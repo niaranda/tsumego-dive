@@ -1,11 +1,14 @@
 import os
 from typing import List
 
+from problem_processing import process_problem
+
 
 def process_collection(collection_path: str):
     """Processes a tsumego collection in given path"""
     problem_paths = __get_problem_paths(collection_path)
-    print(collection_path, len(problem_paths))
+    for problem_path in problem_paths:
+        process_problem(problem_path)
 
 
 def __get_problem_paths(collection_path: str) -> List[str]:
