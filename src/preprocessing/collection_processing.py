@@ -8,7 +8,8 @@ def process_collection(collection_path: str):
     """Processes a tsumego collection in given path"""
     problem_paths = __get_problem_paths(collection_path)
     for problem_path in problem_paths:
-        process_problem(problem_path)
+        if __is_valid(problem_path):
+            process_problem(problem_path)
 
 
 def __get_problem_paths(collection_path: str) -> List[str]:
@@ -18,3 +19,8 @@ def __get_problem_paths(collection_path: str) -> List[str]:
         for name in files:
             problem_paths.append(os.path.join(root, name))
     return problem_paths
+
+
+def __is_valid(problem_path: str) -> bool:
+    """Checks if given problem path is valid"""
+    return "skip" not in problem_path and ".sgf" in problem_path
