@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Tuple
 
 
 class Color(Enum):
@@ -10,9 +11,14 @@ class Color(Enum):
 class Stone:
     """Represents a stone"""
 
-    def __init__(self, color: Color):
+    def __init__(self, color: Color, pos: Tuple[int, int]):
         self.__color: Color = color
+        self.__pos: Tuple[int, int] = pos
 
     @property
     def color(self) -> Color:
         return self.__color
+
+    @property
+    def pos(self) -> Tuple[int, int]:
+        return self.__pos

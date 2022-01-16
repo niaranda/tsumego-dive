@@ -22,4 +22,4 @@ class BoardPoint:
         """Places a stone of given color in this board point"""
         if self.__stone is not None:
             raise Exception("Stone placement error")
-        self.__stone = Stone(color)
+        self.__stone = Stone(color, self.pos)
