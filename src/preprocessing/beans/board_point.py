@@ -23,3 +23,6 @@ class BoardPoint:
         if self.__stone is not None:
             raise Exception("Stone placement error")
         self.__stone = Stone(color, self.pos)
+
+    def is_empty(self) -> bool:
+        return self.__stone is None
