@@ -9,6 +9,9 @@ class Color(Enum):
     BLACK = 1
     WHITE = -1
 
+    def __str__(self):
+        return self.name
+
     def get_other(self):
         return Color.BLACK if self == Color.WHITE else Color.WHITE
 
@@ -19,6 +22,9 @@ class Stone:
     def __init__(self, color: Color, pos: Pos):
         self.__color: Color = color
         self.__pos: Pos = pos
+
+    def __str__(self):
+        return str(self.__color) + " " + str(self.__pos)
 
     @property
     def color(self) -> Color:

@@ -13,6 +13,11 @@ class BoardPoint:
         self.__stone: Optional[Stone] = None
         self.__pos: Pos = pos
 
+    def __str__(self):
+        if self.__stone is None:
+            return " "
+        return "X" if self.__stone.color == Color.BLACK else "O"
+
     @property
     def stone(self) -> Optional[Stone]:
         return self.__stone

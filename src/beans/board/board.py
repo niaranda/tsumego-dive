@@ -18,6 +18,17 @@ class Board:
         if stones is not None:
             self.place_stones(stones)
 
+    def __str__(self):
+        str_board: str = ""
+        row: np.ndarray
+        for row in self.__grid:
+            str_board += " ---" * 19 + "\n| "
+            point: BoardPoint
+            for point in row:
+                str_board += str(point) + " | "
+            str_board += "\n"
+        return str_board + " ---" * 19 + "\n"
+
     def get_stones(self) -> List[Stone]:
         stones: List[Stone] = []
         board_point: BoardPoint
