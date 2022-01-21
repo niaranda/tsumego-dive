@@ -10,6 +10,8 @@ def process_problem(problem_name: str):
     problem = __parse_problem(problem_name)
 
 
+
+
 def __parse_problem(problem_path: str) -> Optional[sgf.GameTree]:
     """Parses problem in given path"""
     with open(problem_path, encoding="GB2312", errors="ignore") as file:

@@ -1,6 +1,6 @@
 from typing import Optional, Tuple
 
-from src.preprocessing.beans.stone import Stone, Color
+from src.beans.stone import Stone, Color
 
 
 class BoardPoint:
