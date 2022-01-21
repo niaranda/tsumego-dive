@@ -17,6 +17,10 @@ class BoardPoint:
     def stone(self) -> Optional[Stone]:
         return self.__stone
 
+    @stone.setter
+    def stone(self, stone: Stone):
+        self.__stone = stone
+
     @property
     def pos(self) -> Pos:
         return self.__pos

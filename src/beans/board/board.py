@@ -1,9 +1,9 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import numpy as np
 
 from src.beans.board.board_point import BoardPoint
-from src.beans.board.stone import Color, Stone
+from src.beans.board.stone import Stone
 
 Pos = Tuple[int, int]
 
@@ -11,10 +11,12 @@ Pos = Tuple[int, int]
 class Board:
     """Represents a Go board"""
 
-    def __init__(self):
+    def __init__(self, stones: Optional[List[Stone]] = None):
         self.__grid = np.empty((19, 19), dtype=BoardPoint)
         for index, _ in np.ndenumerate(self.__grid):
             self.__grid[index] = BoardPoint(index)
+        if stones is not None:
+            self.place_stones(stones)
 
     def get_stones(self) -> List[Stone]:
         stones: List[Stone] = []
@@ -24,11 +26,12 @@ class Board:
                 stones.append(board_point.stone)
         return stones
 
-    def place_stones(self, positions: List[Pos], color: Color):
+    def place_stones(self, stones: List[Stone]):
         """Places a stone in the board"""
-        for pos in positions:
-            point = self.__get_board_point(pos)
-            point.place_stone(color)
+        for stone in stones:
+            pos = stone.pos
+            point = self.__get_point(pos)
+            point.stone = stone
 
-    def __get_board_point(self, pos: Pos) -> BoardPoint:
+    def __get_point(self, pos: Pos) -> BoardPoint:
         return self.__grid[pos]
