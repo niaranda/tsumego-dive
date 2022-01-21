@@ -5,6 +5,8 @@ import numpy as np
 from src.beans.board.board_point import BoardPoint
 from src.beans.board.stone import Color, Stone
 
+Pos = Tuple[int, int]
+
 
 class Board:
     """Represents a Go board"""
@@ -22,11 +24,11 @@ class Board:
                 stones.append(board_point.stone)
         return stones
 
-    def place_stones(self, positions: List[Tuple[int, int]], color: Color):
+    def place_stones(self, positions: List[Pos], color: Color):
         """Places a stone in the board"""
         for pos in positions:
             point = self.__get_board_point(pos)
             point.place_stone(color)
 
-    def __get_board_point(self, pos: Tuple[int, int]) -> BoardPoint:
+    def __get_board_point(self, pos: Pos) -> BoardPoint:
         return self.__grid[pos]

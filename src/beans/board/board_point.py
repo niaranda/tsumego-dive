@@ -3,19 +3,22 @@ from typing import Optional, Tuple
 from src.beans.board.stone import Stone, Color
 
 
+Pos = Tuple[int, int]
+
+
 class BoardPoint:
     """Represents a board point"""
 
-    def __init__(self, pos: Tuple[int, int]):
+    def __init__(self, pos: Pos):
         self.__stone: Optional[Stone] = None
-        self.__pos: Tuple[int, int] = pos
+        self.__pos: Pos = pos
 
     @property
     def stone(self) -> Optional[Stone]:
         return self.__stone
 
     @property
-    def pos(self) -> Tuple[int, int]:
+    def pos(self) -> Pos:
         return self.__pos
 
     def place_stone(self, color: Color):
