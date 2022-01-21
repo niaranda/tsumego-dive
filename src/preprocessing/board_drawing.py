@@ -5,8 +5,8 @@ from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from src.beans.board import Board
-from src.beans.stone import Stone, Color
+from src.beans.board.board import Board
+from src.beans.board.stone import Stone, Color
 
 GRID_LINE_START = 1 / 21
 GRID_LINE_END = 20 / 21

@@ -2,8 +2,8 @@ from typing import List, Tuple
 
 import numpy as np
 
-from src.beans.board_point import BoardPoint
-from src.beans.stone import Color, Stone
+from src.beans.board.board_point import BoardPoint
+from src.beans.board.stone import Color, Stone
 
 
 class Board:
