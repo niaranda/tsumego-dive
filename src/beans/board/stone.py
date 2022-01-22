@@ -9,6 +9,9 @@ class Color(Enum):
     BLACK = 1
     WHITE = -1
 
+    def get_other(self):
+        return Color.BLACK if self == Color.WHITE else Color.WHITE
+
 
 class Stone:
     """Represents a stone"""
