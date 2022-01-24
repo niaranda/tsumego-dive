@@ -4,12 +4,12 @@ import numpy as np
 
 from src.beans.board.board_point import BoardPoint
 from src.beans.board.stone import Stone
-from src.beans.board.stone_group_handler import StoneGroupHandler
+from src.beans.board.stone_capture_handler import StoneCaptureHandler
 
 Pos = Tuple[int, int]
 
 
-class Board(StoneGroupHandler):
+class Board(StoneCaptureHandler):
     """Represents a Go board"""
 
     def __init__(self, stones: Optional[List[Stone]] = None):
@@ -48,11 +48,16 @@ class Board(StoneGroupHandler):
 
     def place_stone(self, stone: Stone):
         """Places a stone in the board"""
-        pos = stone.pos
-        point = self.__get_point(pos)
+        point = self.__get_point(stone.pos)
         point.stone = stone
 
+        self.__capture_groups(stone)
         self.__add_stone_to_groups(stone)
 
     def __get_point(self, pos: Pos) -> BoardPoint:
         return self.__grid[pos]
+
+    def __remove_stones(self, stones):
+        board_points: List[BoardPoint] = [self.__get_point(stone.pos) for stone in stones]
+        for point in board_points:
+            point.remove_stone()
