@@ -15,12 +15,13 @@ class PathType(Enum):
 
 
 class GameNode:
-    def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone]):
+    def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone], comment: Optional[str] = None):
         self.__parent: Optional[GameNode] = parent
         self.__children: List[GameNode] = []
         self.__stone: Optional[Stone] = stone
         self.__board: Board = board
         self.__path_type: PathType = PathType.UNKNOWN
+        self.__comment: Optional[str] = comment
 
     @property
     def parent(self) -> Optional[GameNode]:
