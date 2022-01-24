@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Tuple
+from typing import Tuple, Optional, List
 
 Pos = Tuple[int, int]
 
@@ -21,9 +21,10 @@ class Color(Enum):
 class Stone:
     """Represents a stone"""
 
-    def __init__(self, color: Color, pos: Pos):
+    def __init__(self, color: Color, pos: Pos, liberties: Optional[int] = None):
         self.__color: Color = color
         self.__pos: Pos = pos
+        self.__liberties: Optional[int] = liberties
 
     def __str__(self):
         return str(self.__color) + " " + str(self.__pos)
@@ -36,6 +37,14 @@ class Stone:
     def pos(self) -> Pos:
         return self.__pos
 
+    @property
+    def liberties(self) -> int:
+        return self.__liberties
+
+    @liberties.setter
+    def liberties(self, num_liberties: int):
+        self.__liberties = num_liberties
+
     def is_neighbor(self, stone: Stone) -> bool:
         self_row, self_col = self.__pos
         row, col = stone.pos
@@ -43,3 +52,6 @@ class Stone:
         if abs(self_row - row) == 1 and self_col == col:
             return True
         return abs(self_col - col) == 1 and self_row == row
+
+    def has_liberties(self):
+        return self.__liberties != 0
