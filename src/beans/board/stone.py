@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 from typing import Tuple
 
@@ -33,3 +35,11 @@ class Stone:
     @property
     def pos(self) -> Pos:
         return self.__pos
+
+    def is_neighbor(self, stone: Stone) -> bool:
+        self_row, self_col = self.__pos
+        row, col = stone.pos
+
+        if abs(self_row - row) == 1 and self_col == col:
+            return True
+        return abs(self_col - col) == 1 and self_row == row
