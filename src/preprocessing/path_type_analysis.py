@@ -23,13 +23,11 @@ def compute_path_types(game_tree: GameTree):
 def __analyse_leaf_path_type(leaf: GameNode) -> PathType:
     correct, wrong = __has_correct_clue(leaf.comment), __has_wrong_clue(leaf.comment)
 
-    if not correct and not wrong:
-        return PathType.UNKNOWN
     if correct and wrong:
         return PathType.DUAL
-    if correct:
-        return PathType.CORRECT
-    return PathType.WRONG
+    if wrong:
+        return PathType.WRONG
+    return PathType.CORRECT
 
 
 def __has_correct_clue(comment: str) -> bool:
