@@ -43,6 +43,10 @@ class GameNode:
     def path_type(self) -> PathType:
         return self.__path_type
 
+    @property
+    def comment(self) -> str:
+        return self.__comment
+
     @path_type.setter
     def path_type(self, path_type: PathType):
         self.__path_type = path_type
@@ -55,3 +59,9 @@ class GameNode:
 
     def is_leaf(self) -> bool:
         return len(self.__children) == 0
+
+    def is_valid(self) -> bool:
+        return self.__path_type in [PathType.CORRECT, PathType.WRONG]
+
+    def is_correct(self) -> bool:
+        return self.__path_type == PathType.CORRECT
