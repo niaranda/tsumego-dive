@@ -24,6 +24,8 @@ class BoardPoint:
 
     @stone.setter
     def stone(self, stone: Stone):
+        if self.__stone is not None:
+            raise Exception()
         self.__stone = stone
 
     @property
