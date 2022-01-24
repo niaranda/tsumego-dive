@@ -40,3 +40,6 @@ class BoardPoint:
 
     def is_empty(self) -> bool:
         return self.__stone is None
+
+    def remove_stone(self):
+        self.__stone = None
