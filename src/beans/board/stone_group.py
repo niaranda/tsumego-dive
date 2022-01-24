@@ -32,6 +32,12 @@ class StoneGroup:
     def is_attached(self, stone: Stone):
         return any([group_stone.is_neighbor(stone) for group_stone in self.__stones])
 
+    def has_liberties(self) -> bool:
+        for stone in self.__stones:
+            if stone.has_liberties():
+                return True
+        return False
+
     def __valid_state(self) -> bool:
         if len(self.__stones) == 0:
             return False
