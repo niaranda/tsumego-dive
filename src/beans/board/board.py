@@ -38,11 +38,15 @@ class Board:
         return stones
 
     def place_stones(self, stones: List[Stone]):
-        """Places a stone in the board"""
+        """Places a list of stones in the board"""
         for stone in stones:
-            pos = stone.pos
-            point = self.__get_point(pos)
-            point.stone = stone
+            self.place_stone(stone)
+
+    def place_stone(self, stone: Stone):
+        """Places a stone in the board"""
+        pos = stone.pos
+        point = self.__get_point(pos)
+        point.stone = stone
 
     def __get_point(self, pos: Pos) -> BoardPoint:
         return self.__grid[pos]
