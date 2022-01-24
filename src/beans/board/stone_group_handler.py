@@ -13,8 +13,7 @@ class StoneGroupHandler:
         return self.__stone_groups
 
     def __add_stone_to_groups(self, stone: Stone):
-        groups: List[StoneGroup] = self.__get_groups_of_color(stone.color)
-        neighbor_groups: List[StoneGroup] = list(filter(lambda group: group.is_attached(stone), groups))
+        neighbor_groups: List[StoneGroup] = self.__get_neighbor_groups_of_color(stone, stone.color)
 
         if len(neighbor_groups) == 0:
             self.__add_group(StoneGroup([stone]))
@@ -26,6 +25,10 @@ class StoneGroupHandler:
 
     def __get_groups_of_color(self, color: Color) -> List[StoneGroup]:
         return list(filter(lambda group: group.color == color, self.__stone_groups))
+
+    def __get_neighbor_groups_of_color(self, stone: Stone, color: Color) -> List[StoneGroup]:
+        groups: List[StoneGroup] = self.__get_groups_of_color(color)
+        return list(filter(lambda group: group.is_attached(stone), groups))
 
     def __add_group(self, group: StoneGroup):
         self.__stone_groups.append(group)
