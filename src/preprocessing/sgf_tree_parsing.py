@@ -81,8 +81,10 @@ def __create_game_node(properties: dict, game_node: GameNode, color: Color) -> G
     new_stone: Stone = __parse_stone(properties, color)
     new_board: Board = copy.deepcopy(game_node.board)
 
+    comment: str = properties.get("C")
+
     new_board.place_stones([new_stone])
-    new_game_node = GameNode(game_node, new_board, new_stone)
+    new_game_node = GameNode(game_node, new_board, new_stone, comment)
 
     game_node.add_child(new_game_node)
     return new_game_node
