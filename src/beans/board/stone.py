@@ -46,12 +46,12 @@ class Stone:
         self.__liberties = num_liberties
 
     def is_neighbor(self, stone: Stone) -> bool:
-        self_row, self_col = self.__pos
-        row, col = stone.pos
-
-        if abs(self_row - row) == 1 and self_col == col:
-            return True
-        return abs(self_col - col) == 1 and self_row == row
+        return stone.pos in self.get_neighbor_positions()
 
     def has_liberties(self):
         return self.__liberties != 0
+
+    def get_neighbor_positions(self) -> List[Pos]:
+        row, col = self.__pos
+        positions: List[Pos] = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
+        return list(filter(lambda pos: 0 <= pos[0] <= 18 and 0 <= pos[1] <= 18, positions))
