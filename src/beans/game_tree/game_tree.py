@@ -1,11 +1,13 @@
 from typing import List, Optional
 
 from src.beans.game_tree.game_node import GameNode
+from src.preprocessing.path_type_analysis import compute_path_types
 
 
 class GameTree:
     def __init__(self, root: GameNode):
         self.__root: GameNode = root
+        compute_path_types(self)
 
     @property
     def root(self):
