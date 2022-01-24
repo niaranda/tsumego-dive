@@ -3,21 +3,22 @@ from typing import List, Tuple, Optional
 import numpy as np
 
 from src.beans.board.board_point import BoardPoint
-from src.beans.board.stone import Stone, Color
-from src.beans.board.stone_group import StoneGroup
+from src.beans.board.stone import Stone
+from src.beans.board.stone_group_handler import StoneGroupHandler
 
 Pos = Tuple[int, int]
 
 
-class Board:
+class Board(StoneGroupHandler):
     """Represents a Go board"""
 
     def __init__(self, stones: Optional[List[Stone]] = None):
+        super().__init__()
+
         self.__grid = np.empty((19, 19), dtype=BoardPoint)
         for index, _ in np.ndenumerate(self.__grid):
             self.__grid[index] = BoardPoint(index)
 
-        self.__stone_groups: List[StoneGroup] = []
         if stones is not None:
             self.place_stones(stones)
 
@@ -55,30 +56,3 @@ class Board:
 
     def __get_point(self, pos: Pos) -> BoardPoint:
         return self.__grid[pos]
-
-    def __add_stone_to_groups(self, stone: Stone):
-        groups: List[StoneGroup] = self.__get_groups_of_color(stone.color)
-        neighbor_groups: List[StoneGroup] = list(filter(lambda group: group.is_attached(stone), groups))
-
-        if len(neighbor_groups) == 0:
-            self.__add_group(StoneGroup([stone]))
-            return
-
-        neighbor_groups[0].add_stone(stone)
-        if len(neighbor_groups) != 1:
-            self.__fuse_groups(neighbor_groups)
-
-    def __get_groups_of_color(self, color: Color) -> List[StoneGroup]:
-        return list(filter(lambda group: group.color == color, self.__stone_groups))
-
-    def __add_group(self, group: StoneGroup):
-        self.__stone_groups.append(group)
-
-    def __remove_groups(self, groups: List[StoneGroup]):
-        for group in groups:
-            self.__stone_groups.remove(group)
-
-    def __fuse_groups(self, groups: List[StoneGroup]):
-        self.__remove_groups(groups)
-        stones: List[Stone] = [stone for group in groups for stone in group.stones]
-        self.__add_group(StoneGroup(stones))
