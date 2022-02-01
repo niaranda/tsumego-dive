@@ -26,7 +26,7 @@ class BoardPoint:
     @stone.setter
     def stone(self, stone: Stone):
         if self.__stone is not None:
-            raise Exception()
+            raise Exception(f"Trying to place a stone {stone} in point already containing {self.__stone}")
         self.__stone = stone
 
     @property
@@ -40,5 +40,5 @@ class BoardPoint:
     def remove_stone(self):
         """Removes the placed stone"""
         if self.is_empty():
-            raise Exception()
+            raise Exception(f"Trying to remove a stone from empty point {self.__pos}")
         self.__stone = None
