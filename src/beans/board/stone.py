@@ -15,6 +15,7 @@ class Color(Enum):
         return self.name
 
     def get_other(self):
+        """Get the other color"""
         return Color.BLACK if self == Color.WHITE else Color.WHITE
 
 
@@ -27,6 +28,8 @@ class Stone:
     """Represents a stone"""
 
     def __init__(self, color: Color, pos: Pos, liberties: Optional[int] = None):
+        """Creates a new stone of given color to be placed in given board position.
+        Can optionally specify the number of liberties"""
         if not _valid_position(pos):
             raise Exception()
         self.__color: Color = color
@@ -55,12 +58,16 @@ class Stone:
         self.__liberties = num_liberties
 
     def is_neighbor(self, stone: Stone) -> bool:
+        """True if given stone is neighbor"""
         return stone.pos in self.get_neighbor_positions()
 
     def has_liberties(self):
+        """True if the stone has liberties"""
+        # Can raise exception
         return self.liberties != 0
 
     def get_neighbor_positions(self) -> List[Pos]:
+        """Returns list of neighbor positions"""
         row, col = self.__pos
         positions: List[Pos] = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
         return list(filter(lambda pos: 0 <= pos[0] <= 18 and 0 <= pos[1] <= 18, positions))
