@@ -8,10 +8,11 @@ from src.beans.board.stone import Stone
 
 
 class PathType(Enum):
+    """Represents a type of path in the game tree"""
     CORRECT = 1
     WRONG = 2
-    UNKNOWN = 3
-    DUAL = 4
+    UNKNOWN = 3  # Unknown means the analysis has yet to be performed
+    DUAL = 4  # Dual means analysis could not determine the path type
 
 
 class GameNode:
