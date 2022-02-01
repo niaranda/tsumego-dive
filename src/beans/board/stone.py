@@ -30,7 +30,7 @@ class Stone:
     def __init__(self, color: Color, pos: Pos):
         """Creates a new stone of given color to be placed in given board position"""
         if not _valid_position(pos):
-            raise Exception()
+            raise Exception(f"Trying to create a stone with invalid position {pos}")
         self.__color: Color = color
         self.__pos: Pos = pos
         self.__liberties: Optional[int] = None
@@ -49,7 +49,7 @@ class Stone:
     @property
     def liberties(self) -> int:
         if self.__liberties is None:
-            raise Exception()
+            raise Exception(f"Trying to access stone {self} liberties without prior setting")
         return self.__liberties
 
     @liberties.setter
