@@ -40,6 +40,7 @@ class StoneCaptureHandler(StoneGroupHandler):
             neighbor_stones: List[Stone] = self.__get_neighbor_stones([stone])
             stone.liberties = len(neighbor_stones)
 
+            # Recursively compute neighbor's liberties
             self.__compute_liberties(neighbor_stones)
 
     def __get_neighbor_stones(self, stones: List[Stone]) -> List[Stone]:
