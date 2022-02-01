@@ -39,4 +39,6 @@ class BoardPoint:
 
     def remove_stone(self):
         """Removes the placed stone"""
+        if self.is_empty():
+            raise Exception()
         self.__stone = None
