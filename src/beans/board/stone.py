@@ -27,14 +27,13 @@ def _valid_position(pos: Pos) -> bool:
 class Stone:
     """Represents a stone"""
 
-    def __init__(self, color: Color, pos: Pos, liberties: Optional[int] = None):
-        """Creates a new stone of given color to be placed in given board position.
-        Can optionally specify the number of liberties"""
+    def __init__(self, color: Color, pos: Pos):
+        """Creates a new stone of given color to be placed in given board position"""
         if not _valid_position(pos):
             raise Exception()
         self.__color: Color = color
         self.__pos: Pos = pos
-        self.__liberties: Optional[int] = liberties
+        self.__liberties: Optional[int] = None
 
     def __str__(self):
         return str(self.__color) + " " + str(self.__pos)
