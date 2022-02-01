@@ -14,9 +14,9 @@ class StoneGroupHandler:
     def stone_groups(self) -> List[StoneGroup]:
         return self.__stone_groups
 
-    def __add_stone_to_groups(self, stone: Stone):
+    def _add_stone_to_groups(self, stone: Stone):
         """Adds a new stone to the corresponding group"""
-        neighbor_groups: List[StoneGroup] = self.__get_neighbor_groups_of_color(stone, stone.color)
+        neighbor_groups: List[StoneGroup] = self._get_neighbor_groups_of_color(stone, stone.color)
 
         # No neighbor group -> the stone is a new group
         if len(neighbor_groups) == 0:
@@ -30,28 +30,28 @@ class StoneGroupHandler:
         if len(neighbor_groups) != 1:
             self.__fuse_groups(neighbor_groups)
 
-    def __get_groups_of_color(self, color: Color) -> List[StoneGroup]:
-        """Get all groups of a given color"""
-        return list(filter(lambda group: group.color == color, self.__stone_groups))
-
-    def __get_neighbor_groups_of_color(self, stone: Stone, color: Color) -> List[StoneGroup]:
+    def _get_neighbor_groups_of_color(self, stone: Stone, color: Color) -> List[StoneGroup]:
         """Get the given stone's neighbor groups of given color"""
         groups: List[StoneGroup] = self.__get_groups_of_color(color)
         return list(filter(lambda group: group.is_attached(stone), groups))
+
+    def _remove_groups(self, groups: List[StoneGroup]):
+        """Remove a list of groups"""
+        for group in groups:
+            self.__stone_groups.remove(group)
+
+    def __get_groups_of_color(self, color: Color) -> List[StoneGroup]:
+        """Get all groups of a given color"""
+        return list(filter(lambda group: group.get_color() == color, self.__stone_groups))
 
     def __add_group(self, group: StoneGroup):
         """Add a new group"""
         self.__stone_groups.append(group)
 
-    def __remove_groups(self, groups: List[StoneGroup]):
-        """Remove a list of groups"""
-        for group in groups:
-            self.__stone_groups.remove(group)
-
     def __fuse_groups(self, groups: List[StoneGroup]):
         """Fuse given groups into one"""
         # Remove groups
-        self.__remove_groups(groups)
+        self._remove_groups(groups)
 
         # Add new group with all their stones
         stones: List[Stone] = [stone for group in groups for stone in group.stones]

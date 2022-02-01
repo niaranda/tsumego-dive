@@ -52,19 +52,19 @@ class Board(StoneCaptureHandler):
 
     def place_stone(self, stone: Stone):
         """Places a stone in the board"""
-        point = self.__get_point(stone.pos)
+        point = self._get_point(stone.pos)
         point.stone = stone
 
         # Perform capture if it is the case
-        self.__capture_groups(stone)
+        self._capture_groups(stone)
 
         # Add stone to new group
-        self.__add_stone_to_groups(stone)
+        self._add_stone_to_groups(stone)
 
-    def __get_point(self, pos: Pos) -> BoardPoint:
+    def _get_point(self, pos: Pos) -> BoardPoint:
         return self.__grid[pos]
 
-    def __remove_stones(self, stones):
-        board_points: List[BoardPoint] = [self.__get_point(stone.pos) for stone in stones]
+    def _remove_stones(self, stones):
+        board_points: List[BoardPoint] = [self._get_point(stone.pos) for stone in stones]
         for point in board_points:
             point.remove_stone()
