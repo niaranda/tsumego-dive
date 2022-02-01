@@ -35,6 +35,14 @@ class Stone:
         self.__pos: Pos = pos
         self.__liberties: Optional[int] = None
 
+    def __eq__(self, other: object):
+        if not isinstance(other, Stone):
+            return False
+        return other.color == self.__color and other.pos == self.__pos
+
+    def __hash__(self):
+        return hash((self.__color, self.__pos))
+
     def __str__(self):
         return str(self.__color) + " " + str(self.__pos)
 
