@@ -13,12 +13,15 @@ class Board(StoneCaptureHandler):
     """Represents a Go board"""
 
     def __init__(self, stones: Optional[List[Stone]] = None):
+        """Creates a new Go board, optionally with a list of initial stones placed on it"""
         super().__init__()
 
+        # Initialize grid of board points
         self.__grid = np.empty((19, 19), dtype=BoardPoint)
         for index, _ in np.ndenumerate(self.__grid):
             self.__grid[index] = BoardPoint(index)
 
+        # Place initial stones
         if stones is not None:
             self.place_stones(stones)
 
@@ -34,6 +37,7 @@ class Board(StoneCaptureHandler):
         return str_board + " ---" * 19 + "\n"
 
     def get_stones(self) -> List[Stone]:
+        """Returns list of all stones placed in the board"""
         stones: List[Stone] = []
         board_point: BoardPoint
         for _, board_point in np.ndenumerate(self.__grid):
@@ -51,7 +55,10 @@ class Board(StoneCaptureHandler):
         point = self.__get_point(stone.pos)
         point.stone = stone
 
+        # Perform capture if it is the case
         self.__capture_groups(stone)
+
+        # Add stone to new group
         self.__add_stone_to_groups(stone)
 
     def __get_point(self, pos: Pos) -> BoardPoint:
