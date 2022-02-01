@@ -19,10 +19,12 @@ BACKGROUND_IMAGE: np.ndarray = plt.imread("../../images/board_background.jpg")
 
 
 def draw_board(board: Board):
+    """Draws given board"""
     fig: Figure
     ax: Axes
     fig, ax = plt.subplots()
 
+    # Draw grid
     for i in range(19):
         ax.axhline(-i, GRID_LINE_START, GRID_LINE_END, linewidth=GRID_LINE_WIDTH, color=GRID_LINE_COLOR)
         ax.axvline(i, GRID_LINE_START, GRID_LINE_END, linewidth=GRID_LINE_WIDTH, color=GRID_LINE_COLOR)
@@ -30,8 +32,10 @@ def draw_board(board: Board):
     fig.set_dpi(150)
     ax.set_axis_off()
 
+    # Draw stones
     __draw_stones(ax, board)
 
+    # Add background and show
     ax.imshow(BACKGROUND_IMAGE, extent=(-1, 19, -19, 1))
 
 
