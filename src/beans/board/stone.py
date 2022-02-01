@@ -46,6 +46,8 @@ class Stone:
 
     @property
     def liberties(self) -> int:
+        if self.__liberties is None:
+            raise Exception()
         return self.__liberties
 
     @liberties.setter
@@ -56,7 +58,7 @@ class Stone:
         return stone.pos in self.get_neighbor_positions()
 
     def has_liberties(self):
-        return self.__liberties != 0
+        return self.liberties != 0
 
     def get_neighbor_positions(self) -> List[Pos]:
         row, col = self.__pos
