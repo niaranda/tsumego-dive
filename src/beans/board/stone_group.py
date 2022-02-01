@@ -28,7 +28,10 @@ class StoneGroup:
         # Check same color
         if stone.color != self.get_color():
             raise Exception(f"Trying to add stone {stone} to group {self} of different color")
-        self.stones.append(stone)
+        # Check already in group
+        if stone in self.__stones:
+            raise Exception(f"Trying to add again stone {stone} to group {self} that contains it")
+        self.__stones.append(stone)
 
     def get_color(self) -> Color:
         """Get the group color"""
@@ -52,6 +55,10 @@ class StoneGroup:
     def __valid_state(self) -> bool:
         # Not empty
         if len(self.__stones) == 0:
+            return False
+
+        # No repeated stones
+        if len(self.__stones) != len(set(self.__stones)):
             return False
 
         # All stones have the same color
