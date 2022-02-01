@@ -9,6 +9,8 @@ Pos = Tuple[int, int]
 
 
 class StoneCaptureHandler(StoneGroupHandler):
+    """Class to compute stone capture"""
+
     def __get_point(self, pos: Pos) -> BoardPoint:
         pass
 
@@ -16,18 +18,24 @@ class StoneCaptureHandler(StoneGroupHandler):
         pass
 
     def __capture_groups(self, stone: Stone):
+        """Captures groups after given stone is placed"""
+        # Compute number of liberties for the stone and its neighbors
         self.__compute_liberties([stone])
 
+        # Remove neighbor groups with no liberties left
         captured_groups: List[StoneGroup] = self.__get_groups_captured_by(stone)
         self.__remove_groups(captured_groups)
 
+        # Remove stones for the captured groups from the board
         captured_stones: List[Stone] = [stone for group in captured_groups for stone in group.stones]
         self.__remove_stones(captured_stones)
 
+        # Compute liberties for all affected stones
         affected_stones = self.__get_neighbor_stones(captured_stones)
         self.__compute_liberties(affected_stones)
 
     def __compute_liberties(self, stones: List[Stone]):
+        """Computes liberties for given stones and their neighbors"""
         for stone in stones:
             neighbor_stones: List[Stone] = self.__get_neighbor_stones([stone])
             stone.liberties = len(neighbor_stones)
@@ -35,6 +43,7 @@ class StoneCaptureHandler(StoneGroupHandler):
             self.__compute_liberties(neighbor_stones)
 
     def __get_neighbor_stones(self, stones: List[Stone]) -> List[Stone]:
+        """Get neighbor stones for a list of stones"""
         neighbor_stones = []
 
         for stone in stones:
@@ -47,5 +56,6 @@ class StoneCaptureHandler(StoneGroupHandler):
         return neighbor_stones
 
     def __get_groups_captured_by(self, stone: Stone) -> List[StoneGroup]:
+        """Get groups left without liberties after stone placement"""
         neighbor_groups: List[StoneGroup] = self.__get_neighbor_groups_of_color(stone, stone.color.get_other())
         return list(filter(lambda group: not group.has_liberties(), neighbor_groups))
