@@ -18,10 +18,17 @@ class Color(Enum):
         return Color.BLACK if self == Color.WHITE else Color.WHITE
 
 
+def _valid_position(pos: Pos) -> bool:
+    row, col = pos
+    return 0 <= row <= 18 and 0 <= col <= 18
+
+
 class Stone:
     """Represents a stone"""
 
     def __init__(self, color: Color, pos: Pos, liberties: Optional[int] = None):
+        if not _valid_position(pos):
+            raise Exception()
         self.__color: Color = color
         self.__pos: Pos = pos
         self.__liberties: Optional[int] = liberties
