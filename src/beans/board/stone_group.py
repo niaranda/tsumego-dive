@@ -14,7 +14,7 @@ class StoneGroup:
 
         # Check valid state
         if not self.__valid_state():
-            raise Exception()
+            raise Exception(f"Trying to create invalid group {self}")
 
     def __str__(self) -> str:
         return str([str(stone) for stone in self.__stones])
@@ -27,7 +27,7 @@ class StoneGroup:
         """Adds a stone to the group"""
         # Check same color
         if stone.color != self.get_color():
-            raise Exception()
+            raise Exception(f"Trying to add stone {stone} to group {self} of different color")
         self.stones.append(stone)
 
     def get_color(self) -> Color:
