@@ -16,12 +16,16 @@ class PathType(Enum):
 
 
 class GameNode:
+    """A node of the game tree, representing a state of the board"""
+
     def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone], comment: Optional[str] = None):
+        """Creates a new game node with given parent, board and positioned stone.
+        Can optionally specify the original node's comment"""
         self.__parent: Optional[GameNode] = parent
-        self.__children: List[GameNode] = []
+        self.__children: List[GameNode] = []  # The node is initialized without children nodes
         self.__stone: Optional[Stone] = stone
         self.__board: Board = board
-        self.__path_type: PathType = PathType.UNKNOWN
+        self.__path_type: PathType = PathType.UNKNOWN  # The path type is initialized as unknown
         self.__comment: Optional[str] = comment
 
     @property
@@ -53,16 +57,21 @@ class GameNode:
         self.__path_type = path_type
 
     def add_child(self, game_node: GameNode):
+        """Add child node to this node"""
         self.__children.append(game_node)
 
     def is_root(self) -> bool:
+        """True if the node is the tree root"""
         return self.__parent is None
 
     def is_leaf(self) -> bool:
+        """True if the node is a leaf"""
         return len(self.__children) == 0
 
     def is_valid(self) -> bool:
+        """True if the path type is valid"""
         return self.__path_type in [PathType.CORRECT, PathType.WRONG]
 
     def is_correct(self) -> bool:
+        """True if the path is correct"""
         return self.__path_type == PathType.CORRECT
