@@ -55,7 +55,11 @@ class Board(StoneCaptureHandler):
         point = self._get_point(stone.pos)
         point.stone = stone
 
-        # Perform capture if it is the case
+        # compute liberties and remove one liberty from neighbor stones
+        self._compute_liberties(stone)
+        self._update_neighbor_liberties([stone], -1)
+
+        # Perform group capture
         self._capture_groups(stone)
 
         # Add stone to new group
