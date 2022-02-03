@@ -19,8 +19,8 @@ class StoneCaptureHandler(StoneGroupHandler):
 
     def _capture_groups(self, stone: Stone):
         """Captures groups after given stone is placed"""
-        # Compute number of liberties for the stone and its neighbors
-        self.__compute_liberties([stone])
+        # Update number of liberties for the stone and its neighbors
+        self.__update_liberties([stone], True)
 
         # Remove neighbor groups with no liberties left
         captured_groups: List[StoneGroup] = self.__get_groups_captured_by(stone)
@@ -30,18 +30,18 @@ class StoneCaptureHandler(StoneGroupHandler):
         captured_stones: List[Stone] = [stone for group in captured_groups for stone in group.stones]
         self._remove_stones(captured_stones)
 
-        # Compute liberties for all affected stones
+        # Update liberties for all affected stones
         affected_stones = self.__get_neighbor_stones(captured_stones)
-        self.__compute_liberties(affected_stones)
+        self.__update_liberties(affected_stones, False)
 
-    def __compute_liberties(self, stones: List[Stone]):
-        """Computes liberties for given stones and their neighbors"""
+    def __update_liberties(self, stones: List[Stone], update_neighbors: bool):
+        """Update liberties for given stones. Optionally update neighbor stones liberties"""
         for stone in stones:
             neighbor_stones: List[Stone] = self.__get_neighbor_stones([stone])
-            stone.liberties = len(neighbor_stones)
+            stone.liberties = 4 - len(neighbor_stones)
 
-            # Recursively compute neighbor's liberties
-            self.__compute_liberties(neighbor_stones)
+            if update_neighbors and neighbor_stones:
+                self.__update_liberties(neighbor_stones, False)
 
     def __get_neighbor_stones(self, stones: List[Stone]) -> List[Stone]:
         """Get neighbor stones for a list of stones"""
