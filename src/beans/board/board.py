@@ -36,6 +36,10 @@ class Board(StoneCaptureHandler):
             str_board += "\n"
         return str_board + " ---" * 19 + "\n"
 
+    @property
+    def grid(self):
+        return self.__grid
+
     def get_stones(self) -> List[Stone]:
         """Returns list of all stones placed in the board"""
         stones: List[Stone] = []
