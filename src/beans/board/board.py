@@ -22,7 +22,7 @@ class Board(StoneCaptureHandler):
             self.__grid[index] = BoardPoint(index)
 
         # Place initial stones
-        if stones is not None:
+        if stones:
             self.place_stones(stones)
 
     def __str__(self):
