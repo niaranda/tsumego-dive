@@ -20,13 +20,18 @@ class GameNode:
 
     def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone], comment: Optional[str] = None):
         """Creates a new game node with given parent, board and positioned stone.
-        Can optionally specify the original node's comment"""
+        Adds this game node to given parent node's children list.
+        Can optionally specify the original node's comment."""
         self.__parent: Optional[GameNode] = parent
         self.__children: List[GameNode] = []  # The node is initialized without children nodes
         self.__stone: Optional[Stone] = stone
         self.__board: Board = board
         self.__path_type: PathType = PathType.UNKNOWN  # The path type is initialized as unknown
         self.__comment: Optional[str] = comment
+
+        # add this node as the parent's child
+        if parent:
+            parent.add_child(self)
 
     @property
     def parent(self) -> Optional[GameNode]:
