@@ -1,10 +1,10 @@
 from typing import List, Optional
 
 from src.beans.game_tree.game_node import GameNode
-from src.beans.game_tree.path_type_analysis import compute_path_types
+from src.beans.game_tree.path_type_analysis import PathTypeAnalyser
 
 
-class GameTree:
+class GameTree(PathTypeAnalyser):
     """Represents a game tree for a tsumego"""
 
     def __init__(self, root: GameNode):
@@ -12,7 +12,7 @@ class GameTree:
         self.__root: GameNode = root
 
         # perform path type analysis
-        compute_path_types(self)
+        self._compute_path_types()
 
     @property
     def root(self):
