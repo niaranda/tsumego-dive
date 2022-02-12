@@ -9,11 +9,8 @@ WRONG_CLUES = ["Wrong", "Incorrect", "Failure", "失败", "shi bai"]
 def _perform_path_type_propagation(leaves: List[GameNode], path_type: PathType):
     # Propagates path type to all ancestors of given leaves
     nodes: List[GameNode] = __filter_by_path_type(leaves, path_type)
-    while nodes:
-        for node in nodes:
-            node.path_type = path_type
-            if not node.is_root():
-                nodes.append(node.parent)
+    for node in nodes:
+        __propagate_path_type(node)
 
 
 def _analyse_leaf_path_type(leaf: GameNode) -> PathType:
@@ -40,6 +37,14 @@ def __has_wrong_clue(comment: Optional[str]) -> bool:
 
 def __filter_by_path_type(nodes: List[GameNode], path_type: PathType) -> List[GameNode]:
     return list(filter(lambda node: node.path_type == path_type, nodes))
+
+
+def __propagate_path_type(node):
+    if node.is_root():
+        return
+    parent = node.parent
+    parent.path_type = node.path_type
+    __propagate_path_type(parent)
 
 
 class PathTypeAnalyser:
