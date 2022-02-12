@@ -29,7 +29,7 @@ def __analyse_leaf_path_type(leaf: GameNode) -> PathType:
         return PathType.DUAL
     if wrong:
         return PathType.WRONG
-    return PathType.CORRECT
+    return PathType.CORRECT  # if no clue was found, the path is considered correct
 
 
 def __has_correct_clue(comment: str) -> bool:
