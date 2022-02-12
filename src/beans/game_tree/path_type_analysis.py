@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from src.beans.game_tree.game_node import GameNode, PathType
 
@@ -26,11 +26,15 @@ def _analyse_leaf_path_type(leaf: GameNode) -> PathType:
     return PathType.CORRECT  # if no clue was found, the path is considered correct
 
 
-def __has_correct_clue(comment: str) -> bool:
+def __has_correct_clue(comment: Optional[str]) -> bool:
+    if not comment:
+        return False
     return any([comment.lower().find(clue.lower()) != -1 for clue in CORRECT_CLUES])
 
 
-def __has_wrong_clue(comment: str) -> bool:
+def __has_wrong_clue(comment: Optional[str]) -> bool:
+    if not comment:
+        return False
     return any([comment.lower().find(clue.lower()) != -1 for clue in WRONG_CLUES])
 
 
