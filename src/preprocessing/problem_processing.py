@@ -16,8 +16,6 @@ def process_problem(problem_name: str):
 
     try:
         game_tree: GameTree = parse_sgf_tree(problem)
-
-        # TODO
     except Exception as e:
         log_error(e, problem_name)
 
