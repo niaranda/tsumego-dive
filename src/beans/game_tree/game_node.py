@@ -27,7 +27,7 @@ class GameNode:
         self.__stone: Optional[Stone] = stone
         self.__board: Board = board
         self.__path_type: PathType = PathType.UNKNOWN  # The path type is initialized as unknown
-        self.__comment: Optional[str] = comment
+        self.__comment: Optional[str] = comment[0] if comment else None
 
         # add this node as the parent's child
         if parent:
