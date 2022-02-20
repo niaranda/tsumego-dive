@@ -1,70 +1,34 @@
 from __future__ import annotations
 
-from copy import deepcopy
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 
-import numpy as np
-
-from src.beans.board.board_point import BoardPoint
-from src.beans.board.stone import Stone
+from src.beans.board.color import Color
 from src.beans.board.stone_capture_handler import StoneCaptureHandler
 
 Pos = Tuple[int, int]
 
-
-def _create_empty_grid() -> np.ndarray:
-    grid = np.empty((19, 19), dtype=BoardPoint)
-    for index, _ in np.ndenumerate(grid):
-        grid[index] = BoardPoint(index)
-    return grid
+Stone = (Pos, Color)
 
 
 class Board(StoneCaptureHandler):
     """Represents a Go board"""
 
-    def __init__(self, stones: Optional[List[Stone]] = None, grid: np.ndarray = None):
+    def __init__(self, unplaced_stones: Optional[List[Stone]] = None):
         """Creates a new Go board, optionally with a list of initial stones placed on it"""
         super().__init__()
 
-        if grid is not None:
-            self.__grid = grid
-            return
-
-        # Initialize grid of board points
-        self.__grid = _create_empty_grid()
+        self.__placed_stones: Dict[Pos, Color] = {}
 
         # Place initial stones
-        if stones:
-            self.place_stones(stones)
-
-    def __deepcopy__(self, memodict={}) -> Board:
-        new_board = Board(grid=deepcopy(self.__grid))
-        self._copy_stone_groups_to(new_board)
-        return new_board
-
-    def __str__(self):
-        str_board: str = ""
-        row: np.ndarray
-        for row in self.__grid:
-            str_board += " ---" * 19 + "\n| "
-            point: BoardPoint
-            for point in row:
-                str_board += str(point) + " | "
-            str_board += "\n"
-        return str_board + " ---" * 19 + "\n"
+        if unplaced_stones:
+            self.place_stones(unplaced_stones)
 
     @property
-    def grid(self):
-        return self.__grid
+    def placed_stones(self) -> Dict[Pos, Color]:
+        return self.__placed_stones
 
-    def get_stones(self) -> List[Stone]:
-        """Returns list of all stones placed in the board"""
-        stones: List[Stone] = []
-        board_point: BoardPoint
-        for _, board_point in np.ndenumerate(self.__grid):
-            if not board_point.is_empty():
-                stones.append(board_point.stone)
-        return stones
+    def get_placed_stone_positions(self) -> List[Pos]:
+        return list(self.__placed_stones.keys())
 
     def place_stones(self, stones: List[Stone]):
         """Places a list of stones in the board"""
@@ -73,12 +37,12 @@ class Board(StoneCaptureHandler):
 
     def place_stone(self, stone: Stone):
         """Places a stone in the board"""
-        point = self.get_point(stone.pos)
-        point.stone = stone
+        pos, color = stone
+        self.__placed_stones[pos] = color
 
         # compute liberties and remove one liberty from neighbor stones
-        self._compute_liberties(stone)
-        self._update_neighbor_liberties([stone], -1)
+        self._compute_liberties(pos)
+        self._remove_liberty_from_neighbors([pos])
 
         # Perform group capture
         self._capture_groups(stone)
@@ -86,10 +50,6 @@ class Board(StoneCaptureHandler):
         # Add stone to new group
         self._add_stone_to_groups(stone)
 
-    def get_point(self, pos: Pos) -> BoardPoint:
-        return self.__grid[pos]
-
-    def _remove_stones(self, stones):
-        board_points: List[BoardPoint] = [self.get_point(stone.pos) for stone in stones]
-        for point in board_points:
-            point.remove_stone()
+    def _remove_stones(self, positions: List[Pos]):
+        for pos in positions:
+            del self.__placed_stones[pos]

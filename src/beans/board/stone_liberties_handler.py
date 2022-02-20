@@ -1,34 +1,55 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
-from src.beans.board.board_point import BoardPoint
-from src.beans.board.stone import Stone
+from src.beans.board.color import Color
+from src.beans.board.stone_group import StoneGroup
 
 Pos = Tuple[int, int]
+Stone = Tuple[Pos, Color]
+
+
+def _get_neighbor_positions(position: Pos) -> List[Pos]:
+    """Returns list of neighbor positions"""
+    row, col = position
+    positions: List[Pos] = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
+    return list(filter(lambda pos: 0 <= pos[0] <= 18 and 0 <= pos[1] <= 18, positions))
 
 
 class StoneLibertiesHandler:
 
-    def get_point(self, pos: Pos) -> BoardPoint:
+    def __init__(self):
+        super().__init__()
+        self.__stone_liberties: Dict[Pos, int] = {}
+
+    def get_placed_stone_positions(self) -> List[Pos]:
         pass
 
-    def _compute_liberties(self, stone: Stone):
-        """Compute liberties for a stone"""
-        neighbor_points: List[BoardPoint] = self.__get_neighbor_points(stone)
-        empty_neighbor_points: List[BoardPoint] = list(filter(lambda point: point.is_empty(), neighbor_points))
+    def add_liberty(self, position: Pos):
+        self.__stone_liberties[position] += 1
 
-        stone.liberties = len(empty_neighbor_points)
+    def remove_liberty(self, position: Pos):
+        self.__stone_liberties[position] -= 1
 
-    def _update_neighbor_liberties(self, stones: List[Stone], quantity: int):
-        """Update stone liberties for neighbor of given stones in given quantity"""
-        neighbor_stones: List[Stone] = self.__get_neighbor_stones(stones)
-        for stone in neighbor_stones:
-            stone.liberties += quantity
+    def _compute_liberties(self, position: Pos):
+        neighbor_positions = _get_neighbor_positions(position)
+        neighbor_stones = self.__get_neighbor_stones(position)
+        self.__stone_liberties[position] = len(neighbor_positions) - len(neighbor_stones)
 
-    def __get_neighbor_points(self, stone: Stone) -> List[BoardPoint]:
-        neighbor_positions: List[Pos] = stone.get_neighbor_positions()
-        return [self.get_point(pos) for pos in neighbor_positions]
+    def _add_liberty_to_neighbors(self, positions: List[Pos]):
+        neighbor_stones = [neighbor for pos in positions for neighbor in self.__get_neighbor_stones(pos)]
+        for neighbor in neighbor_stones:
+            self.add_liberty(neighbor)
 
-    def __get_neighbor_stones(self, stones: List[Stone]) -> List[Stone]:
-        neighbor_points: List[BoardPoint] = [point for stone in stones for point in self.__get_neighbor_points(stone)]
-        filled_neighbor_points: List[BoardPoint] = list(filter(lambda point: not point.is_empty(), neighbor_points))
-        return [point.stone for point in filled_neighbor_points]
+    def _remove_liberty_from_neighbors(self, positions: List[Pos]):
+        neighbor_stones = [neighbor for pos in positions for neighbor in self.__get_neighbor_stones(pos)]
+        for neighbor in neighbor_stones:
+            self.remove_liberty(neighbor)
+
+    def _has_liberties(self, group: StoneGroup) -> bool:
+        for pos in group.positions:
+            if self.__stone_liberties[pos] != 0:
+                return True
+        return False
+
+    def __get_neighbor_stones(self, position: Pos) -> List[Pos]:
+        neighbor_positions = _get_neighbor_positions(position)
+        return list(filter(lambda pos: pos in neighbor_positions, self.get_placed_stone_positions()))
