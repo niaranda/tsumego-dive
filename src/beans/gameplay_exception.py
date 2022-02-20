@@ -1,0 +1,3 @@
+
+class GamePlayException(Exception):
+    pass

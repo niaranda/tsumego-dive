@@ -7,6 +7,7 @@ from src.beans.board.board import Board
 from src.beans.board.stone import Color, Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
+from src.preprocessing.preprocessing_exception import PreprocessingException
 
 Pos = Tuple[int, int]
 
@@ -53,7 +54,7 @@ def __parse_stone(properties: dict, color: Color) -> Stone:
     property_name: str = "B" if color == Color.BLACK else "W"
 
     if property_name not in properties.keys():
-        raise Exception(f"Not found expected {color} stone property while parsing sgf tree")
+        raise PreprocessingException(f"Not found expected {color} stone property while parsing sgf tree")
 
     # Get position from properties
     pos: Pos = __parse_position(properties.get(property_name)[0])
@@ -71,9 +72,9 @@ def __get_first_color(problem: sgf.GameTree) -> Color:
     else:
         keys: List[str] = list(problem.root.next.properties.keys())
     if "B" in keys and "W" in keys:
-        raise Exception("Found stones for both colors while parsing sgf tree root")
+        raise PreprocessingException("Found stones for both colors while parsing sgf tree root")
     if "B" not in keys and "W" not in keys:
-        raise Exception("Found no stone while parsing sgf tree root")
+        raise PreprocessingException("Found no stone while parsing sgf tree root")
     return Color.BLACK if "B" in keys else Color.WHITE
 
 

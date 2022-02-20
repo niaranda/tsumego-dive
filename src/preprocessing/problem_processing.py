@@ -1,9 +1,11 @@
-from typing import Optional
+from typing import Optional, Union
 
 import sgf
 
 from src.beans.game_tree.game_tree import GameTree
+from src.beans.gameplay_exception import GamePlayException
 from src.preprocessing.error_handling import log_error
+from src.preprocessing.preprocessing_exception import PreprocessingException
 from src.preprocessing.sgf_tree_parsing import parse_sgf_tree
 
 
@@ -16,7 +18,7 @@ def process_problem(problem_name: str):
 
     try:
         game_tree: GameTree = parse_sgf_tree(problem)
-    except Exception as e:
+    except (GamePlayException, PreprocessingException) as e:
         log_error(e, problem_name)
 
 

@@ -4,6 +4,7 @@ from copy import copy
 from typing import Optional, Tuple
 
 from src.beans.board.stone import Stone, Color
+from src.beans.gameplay_exception import GamePlayException
 
 Pos = Tuple[int, int]
 
@@ -35,9 +36,9 @@ class BoardPoint:
     @stone.setter
     def stone(self, stone: Stone):
         if self.__stone is not None:
-            raise Exception(f"Trying to place a stone {stone} in point already containing {self.__stone}")
+            raise GamePlayException(f"Trying to place a stone {stone} in point already containing {self.__stone}")
         if stone.pos != self.__pos:
-            raise Exception(f"Trying to place a stone {stone} in wrong position {self.__pos}")
+            raise GamePlayException(f"Trying to place a stone {stone} in wrong position {self.__pos}")
         self.__stone = stone
 
     @property
@@ -51,5 +52,5 @@ class BoardPoint:
     def remove_stone(self):
         """Removes the placed stone"""
         if self.is_empty():
-            raise Exception(f"Trying to remove a stone from empty point {self.__pos}")
+            raise GamePlayException(f"Trying to remove a stone from empty point {self.__pos}")
         self.__stone = None

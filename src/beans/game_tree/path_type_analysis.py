@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from src.beans.game_tree.game_node import GameNode, PathType
+from src.preprocessing.preprocessing_exception import PreprocessingException
 
 CORRECT_CLUES = ["Correct", "Success", "正解"]
 WRONG_CLUES = ["Wrong", "Incorrect", "Failure", "失败", "shi bai"]
@@ -68,4 +69,4 @@ class PathTypeAnalyser:
             _perform_path_type_propagation(leaves, path_type)
 
         if not self.root.is_correct():
-            raise Exception("Path type analysis found no correct paths")
+            raise PreprocessingException("Path type analysis found no correct paths")

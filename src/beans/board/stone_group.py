@@ -1,6 +1,7 @@
 from typing import List, Tuple
 
 from src.beans.board.stone import Color, Stone
+from src.preprocessing.preprocessing_exception import PreprocessingException
 
 Pos = Tuple[int, int]
 
@@ -15,7 +16,7 @@ class StoneGroup:
 
         # Check valid state
         if validate and not self.__valid_state():
-            raise Exception(f"Trying to create invalid group {self}")
+            raise PreprocessingException(f"Trying to create invalid group {self}")
 
     def __str__(self) -> str:
         return str([str(stone) for stone in self.__stones])
@@ -40,10 +41,10 @@ class StoneGroup:
         """Adds a stone to the group"""
         # Check same color
         if stone.color != self.get_color():
-            raise Exception(f"Trying to add stone {stone} to group {self} of different color")
+            raise PreprocessingException(f"Trying to add stone {stone} to group {self} of different color")
         # Check already in group
         if stone in self.__stones:
-            raise Exception(f"Trying to add again stone {stone} to group {self} that contains it")
+            raise PreprocessingException(f"Trying to add again stone {stone} to group {self} that contains it")
         self.__stones.append(stone)
         self.__positions.append(stone.pos)
 
