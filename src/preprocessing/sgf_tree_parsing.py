@@ -1,15 +1,16 @@
-from copy import deepcopy
+from copy import copy
 from typing import List, Tuple
 
 import sgf
 
 from src.beans.board.board import Board
-from src.beans.board.stone import Color, Stone
+from src.beans.board.color import Color
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
 from src.preprocessing.preprocessing_exception import PreprocessingException
 
 Pos = Tuple[int, int]
+Stone = Tuple[Pos, Color]
 
 
 def parse_sgf_tree(problem: sgf.GameTree) -> GameTree:
@@ -23,7 +24,7 @@ def parse_sgf_tree(problem: sgf.GameTree) -> GameTree:
     # recursively add all branches
     first_color: Color = __get_first_color(problem)
     last_game_node = __add_branch_nodes(problem.nodes[1:], root, first_color)  # first node is root
-    next_color = last_game_node.stone.color.get_other() if last_game_node.stone else first_color
+    next_color = last_game_node.stone_color.get_other() if last_game_node.stone else first_color
     if problem.children:
         __add_branches(problem.children, last_game_node, next_color)
 
@@ -43,7 +44,7 @@ def __get_init_stones(problem: sgf.GameTree) -> List[Stone]:
 def __parse_init_stones(properties: dict, color: Color) -> List[Stone]:
     property_name: str = "AB" if color == Color.BLACK else "AW"
     stones_pos: List[Pos] = __parse_positions(properties.get(property_name))
-    return [Stone(color, pos) for pos in stones_pos]
+    return [(pos, color) for pos in stones_pos]
 
 
 def __parse_positions(str_positions: List[str]) -> List[Pos]:
@@ -58,7 +59,7 @@ def __parse_stone(properties: dict, color: Color) -> Stone:
 
     # Get position from properties
     pos: Pos = __parse_position(properties.get(property_name)[0])
-    return Stone(color, pos)
+    return pos, color
 
 
 def __parse_position(str_position: str) -> Pos:
@@ -82,7 +83,7 @@ def __add_branches(branches: List[sgf.GameTree], game_node: GameNode, color: Col
     """Recursively adds all branches"""
     for branch in branches:
         last_game_node = __add_branch_nodes(branch.nodes, game_node, color)
-        next_color = last_game_node.stone.color.get_other()
+        next_color = last_game_node.stone_color.get_other()
         __add_branches(branch.children, last_game_node, next_color)
 
 
@@ -98,7 +99,7 @@ def __add_branch_nodes(nodes: List[sgf.Node], game_node: GameNode, color: Color)
 def __create_game_node(properties: dict, game_node: GameNode, color: Color) -> GameNode:
     """Creates a new game node with given parent node by adding a new stone of given color to the board"""
     new_stone: Stone = __parse_stone(properties, color)
-    new_board: Board = deepcopy(game_node.board)  # Copy current board
+    new_board: Board = copy(game_node.board)  # Copy current board
 
     comment: str = properties.get("C")  # Can be None
 

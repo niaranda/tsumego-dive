@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Optional, List
+from typing import Optional, List, Tuple
 
 from src.beans.board.board import Board
-from src.beans.board.stone import Stone
+from src.beans.board.color import Color
+
+Pos = Tuple[int, int]
+Stone = Tuple[Pos, Color]
 
 
 class PathType(Enum):
@@ -44,6 +47,14 @@ class GameNode:
     @property
     def stone(self) -> Optional[Stone]:
         return self.__stone
+
+    @property
+    def stone_pos(self) -> Optional[Pos]:
+        return self.__stone[0] if self.__stone else None
+
+    @property
+    def stone_color(self) -> Optional[Color]:
+        return self.__stone[1] if self.__stone else None
 
     @property
     def board(self) -> Board:

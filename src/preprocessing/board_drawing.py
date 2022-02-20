@@ -1,4 +1,4 @@
-from typing import List
+from typing import Tuple, Dict
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -6,7 +6,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
 from src.beans.board.board import Board
-from src.beans.board.stone import Stone, Color
+from src.beans.board.color import Color
 
 GRID_LINE_START = 1 / 21
 GRID_LINE_END = 20 / 21
@@ -16,6 +16,9 @@ STONE_SIZE = 12
 WHITE_STONE_EDGE_COLOR = "black"
 BLACK_STONE_EDGE_COLOR = "gray"
 BACKGROUND_IMAGE: np.ndarray = plt.imread("../../images/board_background.jpg")
+
+Pos = Tuple[int, int]
+Stone = Tuple[Pos, Color]
 
 
 def draw_board(board: Board):
@@ -40,12 +43,11 @@ def draw_board(board: Board):
 
 
 def __draw_stones(ax: Axes, board: Board):
-    stones: List[Stone] = board.get_stones()
-    stone: Stone
-    for stone in stones:
+    stones: Dict[Pos, Color] = board.placed_stones
+    for pos, color in stones.items():
         ax.plot(
-            stone.pos[1], -stone.pos[0], marker='o', markersize=STONE_SIZE,
-            markeredgecolor=__get_edge_color(stone.color), markerfacecolor=__get_face_color(stone.color)
+            pos[1], -pos[0], marker='o', markersize=STONE_SIZE,
+            markeredgecolor=__get_edge_color(color), markerfacecolor=__get_face_color(color)
         )
 
 
