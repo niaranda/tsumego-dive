@@ -36,16 +36,6 @@ class TestStoneGroup(unittest.TestCase):
         group = StoneGroup([Stone(Color.WHITE, (2, 1))])
         self.assertEqual(group.get_color(), Color.WHITE)
 
-    def test_get_positions(self):
-        positions = [(3, 2), (3, 3), (4, 3)]
-        stones = [Stone(Color.BLACK, pos) for pos in positions]
-        group = StoneGroup(stones)
-
-        self.assertEqual(len(group.get_positions()), len(positions))
-
-        group.add_stone(Stone(Color.BLACK, (3, 4)))
-        self.assertEqual(len(group.get_positions()), len(positions) + 1)
-
     def test_is_attached(self):
         positions = [(3, 2), (3, 3), (4, 3)]
         stones = [Stone(Color.BLACK, pos) for pos in positions]

@@ -8,7 +8,7 @@ Pos = Tuple[int, int]
 
 class StoneLibertiesHandler:
 
-    def _get_point(self, pos: Pos) -> BoardPoint:
+    def get_point(self, pos: Pos) -> BoardPoint:
         pass
 
     def _compute_liberties(self, stone: Stone):
@@ -26,7 +26,7 @@ class StoneLibertiesHandler:
 
     def __get_neighbor_points(self, stone: Stone) -> List[BoardPoint]:
         neighbor_positions: List[Pos] = stone.get_neighbor_positions()
-        return [self._get_point(pos) for pos in neighbor_positions]
+        return [self.get_point(pos) for pos in neighbor_positions]
 
     def __get_neighbor_stones(self, stones: List[Stone]) -> List[Stone]:
         neighbor_points: List[BoardPoint] = [point for stone in stones for point in self.__get_neighbor_points(stone)]

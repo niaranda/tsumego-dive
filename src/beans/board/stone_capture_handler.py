@@ -12,7 +12,7 @@ Pos = Tuple[int, int]
 class StoneCaptureHandler(StoneGroupHandler, StoneLibertiesHandler):
     """Class to compute stone capture"""
 
-    def _get_point(self, pos: Pos) -> BoardPoint:
+    def get_point(self, pos: Pos) -> BoardPoint:
         pass
 
     def _remove_stones(self, captured_stones):

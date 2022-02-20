@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from typing import List, Tuple
 
 import sgf
@@ -97,7 +97,7 @@ def __add_branch_nodes(nodes: List[sgf.Node], game_node: GameNode, color: Color)
 def __create_game_node(properties: dict, game_node: GameNode, color: Color) -> GameNode:
     """Creates a new game node with given parent node by adding a new stone of given color to the board"""
     new_stone: Stone = __parse_stone(properties, color)
-    new_board: Board = copy.deepcopy(game_node.board)  # Copy current board
+    new_board: Board = deepcopy(game_node.board)  # Copy current board
 
     comment: str = properties.get("C")  # Can be None
 

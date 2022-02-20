@@ -27,13 +27,13 @@ def _valid_position(pos: Pos) -> bool:
 class Stone:
     """Represents a stone"""
 
-    def __init__(self, color: Color, pos: Pos):
+    def __init__(self, color: Color, pos: Pos, liberties: Optional[int] = None):
         """Creates a new stone of given color to be placed in given board position"""
         if not _valid_position(pos):
             raise Exception(f"Trying to create a stone with invalid position {pos}")
         self.__color: Color = color
         self.__pos: Pos = pos
-        self.__liberties: Optional[int] = None
+        self.__liberties: Optional[int] = liberties
 
     def __eq__(self, other: object):
         if not isinstance(other, Stone):
@@ -45,6 +45,9 @@ class Stone:
 
     def __str__(self):
         return str(self.__color) + " " + str(self.__pos)
+
+    def __copy__(self) -> Stone:
+        return Stone(self.__color, self.__pos, self.__liberties)
 
     @property
     def color(self) -> Color:

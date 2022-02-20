@@ -3,8 +3,8 @@ from typing import Optional
 import sgf
 
 from src.beans.game_tree.game_tree import GameTree
-from src.preprocessing.sgf_tree_parsing import parse_sgf_tree
 from src.preprocessing.error_handling import log_error
+from src.preprocessing.sgf_tree_parsing import parse_sgf_tree
 
 
 def process_problem(problem_name: str):
@@ -18,7 +18,6 @@ def process_problem(problem_name: str):
         game_tree: GameTree = parse_sgf_tree(problem)
     except Exception as e:
         log_error(e, problem_name)
-
 
 
 def __parse_problem(problem_path: str) -> Optional[sgf.GameTree]:

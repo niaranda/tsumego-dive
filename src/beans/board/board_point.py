@@ -1,7 +1,9 @@
+from __future__ import annotations
+
+from copy import copy
 from typing import Optional, Tuple
 
 from src.beans.board.stone import Stone, Color
-
 
 Pos = Tuple[int, int]
 
@@ -18,6 +20,13 @@ class BoardPoint:
         if self.__stone is None:
             return " "
         return "X" if self.__stone.color == Color.BLACK else "O"
+
+    def __deepcopy__(self, memodict={}) -> BoardPoint:
+        new_point = BoardPoint(self.__pos)
+        if self.is_empty():
+            return new_point
+        new_point.stone = copy(self.__stone)
+        return new_point
 
     @property
     def stone(self) -> Optional[Stone]:

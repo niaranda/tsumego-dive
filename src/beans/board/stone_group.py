@@ -8,20 +8,33 @@ Pos = Tuple[int, int]
 class StoneGroup:
     """Represents a group of stones"""
 
-    def __init__(self, stones: List[Stone]):
+    def __init__(self, stones: List[Stone], validate: bool = True):
         """Create a group of stones with given stones"""
         self.__stones: List[Stone] = stones
+        self.__positions: List[Pos] = [stone.pos for stone in stones]
 
         # Check valid state
-        if not self.__valid_state():
+        if validate and not self.__valid_state():
             raise Exception(f"Trying to create invalid group {self}")
 
     def __str__(self) -> str:
         return str([str(stone) for stone in self.__stones])
 
     @property
-    def stones(self):
+    def stones(self) -> List[Stone]:
         return self.__stones
+
+    @stones.setter
+    def stones(self, stones):
+        self.__stones = stones
+
+    @property
+    def positions(self) -> List[Pos]:
+        return self.__positions
+
+    @positions.setter
+    def positions(self, positions):
+        self.__positions = positions
 
     def add_stone(self, stone: Stone):
         """Adds a stone to the group"""
@@ -32,14 +45,11 @@ class StoneGroup:
         if stone in self.__stones:
             raise Exception(f"Trying to add again stone {stone} to group {self} that contains it")
         self.__stones.append(stone)
+        self.__positions.append(stone.pos)
 
     def get_color(self) -> Color:
         """Get the group color"""
         return self.__stones[0].color
-
-    def get_positions(self) -> List[Pos]:
-        """Get positions of stones in the group"""
-        return [stone.pos for stone in self.__stones]
 
     def is_attached(self, stone: Stone):
         """True if the given stone is neighbor to a stone in the group"""
