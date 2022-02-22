@@ -5,6 +5,8 @@ from typing import List, Optional, Dict
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_capture_handler import StoneCaptureHandler
+from src.beans.board.stone_group import StoneGroup
+from src.beans.gameplay_exception import GamePlayException
 
 
 class Board(StoneCaptureHandler):
@@ -44,9 +46,18 @@ class Board(StoneCaptureHandler):
         # Perform group capture
         self._capture_groups(stone)
 
+        # Check suicide rule
+        if self.__stone_suicided(pos):
+            raise GamePlayException(f"Broke suicide rule when placing stone in {pos}")
+
         # Add stone to new group
         self._add_stone_to_groups(stone)
 
     def _remove_stones(self, positions: List[Pos]):
         for pos in positions:
             del self.__placed_stones[pos]
+
+    def __stone_suicided(self, position: Pos) -> bool:
+        container_group: StoneGroup = self._get_group_containing(position)
+        return not self._has_liberties(container_group)
+

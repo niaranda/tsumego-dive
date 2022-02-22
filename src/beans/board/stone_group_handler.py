@@ -45,6 +45,12 @@ class StoneGroupHandler:
         for group in groups:
             self.__stone_groups.remove(group)
 
+    def _get_group_containing(self, position: Pos) -> StoneGroup:
+        for group in self.__stone_groups:
+            if position in group.positions:
+                return group
+        raise PreprocessingException(f"Added stone in {position} is not contained in any group")
+
     def __get_groups_of_color(self, color: Color) -> List[StoneGroup]:
         """Get all groups of a given color"""
         return list(filter(lambda group: group.color == color, self.__stone_groups))
