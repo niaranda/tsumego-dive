@@ -22,6 +22,9 @@ class Board(StoneCaptureHandler):
         if unplaced_stones:
             self.place_stones(unplaced_stones)
 
+    def __eq__(self, other: Board) -> bool:
+        return self.__placed_stones == other.placed_stones
+
     @property
     def placed_stones(self) -> Dict[Pos, Color]:
         return self.__placed_stones

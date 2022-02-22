@@ -6,6 +6,7 @@ from typing import Optional, List
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
+from src.beans.gameplay_exception import GamePlayException
 
 
 class PathType(Enum):
@@ -34,6 +35,11 @@ class GameNode:
         # add this node as the parent's child
         if parent:
             parent.add_child(self)
+
+        # Check ko rule
+        if self.__broken_ko_rule():
+            raise GamePlayException(f"Ko rule broken when adding {self.stone_color} "
+                                    f"stone in {self.stone_pos}")
 
     @property
     def parent(self) -> Optional[GameNode]:
@@ -90,3 +96,13 @@ class GameNode:
     def is_correct(self) -> bool:
         """True if the path is correct"""
         return self.__path_type == PathType.CORRECT
+
+    def __broken_ko_rule(self) -> bool:
+        if self.__parent is None:
+            return False
+
+        grand_parent = self.__parent.__parent
+        if grand_parent is None:
+            return False
+
+        return grand_parent.board == self.__board
