@@ -20,6 +20,10 @@ class StoneLibertiesHandler:
         super().__init__()
         self.__stone_liberties: Dict[Pos, int] = {}
 
+    @property
+    def stone_liberties(self) -> Dict[Pos, int]:
+        return self.__stone_liberties
+
     def get_placed_stone_positions(self) -> List[Pos]:
         pass
 
