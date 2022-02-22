@@ -24,3 +24,9 @@ class TestBoard(unittest.TestCase):
         stone_dict: Dict[Pos, Color] = {(1, 3): Color.BLACK, (2, 5): Color.WHITE}
 
         self.assertEqual(stone_dict, board.placed_stones)
+
+    def test_suicide_rule(self):
+        positions = [(0, 1), (1, 0)]
+        board: Board = Board([(pos, Color.BLACK) for pos in positions])
+        with self.assertRaises(Exception):
+            board.place_stone(((0, 0), Color.WHITE))
