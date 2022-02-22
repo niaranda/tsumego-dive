@@ -2,23 +2,25 @@ import unittest
 from typing import Tuple
 
 from src.beans.board.board import Board
-from src.beans.board.stone import Stone, Color
+from src.beans.board.color import  Color
 
 Pos = Tuple[int, int]
+Stone = Tuple[Pos, Color]
 
 
 class TestStoneLibertiesHandler(unittest.TestCase):
 
     def test_liberties_update(self):
-        stones = [Stone(Color.BLACK, pos) for pos in [(0, 0), (0, 5), (10, 10)]]
+        positions = [(0, 0), (0, 5), (10, 10)]
+        stones = [(pos, Color.BLACK) for pos in positions]
         board = Board(stones)
 
-        self.assertEqual(stones[0].liberties, 2)
-        self.assertEqual(stones[1].liberties, 3)
-        self.assertEqual(stones[2].liberties, 4)
+        self.assertEqual(board.stone_liberties[positions[0]], 2)
+        self.assertEqual(board.stone_liberties[positions[1]], 3)
+        self.assertEqual(board.stone_liberties[positions[2]], 4)
 
-        board.place_stone(Stone(Color.BLACK, (0, 1)))
-        self.assertEqual(stones[0].liberties, 1)
+        board.place_stone(((0, 1), Color.BLACK))
+        self.assertEqual(board.stone_liberties[positions[0]], 1)
 
-        board.place_stone(Stone(Color.WHITE, (0, 6)))
-        self.assertEqual(stones[1].liberties, 2)
+        board.place_stone(((0, 6), Color.WHITE))
+        self.assertEqual(board.stone_liberties[positions[1]], 2)

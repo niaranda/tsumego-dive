@@ -11,8 +11,8 @@ def _create_game_tree(leaf1_comment: Optional[str], leaf2_comment: Optional[str]
     branch1 = GameNode(root, Board(), None)
     branch2 = GameNode(root, Board(), None)
 
-    GameNode(branch1, Board(), None, leaf1_comment)
-    GameNode(branch2, Board(), None, leaf2_comment)
+    GameNode(branch1, Board(), None, [leaf1_comment])
+    GameNode(branch2, Board(), None, [leaf2_comment])
 
     return GameTree(root)
 
