@@ -27,12 +27,6 @@ class StoneLibertiesHandler:
     def get_placed_stone_positions(self) -> List[Pos]:
         pass
 
-    def add_liberty(self, position: Pos):
-        self.__stone_liberties[position] += 1
-
-    def remove_liberty(self, position: Pos):
-        self.__stone_liberties[position] -= 1
-
     def _compute_liberties(self, position: Pos):
         neighbor_positions = _get_neighbor_positions(position)
         neighbor_stones = self.__get_neighbor_stones(position)
@@ -41,18 +35,24 @@ class StoneLibertiesHandler:
     def _add_liberty_to_neighbors(self, positions: List[Pos]):
         neighbor_stones = [neighbor for pos in positions for neighbor in self.__get_neighbor_stones(pos)]
         for neighbor in neighbor_stones:
-            self.add_liberty(neighbor)
+            self.__add_liberty(neighbor)
 
     def _remove_liberty_from_neighbors(self, positions: List[Pos]):
         neighbor_stones = [neighbor for pos in positions for neighbor in self.__get_neighbor_stones(pos)]
         for neighbor in neighbor_stones:
-            self.remove_liberty(neighbor)
+            self.__remove_liberty(neighbor)
 
     def _has_liberties(self, group: StoneGroup) -> bool:
         for pos in group.positions:
             if self.__stone_liberties[pos] != 0:
                 return True
         return False
+
+    def __add_liberty(self, position: Pos):
+        self.__stone_liberties[position] += 1
+
+    def __remove_liberty(self, position: Pos):
+        self.__stone_liberties[position] -= 1
 
     def __get_neighbor_stones(self, position: Pos) -> List[Pos]:
         neighbor_positions = _get_neighbor_positions(position)
