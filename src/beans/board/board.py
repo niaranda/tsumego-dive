@@ -6,8 +6,7 @@ from src.beans.board.color import Color
 from src.beans.board.stone_capture_handler import StoneCaptureHandler
 
 Pos = Tuple[int, int]
-
-Stone = (Pos, Color)
+Stone = Tuple[Pos, Color]
 
 
 class Board(StoneCaptureHandler):
