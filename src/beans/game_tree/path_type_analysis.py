@@ -1,10 +1,12 @@
+import json
 from typing import List, Optional
+from dotenv import dotenv_values
 
 from src.beans.game_tree.game_node import GameNode, PathType
 from src.preprocessing.preprocessing_exception import PreprocessingException
 
-CORRECT_CLUES = ["Correct", "Success", "正解"]
-WRONG_CLUES = ["Wrong", "Incorrect", "Failure", "失败", "shi bai"]
+CORRECT_CLUES = json.loads(dotenv_values()["CORRECT_CLUES"])
+WRONG_CLUES = json.loads(dotenv_values()["WRONG_CLUES"])
 
 
 def _perform_path_type_propagation(leaves: List[GameNode], path_type: PathType):
