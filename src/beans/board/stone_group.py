@@ -9,7 +9,11 @@ Pos = Tuple[int, int]
 def _are_neighbor_positions(pos1: Pos, pos2: Pos) -> bool:
     row1, col1 = pos1
     row2, col2 = pos2
-    return abs(row1 - row2) == 1 or abs(col1 - col2) == 1
+    if row1 != row2 and col1 != col2:
+        return False
+    if row1 == row2:
+        return abs(col1 - col2) == 1
+    return abs(row1 - row2) == 1
 
 
 class StoneGroup:
@@ -54,3 +58,5 @@ class StoneGroup:
         # No repeated stones
         if len(self.__positions) != len(set(self.__positions)):
             return False
+
+        return True
