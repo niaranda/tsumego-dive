@@ -21,7 +21,7 @@ class PathType(Enum):
 class GameNode:
     """A node of the game tree, representing a state of the board"""
 
-    def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone], comment: Optional[str] = None):
+    def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone], comment: Optional[List[str]] = None):
         """Creates a new game node with given parent, board and positioned stone.
         Adds this game node to given parent node's children list.
         Can optionally specify the original node's comment."""
