@@ -47,6 +47,10 @@ class StoneGroup:
     def positions(self) -> List[Pos]:
         return self.__positions
 
+    @positions.setter
+    def positions(self, value):
+        self.__positions = value
+
     @property
     def color(self) -> Color:
         return self.__color
@@ -62,6 +66,9 @@ class StoneGroup:
         """True if the given position is neighbor to a position in the group"""
         return any([_are_neighbor_positions(position, group_pos) for group_pos in self.__positions])
 
+    def inverse_color(self):
+        self.__color = self.__color.get_other()
+
     def __valid_state(self) -> bool:
         # Not empty
         if len(self.__positions) == 0:
@@ -72,3 +79,4 @@ class StoneGroup:
             return False
 
         return True
+
