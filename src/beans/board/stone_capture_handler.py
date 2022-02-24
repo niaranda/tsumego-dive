@@ -20,6 +20,9 @@ class StoneCaptureHandler(StoneLibertiesHandler, StoneGroupHandler):
         """Captures groups after given stone is placed"""
         # Remove neighbor groups with no liberties left
         captured_groups: List[StoneGroup] = self.__get_groups_captured_by(stone)
+        if captured_groups is None:
+            return
+
         self._remove_groups(captured_groups)
 
         # Remove stones in the captured groups from the board
