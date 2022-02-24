@@ -55,7 +55,7 @@ class StoneGroup:
         """Adds a stone to the group"""
         # Check already in group
         if pos in self.__positions:
-            raise PreprocessingException(f"Trying to add again stone in {pos} to group {self} that contains it")
+            raise PreprocessingException(f"Trying to add again stone in {pos} to {self} that contains it")
         self.__positions.append(pos)
 
     def is_attached(self, position: Pos) -> bool:
