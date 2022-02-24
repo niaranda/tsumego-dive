@@ -1,11 +1,7 @@
 import unittest
-from typing import Tuple
 
 from src.beans.board.color import Color
 from src.beans.board.stone_group import StoneGroup
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 class TestStoneGroup(unittest.TestCase):

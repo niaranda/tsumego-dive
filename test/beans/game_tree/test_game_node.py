@@ -4,6 +4,7 @@ from typing import Optional
 
 from src.beans.board.board import Board
 from src.beans.board.color import Color
+from src.beans.board.stone import Stone
 from src.beans.game_tree.game_node import GameNode, PathType
 
 
@@ -66,8 +67,8 @@ class TestGameNode(unittest.TestCase):
         self.assertFalse(node3.is_correct())
 
     def test_ko_rule(self):
-        black_stones = [((0, 1), Color.BLACK), ((1, 0), Color.BLACK)]
-        white_stones = [((0, 2), Color.WHITE), ((1, 1), Color.WHITE)]
+        black_stones = [Stone((0, 1), Color.BLACK), ((1, 0), Color.BLACK)]
+        white_stones = [Stone((0, 2), Color.WHITE), ((1, 1), Color.WHITE)]
         board1 = Board(black_stones + white_stones)
         root = GameNode(None, board1, None)
 
@@ -77,7 +78,7 @@ class TestGameNode(unittest.TestCase):
         node = GameNode(root, board2, stone)
 
         board3 = copy(board2)
-        illegal_stone = ((0, 1), Color.BLACK)
+        illegal_stone = Stone((0, 1), Color.BLACK)
         board3.place_stone(illegal_stone)
 
         with self.assertRaises(Exception):
