@@ -63,15 +63,15 @@ class Board(StoneCaptureHandler):
         self._compute_liberties(pos)
         self._remove_liberty_from_neighbors([pos])
 
+        # Add stone to new group
+        self._add_stone_to_groups(stone)
+
         # Perform group capture
         self._capture_groups(stone)
 
         # Check suicide rule
         if self.__stone_suicided(pos):
             raise GamePlayException(f"Broke suicide rule when placing stone in {pos}")
-
-        # Add stone to new group
-        self._add_stone_to_groups(stone)
 
     def _remove_stones(self, positions: List[Pos]):
         for pos in positions:
