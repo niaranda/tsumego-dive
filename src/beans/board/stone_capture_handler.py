@@ -1,12 +1,9 @@
-from typing import Tuple, List
+from typing import List
 
-from src.beans.board.color import Color
+from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_group import StoneGroup
 from src.beans.board.stone_group_handler import StoneGroupHandler
 from src.beans.board.stone_liberties_handler import StoneLibertiesHandler
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 class StoneCaptureHandler(StoneGroupHandler, StoneLibertiesHandler):

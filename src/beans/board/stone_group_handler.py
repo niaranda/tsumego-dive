@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from typing import List, Tuple
+from typing import List
 
 from src.beans.board.color import Color
+from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_group import StoneGroup
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 class StoneGroupHandler:

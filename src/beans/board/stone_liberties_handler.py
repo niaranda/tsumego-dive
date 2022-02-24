@@ -1,10 +1,7 @@
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
-from src.beans.board.color import Color
+from src.beans.board.stone import Pos
 from src.beans.board.stone_group import StoneGroup
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 def _get_neighbor_positions(position: Pos) -> List[Pos]:

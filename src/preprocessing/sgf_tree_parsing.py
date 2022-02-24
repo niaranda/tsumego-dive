@@ -1,16 +1,14 @@
 from copy import copy
-from typing import List, Tuple
+from typing import List
 
 import sgf
 
 from src.beans.board.board import Board
 from src.beans.board.color import Color
+from src.beans.board.stone import Pos, Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
 from src.preprocessing.preprocessing_exception import PreprocessingException
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 def parse_sgf_tree(problem: sgf.GameTree) -> GameTree:

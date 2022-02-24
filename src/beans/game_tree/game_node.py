@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Optional, List, Tuple
+from typing import Optional, List
 
 from src.beans.board.board import Board
 from src.beans.board.color import Color
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
+from src.beans.board.stone import Stone, Pos
 
 
 class PathType(Enum):
@@ -21,7 +19,8 @@ class PathType(Enum):
 class GameNode:
     """A node of the game tree, representing a state of the board"""
 
-    def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone], comment: Optional[List[str]] = None):
+    def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone],
+                 comment: Optional[List[str]] = None):
         """Creates a new game node with given parent, board and positioned stone.
         Adds this game node to given parent node's children list.
         Can optionally specify the original node's comment."""

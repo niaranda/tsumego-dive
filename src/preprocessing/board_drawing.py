@@ -1,4 +1,4 @@
-from typing import Tuple, Dict
+from typing import Dict
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 
 from src.beans.board.board import Board
 from src.beans.board.color import Color
+from src.beans.board.stone import Pos
 
 GRID_LINE_START = 1 / 21
 GRID_LINE_END = 20 / 21
@@ -16,9 +17,6 @@ STONE_SIZE = 12
 WHITE_STONE_EDGE_COLOR = "black"
 BLACK_STONE_EDGE_COLOR = "gray"
 BACKGROUND_IMAGE: np.ndarray = plt.imread("../../images/board_background.jpg")
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 def draw_board(board: Board):

@@ -1,9 +1,10 @@
-from typing import List, Tuple
+from __future__ import annotations
+
+from typing import List
 
 from src.beans.board.color import Color
+from src.beans.board.stone import Pos
 from src.preprocessing.preprocessing_exception import PreprocessingException
-
-Pos = Tuple[int, int]
 
 
 def _are_neighbor_positions(pos1: Pos, pos2: Pos) -> bool:

@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Optional, Dict
+from typing import List, Optional, Dict
 
 from src.beans.board.color import Color
+from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_capture_handler import StoneCaptureHandler
-
-Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
 
 
 class Board(StoneCaptureHandler):
