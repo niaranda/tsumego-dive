@@ -8,6 +8,7 @@ from src.beans.board.color import Color
 from src.beans.board.stone import Pos, Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
+from src.preprocessing.normalizer import Normalizer
 from src.preprocessing.preprocessing_exception import PreprocessingException
 
 
@@ -76,6 +77,9 @@ class SgfTreeParser:
         init_board: Board = Board(init_stones)
         first_stone: Stone = _get_first_stone(problem)
 
+        self.__normalizer = Normalizer(init_board, first_stone)
+        self.__normalizer.normalize_board(init_board)
+
         self.__root = GameNode(None, init_board, None)
         self.__first_color: Color = first_stone[1]
 
@@ -120,5 +124,7 @@ class SgfTreeParser:
         new_board: Board = deepcopy(game_node.board)  # Copy current board
 
         # Place the new stone and create a new game node
-        new_board.place_stone(new_stone)
+        normalized_stone = self.__normalizer.normalize_stone(new_stone)
+        new_board.place_stone(normalized_stone)
+
         return GameNode(game_node, new_board, new_stone, properties.get("C"))
