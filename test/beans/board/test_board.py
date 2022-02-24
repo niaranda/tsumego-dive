@@ -14,7 +14,7 @@ class TestBoard(unittest.TestCase):
         stones: List[Stone] = [((1, 3), Color.BLACK), ((2, 5), Color.WHITE)]
         board: Board = Board(stones)
         positions = [(1, 3), (2, 5)]
-        self.assertEqual(positions, board.get_placed_stone_positions())
+        self.assertEqual(positions, list(board.placed_stones.keys()))
 
     def test_place_stones(self):
         board: Board = Board()
