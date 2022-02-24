@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import copy
 from typing import List
 
 from src.beans.board.color import Color
@@ -31,6 +32,16 @@ class StoneGroup:
 
     def __str__(self) -> str:
         return f"Group: {str(self.__color)} {str([str(pos) for pos in self.__positions])}"
+
+    def __deepcopy__(self, memodict={}) -> StoneGroup:
+        positions = copy(self.__positions)
+        return StoneGroup(positions, self.__color)
+
+    def __eq__(self, other: StoneGroup) -> bool:
+        return self.__color == other.__color and self.__positions == other.__positions
+
+    def __hash__(self) -> int:
+        return hash((self.__color, self.__positions))
 
     @property
     def positions(self) -> List[Pos]:

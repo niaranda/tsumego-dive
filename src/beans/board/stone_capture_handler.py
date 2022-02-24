@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_group import StoneGroup
@@ -6,11 +6,12 @@ from src.beans.board.stone_group_handler import StoneGroupHandler
 from src.beans.board.stone_liberties_handler import StoneLibertiesHandler
 
 
-class StoneCaptureHandler(StoneGroupHandler, StoneLibertiesHandler):
+class StoneCaptureHandler(StoneLibertiesHandler, StoneGroupHandler):
     """Class to compute stone capture"""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, stones: Optional[List[Stone]]):
+        StoneLibertiesHandler.__init__(self, stones)
+        StoneGroupHandler.__init__(self, stones)
 
     def _remove_stones(self, captured_stones):
         pass

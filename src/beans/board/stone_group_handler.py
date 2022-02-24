@@ -1,22 +1,29 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_group import StoneGroup
+from src.preprocessing.preprocessing_exception import PreprocessingException
 
 
 class StoneGroupHandler:
     """Class to handle stone groups in board"""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, stones: Optional[List[Stone]]):
         self.__stone_groups: List[StoneGroup] = []
+        if stones:
+            for stone in stones:
+                self._add_stone_to_groups(stone)
 
     @property
     def stone_groups(self) -> List[StoneGroup]:
         return self.__stone_groups
+
+    @stone_groups.setter
+    def stone_groups(self, groups: List[StoneGroup]):
+        self.__stone_groups = groups
 
     def _add_stone_to_groups(self, stone: Stone):
         """Adds a new stone to the corresponding group"""

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import copy, deepcopy
 from typing import List, Optional, Dict
 
 from src.beans.board.color import Color
@@ -14,20 +15,32 @@ class Board(StoneCaptureHandler):
 
     def __init__(self, unplaced_stones: Optional[List[Stone]] = None):
         """Creates a new Go board, optionally with a list of initial stones placed on it"""
-        super().__init__()
-
         self.__placed_stones: Dict[Pos, Color] = {}
 
         # Place initial stones
         if unplaced_stones:
-            self.place_stones(unplaced_stones)
+            for pos, color in unplaced_stones:
+                self.__placed_stones[pos] = color
+
+        super().__init__(unplaced_stones)
 
     def __eq__(self, other: Board) -> bool:
         return self.__placed_stones == other.placed_stones
 
+    def __deepcopy__(self, memodict={}) -> Board:
+        new_board = Board()
+        new_board.placed_stones = copy(self.__placed_stones)
+        new_board.stone_groups = deepcopy(self.stone_groups)
+        new_board.stone_liberties = copy(self.stone_liberties)
+        return new_board
+
     @property
     def placed_stones(self) -> Dict[Pos, Color]:
         return self.__placed_stones
+
+    @placed_stones.setter
+    def placed_stones(self, stones: Dict[Pos, Color]):
+        self.__placed_stones = stones
 
     def get_placed_stone_positions(self) -> List[Pos]:
         return list(self.__placed_stones.keys())

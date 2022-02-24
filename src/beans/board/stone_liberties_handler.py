@@ -1,6 +1,6 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 
-from src.beans.board.stone import Pos
+from src.beans.board.stone import Pos, Stone
 from src.beans.board.stone_group import StoneGroup
 
 
@@ -13,13 +13,19 @@ def _get_neighbor_positions(position: Pos) -> List[Pos]:
 
 class StoneLibertiesHandler:
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, stones: Optional[List[Stone]]):
         self.__stone_liberties: Dict[Pos, int] = {}
+        if stones:
+            for stone in stones:
+                self._compute_liberties(stone[0])
 
     @property
     def stone_liberties(self) -> Dict[Pos, int]:
         return self.__stone_liberties
+
+    @stone_liberties.setter
+    def stone_liberties(self, liberties: Dict[Pos, int]):
+        self.__stone_liberties = liberties
 
     def get_placed_stone_positions(self) -> List[Pos]:
         pass
