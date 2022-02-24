@@ -6,7 +6,7 @@ from src.beans.game_tree.game_tree import GameTree
 from src.beans.gameplay_exception import GamePlayException
 from src.preprocessing.error_handling import log_error
 from src.preprocessing.preprocessing_exception import PreprocessingException
-from src.preprocessing.sgf_tree_parsing import parse_sgf_tree
+from src.preprocessing.sgf_tree_parser import SgfTreeParser
 
 
 def process_problem(problem_name: str):
@@ -17,7 +17,7 @@ def process_problem(problem_name: str):
         return
 
     try:
-        game_tree: GameTree = parse_sgf_tree(problem)
+        game_tree: GameTree = SgfTreeParser(problem).parse_tree()
     except (GamePlayException, PreprocessingException) as e:
         log_error(e, problem_name)
 
