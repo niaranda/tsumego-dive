@@ -1,6 +1,10 @@
-from typing import Tuple
+from typing import Tuple, NamedTuple
 
 from src.beans.board.color import Color
 
 Pos = Tuple[int, int]
-Stone = Tuple[Pos, Color]
+
+
+class Stone(NamedTuple):
+    pos: Pos
+    color: Color

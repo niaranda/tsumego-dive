@@ -27,7 +27,7 @@ def __get_main_reference(board: Board, references: List[Pos]) -> Pos:
 
 
 def _determine_color_inversion(first_stone: Stone) -> bool:
-    return first_stone[1] == Color.WHITE
+    return first_stone.color == Color.WHITE
 
 
 def _determine_board_rotations(init_board: Board) -> int:
@@ -43,11 +43,11 @@ def _determine_board_reflexion(init_board: Board) -> bool:
 
 
 def _perform_stone_color_inversion(stone: Stone) -> Stone:
-    return stone[0], stone[1].get_other()
+    return Stone(stone.pos, stone.color.get_other())
 
 
 def _perform_stone_rotation(stone: Stone) -> Stone:
-    return _perform_pos_rotation(stone[0]), stone[1]
+    return Stone(_perform_pos_rotation(stone.pos), stone.color)
 
 
 def _perform_pos_rotation(pos: Pos) -> Pos:
@@ -58,7 +58,7 @@ def _perform_pos_rotation(pos: Pos) -> Pos:
 
 
 def _perform_stone_reflection(stone: Stone) -> Stone:
-    return _perform_pos_reflection(stone[0]), stone[1]
+    return Stone(_perform_pos_reflection(stone.pos), stone.color)
 
 
 def _perform_pos_reflection(pos: Pos) -> Pos:

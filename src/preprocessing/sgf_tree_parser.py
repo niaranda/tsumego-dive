@@ -25,7 +25,7 @@ def _parse_stone(properties: dict, color: Color) -> Stone:
 
     # Get position from properties
     pos: Pos = _parse_position(properties.get(property_name)[0])
-    return pos, color
+    return Stone(pos, color)
 
 
 def _get_first_stone(problem: sgf.GameTree) -> Stone:
@@ -54,7 +54,7 @@ def _parse_positions(str_positions: List[str]) -> List[Pos]:
 def _parse_init_stones(properties: dict, color: Color) -> List[Stone]:
     property_name: str = "AB" if color == Color.BLACK else "AW"
     stones_pos: List[Pos] = _parse_positions(properties.get(property_name))
-    return [(pos, color) for pos in stones_pos]
+    return [Stone(pos, color) for pos in stones_pos]
 
 
 def _get_init_stones(problem: sgf.GameTree) -> List[Stone]:
@@ -81,14 +81,14 @@ class SgfTreeParser:
         self.__normalizer.normalize_board(init_board)
 
         self.__root = GameNode(None, init_board, None)
-        self.__first_color: Color = first_stone[1]
+        self.__first_color: Color = first_stone.color
 
     def parse_tree(self) -> GameTree:
         """Converts an sgf game tree to a game tree for this project"""
         if self.__problem.nodes[1:]:
             last_game_node = self.__add_branch_nodes(self.__problem.nodes[1:], self.__root,
                                                      self.__first_color)  # first node is root
-            next_color = last_game_node.stone_color.get_other()
+            next_color = last_game_node.stone.color.get_other()
         else:
             last_game_node = self.__root
             next_color = self.__first_color
@@ -102,7 +102,7 @@ class SgfTreeParser:
         for branch in branches:
             if branch.nodes:
                 last_game_node = self.__add_branch_nodes(branch.nodes, game_node, color)
-                next_color = last_game_node.stone_color.get_other()
+                next_color = last_game_node.stone.color.get_other()
             else:
                 last_game_node = game_node
                 next_color = color

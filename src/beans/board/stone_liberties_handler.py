@@ -10,7 +10,7 @@ class StoneLibertiesHandler:
         self.__stone_liberties: Dict[Pos, int] = {}
         if stones:
             for stone in stones:
-                self._compute_liberties(stone[0])
+                self._compute_liberties(stone.pos)
 
     @property
     def stone_liberties(self) -> Dict[Pos, int]:

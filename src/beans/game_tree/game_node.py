@@ -4,8 +4,7 @@ from enum import Enum
 from typing import Optional, List
 
 from src.beans.board.board import Board
-from src.beans.board.color import Color
-from src.beans.board.stone import Stone, Pos
+from src.beans.board.stone import Stone
 from src.beans.gameplay_exception import GamePlayException
 
 
@@ -38,8 +37,8 @@ class GameNode:
 
         # Check ko rule
         if self.__broken_ko_rule():
-            raise GamePlayException(f"Ko rule broken when adding {self.stone_color} "
-                                    f"stone in {self.stone_pos}")
+            raise GamePlayException(f"Ko rule broken when adding {self.stone.color} "
+                                    f"stone in {self.stone.pos}")
 
     @property
     def parent(self) -> Optional[GameNode]:
@@ -52,14 +51,6 @@ class GameNode:
     @property
     def stone(self) -> Optional[Stone]:
         return self.__stone
-
-    @property
-    def stone_pos(self) -> Optional[Pos]:
-        return self.__stone[0] if self.__stone else None
-
-    @property
-    def stone_color(self) -> Optional[Color]:
-        return self.__stone[1] if self.__stone else None
 
     @property
     def board(self) -> Board:
