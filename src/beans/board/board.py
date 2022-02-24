@@ -53,6 +53,10 @@ class Board(StoneCaptureHandler):
     def place_stone(self, stone: Stone):
         """Places a stone in the board"""
         pos, color = stone
+
+        if pos in self.__placed_stones:
+            raise GamePlayException(f"Adding {color} stone to position {pos} already containing a stone")
+
         self.__placed_stones[pos] = color
 
         # compute liberties and remove one liberty from neighbor stones
