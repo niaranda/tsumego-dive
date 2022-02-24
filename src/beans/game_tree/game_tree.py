@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from src.beans.game_tree.game_node import GameNode
-from src.beans.game_tree.path_type_analysis import PathTypeAnalyser
+from src.preprocessing.path_type_analysis import PathTypeAnalyser
 
 
 class GameTree(PathTypeAnalyser):
