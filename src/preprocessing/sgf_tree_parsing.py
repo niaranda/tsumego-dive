@@ -100,5 +100,5 @@ def __create_game_node(properties: dict, game_node: GameNode, color: Color) -> G
     new_board: Board = deepcopy(game_node.board)  # Copy current board
 
     # Place the new stone and create a new game node
-    new_board.place_stones([new_stone])
+    new_board.place_stone(new_stone)
     return GameNode(game_node, new_board, new_stone, properties.get("C"))
