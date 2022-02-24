@@ -21,8 +21,12 @@ def parse_sgf_tree(problem: sgf.GameTree) -> GameTree:
 
     # recursively add all branches
     first_color: Color = __get_first_color(problem)
-    last_game_node = __add_branch_nodes(problem.nodes[1:], root, first_color)  # first node is root
-    next_color = last_game_node.stone_color.get_other() if last_game_node.stone else first_color
+    if problem.nodes[1:]:
+        last_game_node = __add_branch_nodes(problem.nodes[1:], root, first_color)  # first node is root
+        next_color = last_game_node.stone_color.get_other()
+    else:
+        last_game_node = root
+        next_color = first_color
     if problem.children:
         __add_branches(problem.children, last_game_node, next_color)
 
@@ -80,9 +84,14 @@ def __get_first_color(problem: sgf.GameTree) -> Color:
 def __add_branches(branches: List[sgf.GameTree], game_node: GameNode, color: Color):
     """Recursively adds all branches"""
     for branch in branches:
-        last_game_node = __add_branch_nodes(branch.nodes, game_node, color)
-        next_color = last_game_node.stone_color.get_other()
-        __add_branches(branch.children, last_game_node, next_color)
+        if branch.nodes:
+            last_game_node = __add_branch_nodes(branch.nodes, game_node, color)
+            next_color = last_game_node.stone_color.get_other()
+        else:
+            last_game_node = game_node
+            next_color = color
+        if branch.children:
+            __add_branches(branch.children, last_game_node, next_color)
 
 
 def __add_branch_nodes(nodes: List[sgf.Node], game_node: GameNode, color: Color):
