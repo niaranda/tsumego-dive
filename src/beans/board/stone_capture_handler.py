@@ -27,7 +27,7 @@ class StoneCaptureHandler(StoneLibertiesHandler, StoneGroupHandler):
         self._remove_stones(captured_positions)
 
         # Add one liberty to all affected stones
-        self._remove_liberty_from_neighbors(captured_positions)
+        self._add_liberty_to_neighbors(captured_positions)
 
     def __get_groups_captured_by(self, stone: Stone) -> List[StoneGroup]:
         """Get groups left without liberties after stone placement"""
