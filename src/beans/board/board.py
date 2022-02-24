@@ -42,9 +42,6 @@ class Board(StoneCaptureHandler):
     def placed_stones(self, stones: Dict[Pos, Color]):
         self.__placed_stones = stones
 
-    def get_placed_stone_positions(self) -> List[Pos]:
-        return list(self.__placed_stones.keys())
-
     def place_stones(self, stones: List[Stone]):
         """Places a list of stones in the board"""
         for stone in stones:
@@ -77,7 +74,19 @@ class Board(StoneCaptureHandler):
         for pos in positions:
             del self.__placed_stones[pos]
 
+    def _get_neighbor_stone_positions(self, position: Pos) -> List[Pos]:
+        neighbor_positions = self._get_neighbor_positions(position)
+        return list(filter(lambda pos: pos in neighbor_positions, self.__get_placed_stone_positions()))
+
+    def _get_neighbor_positions(self, position: Pos) -> List[Pos]:
+        """Returns list of neighbor positions"""
+        row, col = position
+        positions: List[Pos] = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
+        return list(filter(lambda pos: 0 <= pos[0] <= 18 and 0 <= pos[1] <= 18, positions))
+
     def __stone_suicided(self, position: Pos) -> bool:
         container_group: StoneGroup = self._get_group_containing(position)
         return not self._has_liberties(container_group)
 
+    def __get_placed_stone_positions(self) -> List[Pos]:
+        return list(self.__placed_stones.keys())
