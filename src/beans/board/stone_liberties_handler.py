@@ -50,6 +50,13 @@ class StoneLibertiesHandler:
                 return True
         return False
 
+    def _remove_liberty_count(self, position: Pos):
+        del self.__stone_liberties[position]
+
+    def _remove_liberties_count(self, positions: List[Pos]):
+        for pos in positions:
+            self._remove_liberty_count(pos)
+
     def __add_liberty(self, position: Pos):
         self.__stone_liberties[position] += 1
 

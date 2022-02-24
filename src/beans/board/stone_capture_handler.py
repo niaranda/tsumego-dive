@@ -25,6 +25,7 @@ class StoneCaptureHandler(StoneLibertiesHandler, StoneGroupHandler):
         # Remove stones in the captured groups from the board
         captured_positions: List[Pos] = [pos for group in captured_groups for pos in group.positions]
         self._remove_stones(captured_positions)
+        self._remove_liberties_count(captured_positions)
 
         # Add one liberty to all affected stones
         self._add_liberty_to_neighbors(captured_positions)
