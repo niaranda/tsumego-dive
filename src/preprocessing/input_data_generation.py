@@ -35,7 +35,7 @@ def generate_input_data(game_tree: GameTree) -> Tuple[np.ndarray, np.ndarray]:
 
 def __generate_data(data: Optional[np.ndarray], game_node: GameNode, color: Color, filter_correct: bool) -> np.ndarray:
     if len(game_node.children) == 0:
-        if data is None:
+        if color == Color.BLACK and data is None:
             raise PreprocessingException("Empty game")
         return data
     if game_node.children[0].stone.color == color:
