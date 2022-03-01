@@ -67,6 +67,15 @@ def _get_init_stones(problem: sgf.GameTree) -> List[Stone]:
     return black_stones + white_stones
 
 
+def _get_comment(properties: Dict[str, str]) -> str:
+    comment, note = "", ""
+    if "C" in properties:
+        comment = properties["C"][0]
+    if "N" in properties:
+        note = properties["N"][0]
+    return comment + note
+
+
 class SgfTreeParser:
 
     def __init__(self, problem: sgf.GameTree):
@@ -127,4 +136,6 @@ class SgfTreeParser:
         normalized_stone = self.__normalizer.normalize_stone(new_stone)
         new_board.place_stone(normalized_stone)
 
-        return GameNode(game_node, new_board, new_stone, properties.get("C"))
+        comment: str = _get_comment(properties)
+
+        return GameNode(game_node, new_board, new_stone, comment)
