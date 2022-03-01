@@ -1,10 +1,11 @@
 import logging
-import os
 from datetime import datetime
+from pathlib import Path
 
-now = datetime.now().strftime("%y%m%d_%H%M%S")
-os.mkdir(f"../../log/{now}")
-logging.basicConfig(filename=f"../../log/{now}/errors.log")
+day = datetime.now().strftime("%y%m%d")
+time = datetime.now().strftime("%H%M%S")
+Path(f"../../log/{day}").mkdir(exist_ok=True)
+logging.basicConfig(filename=f"../../log/{day}/{time}.log")
 
 
 def log_error(e: Exception, problem_path: str):
