@@ -8,6 +8,7 @@ from src.beans.board.color import Color
 from src.beans.board.stone import Pos, Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
+from src.beans.gameplay_exception import GamePlayException
 from src.preprocessing.normalizer import Normalizer
 from src.preprocessing.preprocessing_exception import PreprocessingException
 
@@ -27,7 +28,15 @@ def _parse_stone(properties: dict, color: Color) -> Stone:
 
     # Get position from properties
     pos: Pos = _parse_position(properties.get(property_name)[0])
-    return Stone(pos, color)
+
+    if __is_valid_position(pos):
+        return Stone(pos, color)
+
+    row, col = pos
+    if row == 25 and col == 25:
+        raise GamePlayException("Unallowed pass")
+
+    raise PreprocessingException(f"Wrong stone position {properties.get(property_name)[0]}")
 
 
 def _correct_only_comment_tree_node(problem: sgf.GameTree):
@@ -104,6 +113,11 @@ def _get_comment(properties: Dict[str, str]) -> str:
     if "N" in properties:
         note = properties["N"][0]
     return comment + note
+
+
+def __is_valid_position(position: Pos) -> bool:
+    row, col = position
+    return 0 <= row <= 18 and 0 <= col <= 18
 
 
 class SgfTreeParser:
