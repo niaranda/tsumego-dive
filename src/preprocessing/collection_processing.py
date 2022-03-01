@@ -58,4 +58,4 @@ def __get_problem_paths(collection_path: str) -> List[str]:
 
 def __is_valid(problem_path: str) -> bool:
     """Checks if given problem path is valid"""
-    return "skip" not in problem_path and ".sgf" in problem_path
+    return "skip" not in problem_path and ".sgf" in problem_path.lower()
