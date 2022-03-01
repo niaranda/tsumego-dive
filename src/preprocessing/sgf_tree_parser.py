@@ -28,21 +28,34 @@ def _parse_stone(properties: dict, color: Color) -> Stone:
     return Stone(pos, color)
 
 
+def _correct_only_comment_first_node(problem: sgf.GameTree):
+    if len(problem.nodes) > 1:
+        problem.root.nodes.pop(1)
+
+    problem.children[0].nodes.pop(0)
+    return
+
+
+def _get_first_node_properties(problem: sgf.GameTree) -> Dict[str, str]:
+    if len(problem.nodes) > 1:
+        return problem.nodes[1].properties
+    return problem.children[0].root.properties
+
+
 def _get_first_stone(problem: sgf.GameTree) -> Stone:
-    properties: Dict[str, str]
-    if problem.children:
-        properties = problem.children[0].root.properties
-    else:
-        properties = problem.root.next.properties
+    properties: Dict[str, str] = _get_first_node_properties(problem)
 
-    keys = properties.keys()
+    if "B" not in properties and "W" not in properties:
+        if "C" in properties or "N" in properties:
+            _correct_only_comment_first_node(problem)
+            properties = _get_first_node_properties(problem)
+            if "B" not in properties and "W" not in properties:
+                raise PreprocessingException("Found no stone while parsing sgf tree root")
 
-    if "B" in keys and "W" in keys:
+    if "B" in properties and "W" in properties:
         raise PreprocessingException("Found stones for both colors while parsing sgf tree root")
-    if "B" not in keys and "W" not in keys:
-        raise PreprocessingException("Found no stone while parsing sgf tree root")
 
-    if "B" in keys:
+    if "B" in properties:
         return _parse_stone(properties, Color.BLACK)
     return _parse_stone(properties, Color.WHITE)
 
