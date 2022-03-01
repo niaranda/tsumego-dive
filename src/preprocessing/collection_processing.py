@@ -17,7 +17,7 @@ def process_collection(collection_path: str):
 
 
 def __save_to_csv(black_moves: np.ndarray, white_moves: np.ndarray):
-    dotenv.load_dotenv()
+    dotenv.load_dotenv(override=True)
 
     with open(os.environ["BLACK_FILE"], "a") as f:
         f.write(pd.DataFrame(black_moves).to_csv(header=False))
