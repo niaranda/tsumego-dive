@@ -42,7 +42,13 @@ def __process_problems(problem_paths: List[str]) -> Tuple[np.ndarray, np.ndarray
             continue
 
         black_moves = np.vstack([black_moves, problem_result[0]])
-        white_moves = np.vstack([white_moves, problem_result[1]])
+
+        if white_moves is None:
+            white_moves = problem_result[1]
+            continue
+
+        if problem_result[1] is not None:
+            white_moves = np.vstack([white_moves, problem_result[1]])
 
     return black_moves, white_moves
 
