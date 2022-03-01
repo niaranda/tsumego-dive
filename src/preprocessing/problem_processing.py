@@ -24,6 +24,7 @@ def process_problem(problem_name: str) -> Optional[Tuple[np.ndarray, np.ndarray]
 
     except (GamePlayException, PreprocessingException) as e:
         log_error(e, problem_name)
+        return None
 
 
 def __parse_problem(problem_path: str) -> Optional[sgf.GameTree]:
