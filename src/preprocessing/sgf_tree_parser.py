@@ -28,12 +28,27 @@ def _parse_stone(properties: dict, color: Color) -> Stone:
     return Stone(pos, color)
 
 
-def _correct_only_comment_first_node(problem: sgf.GameTree):
+def _correct_only_comment_tree_node(problem: sgf.GameTree):
     if len(problem.nodes) > 1:
         problem.root.nodes.pop(1)
 
     problem.children[0].nodes.pop(0)
     return
+
+
+def _correct_only_comment_branch_node(branch: sgf.GameTree):
+    branch.nodes.pop(0)
+
+
+def _check_only_comment_branch_node(branch: sgf.GameTree) -> bool:
+    if not branch.nodes:
+        return False
+
+    properties: Dict[str, str] = branch.nodes[0].properties
+    if "B" in properties or "W" in properties:
+        return False
+
+    return "C" in properties or "N" in properties
 
 
 def _get_first_node_properties(problem: sgf.GameTree) -> Dict[str, str]:
@@ -47,7 +62,7 @@ def _get_first_stone(problem: sgf.GameTree) -> Stone:
 
     if "B" not in properties and "W" not in properties:
         if "C" in properties or "N" in properties:
-            _correct_only_comment_first_node(problem)
+            _correct_only_comment_tree_node(problem)
             properties = _get_first_node_properties(problem)
             if "B" not in properties and "W" not in properties:
                 raise PreprocessingException("Found no stone while parsing sgf tree root")
@@ -122,6 +137,9 @@ class SgfTreeParser:
     def __add_branches(self, branches: List[sgf.GameTree], game_node: GameNode, color: Color):
         """Recursively adds all branches"""
         for branch in branches:
+            if branch.nodes and _check_only_comment_branch_node(branch):
+                _correct_only_comment_branch_node(branch)
+
             if branch.nodes:
                 last_game_node = self.__add_branch_nodes(branch.nodes, game_node, color)
                 next_color = last_game_node.stone.color.get_other()
