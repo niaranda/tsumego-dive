@@ -23,11 +23,11 @@ def _parse_position(str_position: str) -> Pos:
 def _parse_stone(properties: dict, color: Color) -> Stone:
     property_name: str = "B" if color == Color.BLACK else "W"
 
-    if property_name not in properties.keys():
+    if property_name not in properties:
         raise PreprocessingException(f"Not found expected {color} stone property while parsing sgf tree")
 
     # Get position from properties
-    pos: Pos = _parse_position(properties.get(property_name)[0])
+    pos: Pos = _parse_position(properties.get(property_name)[0].lower())
 
     if __is_valid_position(pos):
         return Stone(pos, color)
