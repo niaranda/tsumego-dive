@@ -13,7 +13,7 @@ from src.preprocessing.preprocessing_exception import PreprocessingException
 
 
 def truncate_csv_files():
-    dotenv.load_dotenv()
+    dotenv.load_dotenv(override=True)
 
     black_file = os.environ["BLACK_FILE"]
     white_file = os.environ["WHITE_FILE"]
