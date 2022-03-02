@@ -14,6 +14,8 @@ from src.preprocessing.preprocessing_exception import PreprocessingException
 
 
 def _parse_position(str_position: str) -> Pos:
+    if not str_position:
+        raise GamePlayException("Unallowed pass")
     if len(str_position) != 2:
         raise PreprocessingException(f"Wrong stone position format {str_position} in sgf")
     col, row = str_position
