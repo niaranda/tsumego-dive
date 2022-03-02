@@ -94,6 +94,9 @@ def _parse_positions(str_positions: List[str]) -> List[Pos]:
 
 def _parse_init_stones(properties: dict, color: Color) -> List[Stone]:
     property_name: str = "AB" if color == Color.BLACK else "AW"
+    if property_name not in properties:
+        return []
+
     stones_pos: List[Pos] = _parse_positions(properties.get(property_name))
     return [Stone(pos, color) for pos in stones_pos]
 
@@ -143,6 +146,8 @@ class SgfTreeParser:
             _correct_fake_root(problem)
 
         init_stones: List[Stone] = _get_init_stones(problem)
+        if not init_stones:
+            raise PreprocessingException("Empty initial board")
 
         init_board: Board = Board(init_stones)
         first_stone: Stone = _get_first_stone(problem)
