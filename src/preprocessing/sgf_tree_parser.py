@@ -100,7 +100,7 @@ def _parse_init_stones(properties: dict, color: Color) -> List[Stone]:
 
 def _get_init_stones(problem: sgf.GameTree) -> List[Stone]:
     """Gets sgf game tree initial stones"""
-    properties: dict = problem.root.properties
+    properties: dict = problem.nodes[0].properties
 
     black_stones: List[Stone] = _parse_init_stones(properties, Color.BLACK)
     white_stones: List[Stone] = _parse_init_stones(properties, Color.WHITE)
@@ -122,10 +122,25 @@ def __is_valid_position(position: Pos) -> bool:
     return 0 <= row <= 18 and 0 <= col <= 18
 
 
+def _has_fake_root(problem: sgf.GameTree) -> bool:
+    return "AW" not in problem.root.properties and "AB" not in problem.root.properties
+
+
+def _correct_fake_root(problem: sgf.GameTree):
+    # root must have at least 2 nodes
+    if len(problem.nodes) == 1:
+        raise PreprocessingException("Found impossible fake root with only one node")
+
+    problem.nodes.pop(0)
+
+
 class SgfTreeParser:
 
     def __init__(self, problem: sgf.GameTree):
         self.__problem = problem
+
+        while _has_fake_root(problem):  # can be several nodes
+            _correct_fake_root(problem)
 
         init_stones: List[Stone] = _get_init_stones(problem)
 
