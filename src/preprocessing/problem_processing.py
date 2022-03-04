@@ -9,7 +9,7 @@ from src.preprocessing.error_handling import log_error
 from src.preprocessing.input_data_generation import generate_input_data
 from src.preprocessing.preprocessing_exception import PreprocessingException
 from src.preprocessing.sgf_corrections import apply_corrections
-from src.preprocessing.sgf_tree_parser import SgfTreeParser
+from src.preprocessing.tree_adapter import TreeAdapter
 
 
 def process_problem(problem_name: str) -> Optional[Tuple[np.ndarray, np.ndarray]]:
@@ -20,7 +20,7 @@ def process_problem(problem_name: str) -> Optional[Tuple[np.ndarray, np.ndarray]
         return None
 
     try:
-        game_tree: GameTree = SgfTreeParser(problem).parse_tree()
+        game_tree: GameTree = TreeAdapter(problem).parse_tree()
         return generate_input_data(game_tree)
 
     except (GamePlayException, PreprocessingException) as e:

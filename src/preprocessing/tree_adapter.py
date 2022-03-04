@@ -137,7 +137,7 @@ def _correct_fake_root(problem: sgf.GameTree):
     problem.nodes.pop(0)
 
 
-class SgfTreeParser:
+class TreeAdapter:
 
     def __init__(self, problem: sgf.GameTree):
         self.__problem = problem
