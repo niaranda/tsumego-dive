@@ -1,5 +1,7 @@
 import json
 from typing import List, Optional
+
+import dotenv
 from dotenv import dotenv_values
 
 from src.beans.game_tree.game_node import GameNode, PathType
@@ -18,9 +20,17 @@ def _perform_path_type_propagation(leaves: List[GameNode], path_type: PathType):
 
 def _analyse_leaf_path_type(leaf: GameNode) -> PathType:
     correct, wrong = __has_correct_clue(leaf.comment), __has_wrong_clue(leaf.comment)
+    dotenv.load_dotenv(override=True)
+    default_wrong = bool(dotenv_values()["DEFAULT_WRONG"])
 
     if correct and wrong:
         return PathType.DUAL
+
+    if default_wrong and correct:
+        return PathType.CORRECT
+    if default_wrong:
+        return PathType.WRONG  # if no clue was found, the path is considered wrong
+
     if wrong:
         return PathType.WRONG
     return PathType.CORRECT  # if no clue was found, the path is considered correct
