@@ -207,4 +207,4 @@ class TreeAdapter:
 
         comment: str = _get_comment(properties)
 
-        return GameNode(game_node, new_board, new_stone, comment)
+        return GameNode(game_node, new_board, normalized_stone, comment)
