@@ -172,8 +172,6 @@ class TreeAdapter:
             _correct_fake_root(problem)
 
         init_stones: List[Stone] = _get_init_stones(problem)
-        if not init_stones:
-            raise PreprocessingException("Empty initial board")
 
         init_board: Board = Board(init_stones)
         first_stone: Stone = _get_first_stone(problem)

@@ -19,8 +19,14 @@ def apply_corrections(sgf: str) -> str:
     if __has_multiple_init_property(result, Color.WHITE):
         result = __unite_multiple_init_property(result, Color.WHITE)
 
+    if __has_empty_board(result):
+        raise PreprocessingException("Unallowed empty initial board")
+
     return result
 
+
+def __has_empty_board(sgf: str) -> bool:
+    return sgf.count("AB[") == 0 and sgf.count("AW[") == 0
 
 def __has_wrong_node_delimiters(sgf: str) -> bool:
     return len(re.findall("\\([A-Z]{1,2}\\[", sgf)) != 0
