@@ -108,7 +108,7 @@ def _get_init_stones(problem: sgf.GameTree) -> List[Stone]:
     black_stones: List[Stone] = _parse_init_stones(properties, Color.BLACK)
     white_stones: List[Stone] = _parse_init_stones(properties, Color.WHITE)
 
-    return black_stones + white_stones
+    return list(set(black_stones + white_stones))  # remove duplicates
 
 
 def _get_comment(properties: Dict[str, str]) -> str:
