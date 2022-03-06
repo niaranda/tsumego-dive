@@ -165,7 +165,7 @@ class TreeAdapter:
         if _invalid_size(problem):
             raise PreprocessingException("Invalid size")
 
-        if _has_first_empty_branch(problem):
+        while _has_first_empty_branch(problem):  # can have several empty branches
             _correct_first_empty_branch(problem)
 
         while _has_fake_root(problem):  # can be several nodes
