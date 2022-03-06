@@ -2,10 +2,14 @@ import re
 from typing import List
 
 from src.beans.board.color import Color
+from src.preprocessing.preprocessing_exception import PreprocessingException
 
 
 def apply_corrections(sgf: str) -> str:
     result = sgf.replace("\n", "")
+
+    if __has_node_with_multiple_stone_placing(result):
+        raise PreprocessingException("Unallowed multiple stone placing in one node")
 
     if __has_multiple_init_property(result, Color.BLACK):
         result = __unite_multiple_init_property(result, Color.BLACK)
@@ -13,6 +17,16 @@ def apply_corrections(sgf: str) -> str:
         result = __unite_multiple_init_property(result, Color.WHITE)
 
     return result
+
+
+def __has_node_with_multiple_stone_placing(sgf: str) -> bool:
+    nodes: List[str] = re.findall("\\(;.*?\\(;", sgf)  # branches
+    if len(nodes) == 0:  # no branches
+        nodes = re.findall("\\(;.*?;", sgf)
+
+    root_node: str = nodes[0]
+    other_nodes: str = sgf.replace(root_node, "")
+    return other_nodes.count("AW[") != 0 or other_nodes.count("AB[") != 0
 
 
 def __has_multiple_init_property(sgf: str, color: Color) -> bool:

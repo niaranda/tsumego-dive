@@ -34,9 +34,6 @@ def __parse_problem(problem_path: str) -> Optional[sgf.GameTree]:
         try:
             sgf_str: str = apply_corrections(file.read())
             return sgf.parse(sgf_str).children[0]  # only one problem per file
-        except UnicodeDecodeError as e:
-            log_error(e, problem_path)
-            return None
-        except sgf.ParseException as e:
+        except (UnicodeDecodeError, sgf.ParseException, PreprocessingException) as e:
             log_error(e, problem_path)
             return None
