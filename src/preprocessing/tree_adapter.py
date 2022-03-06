@@ -137,10 +137,19 @@ def _correct_fake_root(problem: sgf.GameTree):
     problem.nodes.pop(0)
 
 
+def _invalid_size(problem: sgf.GameTree) -> bool:
+    if "SZ" not in problem.root.properties:
+        return False
+    return problem.root.properties["SZ"][0] != "19"
+
+
 class TreeAdapter:
 
     def __init__(self, problem: sgf.GameTree):
         self.__problem = problem
+
+        if _invalid_size(problem):
+            raise PreprocessingException("Invalid size")
 
         while _has_fake_root(problem):  # can be several nodes
             _correct_fake_root(problem)
