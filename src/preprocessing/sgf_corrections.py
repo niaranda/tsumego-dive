@@ -23,6 +23,8 @@ def __has_node_with_multiple_stone_placing(sgf: str) -> bool:
     nodes: List[str] = re.findall("\\(;.*?\\(;", sgf)  # branches
     if len(nodes) == 0:  # no branches
         nodes = re.findall("\\(;.*?;", sgf)
+    if len(nodes) == 0:
+        raise PreprocessingException("Empty problem")
 
     root_node: str = nodes[0]
     other_nodes: str = sgf.replace(root_node, "")
