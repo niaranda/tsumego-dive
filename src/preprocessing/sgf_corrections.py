@@ -8,6 +8,9 @@ from src.preprocessing.preprocessing_exception import PreprocessingException
 def apply_corrections(sgf: str) -> str:
     result = sgf.replace("\n", "")
 
+    if __has_wrong_node_delimiters(result):
+        result = __replace_node_delimiters(result)
+
     if __has_node_with_multiple_stone_placing(result):
         raise PreprocessingException("Unallowed multiple stone placing in one node")
 
@@ -16,6 +19,20 @@ def apply_corrections(sgf: str) -> str:
     if __has_multiple_init_property(result, Color.WHITE):
         result = __unite_multiple_init_property(result, Color.WHITE)
 
+    return result
+
+
+def __has_wrong_node_delimiters(sgf: str) -> bool:
+    return len(re.findall("\\([A-Z]{1,2}\\[", sgf)) != 0
+
+
+def __replace_node_delimiters(sgf: str) -> str:
+    wrong_portions: List[str] = re.findall("\\([A-Z]{1,2}\\[", sgf)
+    corrections: List[str] = [portion.replace("(", "(;") for portion in wrong_portions]
+
+    result = sgf
+    for wrong_portion, correction in zip(wrong_portions, corrections):
+        result = sgf.replace(wrong_portion, correction)
     return result
 
 
