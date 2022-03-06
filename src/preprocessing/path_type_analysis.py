@@ -21,7 +21,7 @@ def _perform_path_type_propagation(leaves: List[GameNode], path_type: PathType):
 def _analyse_leaf_path_type(leaf: GameNode) -> PathType:
     correct, wrong = __has_correct_clue(leaf.comment), __has_wrong_clue(leaf.comment)
     dotenv.load_dotenv(override=True)
-    default_wrong = bool(dotenv_values()["DEFAULT_WRONG"])
+    default_wrong = dotenv_values()["DEFAULT_WRONG"] == "True"
 
     if correct and wrong:
         return PathType.DUAL
