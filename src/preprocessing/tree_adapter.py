@@ -143,6 +143,20 @@ def _invalid_size(problem: sgf.GameTree) -> bool:
     return problem.root.properties["SZ"][0] != "19"
 
 
+def _has_first_empty_branch(problem: sgf.GameTree) -> bool:
+    if len(problem.nodes) > 1:
+        return False
+    first_branch: sgf.GameTree = problem.children[0]
+    if len(first_branch.nodes) > 1:
+        return False
+    properties: Dict[str, str] = first_branch.nodes[0].properties
+    return "B" not in properties and "W" not in properties
+
+
+def _correct_first_empty_branch(problem: sgf.GameTree):
+    problem.children.pop(0)  # remove first branch
+
+
 class TreeAdapter:
 
     def __init__(self, problem: sgf.GameTree):
@@ -150,6 +164,9 @@ class TreeAdapter:
 
         if _invalid_size(problem):
             raise PreprocessingException("Invalid size")
+
+        if _has_first_empty_branch(problem):
+            _correct_first_empty_branch(problem)
 
         while _has_fake_root(problem):  # can be several nodes
             _correct_fake_root(problem)
