@@ -5,7 +5,7 @@ from typing import List, Optional
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
 from src.beans.board.stone_group import StoneGroup
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
 class StoneGroupHandler:

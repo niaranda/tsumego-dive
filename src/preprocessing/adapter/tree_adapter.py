@@ -3,15 +3,15 @@ from typing import List, Dict
 
 import sgf
 
-import src.preprocessing.tree_adapter_corrections as corrections
+import src.preprocessing.corrections.tree_adapter_corrections as corrections
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Pos, Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
 from src.beans.gameplay_exception import GamePlayException
-from src.preprocessing.normalizer import Normalizer
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.adapter.normalizer import Normalizer
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
 def _parse_position(str_position: str) -> Pos:

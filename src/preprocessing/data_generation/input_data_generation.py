@@ -9,7 +9,7 @@ from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
 from src.beans.game_tree.game_node import GameNode, PathType
 from src.beans.game_tree.game_tree import GameTree
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
 def truncate_csv_files():

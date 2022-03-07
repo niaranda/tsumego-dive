@@ -2,7 +2,7 @@ from typing import Dict
 
 import sgf
 
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
 def correct_only_comment_first_node(problem: sgf.GameTree):

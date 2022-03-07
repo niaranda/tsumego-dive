@@ -5,11 +5,11 @@ import sgf
 
 from src.beans.game_tree.game_tree import GameTree
 from src.beans.gameplay_exception import GamePlayException
-from src.preprocessing.error_handling import log_error
-from src.preprocessing.input_data_generation import generate_input_data
-from src.preprocessing.preprocessing_exception import PreprocessingException
-from src.preprocessing.sgf_corrections import apply_corrections
-from src.preprocessing.tree_adapter import TreeAdapter
+from src.preprocessing.errors.error_handling import log_error
+from src.preprocessing.data_generation.input_data_generation import generate_input_data
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
+from src.preprocessing.corrections.sgf_corrections import apply_corrections
+from src.preprocessing.adapter.tree_adapter import TreeAdapter
 
 
 def process_problem(problem_path: str) -> Optional[Tuple[np.ndarray, Optional[np.ndarray]]]:

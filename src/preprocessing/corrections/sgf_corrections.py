@@ -2,7 +2,7 @@ import re
 from typing import List
 
 from src.beans.board.color import Color
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
 def apply_corrections(sgf: str) -> str:

@@ -4,8 +4,8 @@ from datetime import datetime
 
 import dotenv
 
-from collection_processing import process_collection
-from src.preprocessing.input_data_generation import truncate_csv_files
+from src.preprocessing.processing.collection_processing import process_collection
+from src.preprocessing.data_generation.input_data_generation import truncate_csv_files
 
 
 def main():

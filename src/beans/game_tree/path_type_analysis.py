@@ -1,11 +1,11 @@
 import json
-from typing import List, Optional
+from typing import List
 
 import dotenv
 from dotenv import dotenv_values
 
 from src.beans.game_tree.game_node import GameNode, PathType
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 CORRECT_CLUES = json.loads(dotenv_values()["CORRECT_CLUES"])
 WRONG_CLUES = json.loads(dotenv_values()["WRONG_CLUES"])

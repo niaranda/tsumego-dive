@@ -5,7 +5,7 @@ from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone
 from src.beans.board.stone_group import StoneGroup
-from src.preprocessing.normalizer import Normalizer
+from src.preprocessing.adapter.normalizer import Normalizer
 
 
 class TestNormalizer(unittest.TestCase):

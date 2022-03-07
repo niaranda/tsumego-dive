@@ -5,7 +5,7 @@ from typing import List
 
 from src.beans.board.color import Color
 from src.beans.board.stone import Pos
-from src.preprocessing.preprocessing_exception import PreprocessingException
+from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
 def _are_neighbor_positions(pos1: Pos, pos2: Pos) -> bool:
