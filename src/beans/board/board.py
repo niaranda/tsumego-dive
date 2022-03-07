@@ -71,22 +71,26 @@ class Board(StoneCaptureHandler):
             raise GamePlayException(f"Broke suicide rule when placing stone in {pos}")
 
     def _remove_stones(self, positions: List[Pos]):
+        """Removes stones from the board. Overrides StoneCaptureHandler method"""
         for pos in positions:
             del self.__placed_stones[pos]
 
     def _get_neighbor_stone_positions(self, position: Pos) -> List[Pos]:
+        """Returns list of neighbor positions containing stones. Overrides StoneLibertiesHandler method"""
         neighbor_positions = self._get_neighbor_positions(position)
-        return list(filter(lambda pos: pos in neighbor_positions, self.__get_placed_stone_positions()))
+        return list(filter(lambda pos: pos in neighbor_positions, self._get_placed_stone_positions()))
 
     def _get_neighbor_positions(self, position: Pos) -> List[Pos]:
-        """Returns list of neighbor positions"""
+        """Returns list of neighbor positions. Overrides StoneLibertiesHandler method"""
         row, col = position
         positions: List[Pos] = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
         return list(filter(lambda pos: 0 <= pos[0] <= 18 and 0 <= pos[1] <= 18, positions))
 
     def __stone_suicided(self, position: Pos) -> bool:
+        """True if the stone placed in position committed suicide"""
         container_group: StoneGroup = self._get_group_containing(position)
         return not self._has_liberties(container_group)
 
-    def __get_placed_stone_positions(self) -> List[Pos]:
+    def _get_placed_stone_positions(self) -> List[Pos]:
+        """Returns list of occupied positions. Overrides StoneLibertiesHandler method"""
         return list(self.__placed_stones.keys())
