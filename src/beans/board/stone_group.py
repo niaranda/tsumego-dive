@@ -9,6 +9,7 @@ from src.preprocessing.preprocessing_exception import PreprocessingException
 
 
 def _are_neighbor_positions(pos1: Pos, pos2: Pos) -> bool:
+    """True if given positions are neighbors"""
     row1, col1 = pos1
     row2, col2 = pos2
     if row1 != row2 and col1 != col2:
@@ -22,7 +23,7 @@ class StoneGroup:
     """Represents a group of stones"""
 
     def __init__(self, positions: List[Pos], color: Color):
-        """Create a group of stones with given stones"""
+        """Creates a group of stones with given stones and color"""
         self.__positions: List[Pos] = positions
         self.__color = color
 
@@ -67,9 +68,11 @@ class StoneGroup:
         return any([_are_neighbor_positions(position, group_pos) for group_pos in self.__positions])
 
     def inverse_color(self):
+        """Changes the group color"""
         self.__color = self.__color.get_other()
 
     def __valid_state(self) -> bool:
+        """True if the state of the group is valid"""
         # Not empty
         if len(self.__positions) == 0:
             return False
