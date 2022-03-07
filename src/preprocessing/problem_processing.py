@@ -12,7 +12,7 @@ from src.preprocessing.sgf_corrections import apply_corrections
 from src.preprocessing.tree_adapter import TreeAdapter
 
 
-def process_problem(problem_name: str) -> Optional[Tuple[np.ndarray, np.ndarray]]:
+def process_problem(problem_name: str) -> Optional[Tuple[np.ndarray, Optional[np.ndarray]]]:
     """Processes one tsumego problem"""
     print(problem_name)
     problem: Optional[sgf.GameTree] = __parse_problem(problem_name)
