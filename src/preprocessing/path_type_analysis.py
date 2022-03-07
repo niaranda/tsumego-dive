@@ -12,47 +12,54 @@ WRONG_CLUES = json.loads(dotenv_values()["WRONG_CLUES"])
 
 
 def _perform_path_type_propagation(leaves: List[GameNode], path_type: PathType):
-    # Propagates path type to all ancestors of given leaves
+    """Propagates given path type to all ancestors of given leaves"""
     nodes: List[GameNode] = __filter_by_path_type(leaves, path_type)
     for node in nodes:
         __propagate_path_type(node)
 
 
 def _analyse_leaf_path_type(leaf: GameNode) -> PathType:
+    """Returns path type after analysing given leaf node"""
+    # Check for clues in comment
     correct, wrong = __has_correct_clue(leaf.comment), __has_wrong_clue(leaf.comment)
+
+    # Get environment value for default type
     dotenv.load_dotenv(override=True)
     default_wrong = dotenv_values()["DEFAULT_WRONG"] == "True"
 
-    if correct and wrong:
+    if correct and wrong:  # Found both clues
         return PathType.DUAL
 
-    if default_wrong and correct:
+    if correct:  # Found correct
         return PathType.CORRECT
-    if default_wrong:
-        return PathType.WRONG  # if no clue was found, the path is considered wrong
 
-    if wrong:
+    if wrong:  # Found wrong
         return PathType.WRONG
-    return PathType.CORRECT  # if no clue was found, the path is considered correct
+
+    # No clue was found
+    if default_wrong:
+        return PathType.WRONG  # Default is wrong
+
+    return PathType.CORRECT  # Default is correct
 
 
-def __has_correct_clue(comment: Optional[str]) -> bool:
-    if not comment:
-        return False
+def __has_correct_clue(comment: str) -> bool:
+    """True if correct clue found in given comment"""
     return any([comment.lower().find(clue.lower()) != -1 for clue in CORRECT_CLUES])
 
 
-def __has_wrong_clue(comment: Optional[str]) -> bool:
-    if not comment:
-        return False
+def __has_wrong_clue(comment: str) -> bool:
+    """True if wrong clue found in given comment"""
     return any([comment.lower().find(clue.lower()) != -1 for clue in WRONG_CLUES])
 
 
 def __filter_by_path_type(nodes: List[GameNode], path_type: PathType) -> List[GameNode]:
+    """Returns list of nodes from given nodes filtered by given path type"""
     return list(filter(lambda node: node.path_type == path_type, nodes))
 
 
 def __propagate_path_type(node):
+    """Propagates the path type of given node to all its ancestors"""
     if node.is_root():
         return
     parent = node.parent
@@ -61,6 +68,7 @@ def __propagate_path_type(node):
 
 
 class PathTypeAnalyser:
+    """Performs path type analysis"""
 
     @property
     def root(self) -> GameNode:
@@ -70,9 +78,10 @@ class PathTypeAnalyser:
         pass
 
     def _compute_path_types(self):
-        """Analyses path types for given game tree"""
+        """Analyses path types"""
         leaves: List[GameNode] = self.get_leaves()
 
+        # Analyse leaves path types
         for leaf in leaves:
             leaf.path_type = _analyse_leaf_path_type(leaf)
 
@@ -80,5 +89,6 @@ class PathTypeAnalyser:
         for path_type in (PathType.DUAL, PathType.WRONG, PathType.CORRECT):
             _perform_path_type_propagation(leaves, path_type)
 
+        # There should be at least one correct path, so root should be correct
         if not self.root.is_correct():
             raise PreprocessingException("Path type analysis found no correct paths")
