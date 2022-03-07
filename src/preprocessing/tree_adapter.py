@@ -3,6 +3,7 @@ from typing import List, Dict
 
 import sgf
 
+import src.preprocessing.tree_adapter_corrections as corrections
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Pos, Stone
@@ -41,29 +42,6 @@ def _parse_stone(properties: dict, color: Color) -> Stone:
     raise PreprocessingException(f"Wrong stone position {properties.get(property_name)[0]}")
 
 
-def _correct_only_comment_tree_node(problem: sgf.GameTree):
-    if len(problem.nodes) > 1:
-        problem.root.nodes.pop(1)
-
-    problem.children[0].nodes.pop(0)
-    return
-
-
-def _correct_only_comment_branch_node(branch: sgf.GameTree):
-    branch.nodes.pop(0)
-
-
-def _check_only_comment_branch_node(branch: sgf.GameTree) -> bool:
-    if not branch.nodes:
-        return False
-
-    properties: Dict[str, str] = branch.nodes[0].properties
-    if "B" in properties or "W" in properties:
-        return False
-
-    return "C" in properties or "N" in properties
-
-
 def _get_first_node_properties(problem: sgf.GameTree) -> Dict[str, str]:
     if len(problem.nodes) > 1:
         return problem.nodes[1].properties
@@ -75,7 +53,7 @@ def _get_first_stone(problem: sgf.GameTree) -> Stone:
 
     if "B" not in properties and "W" not in properties:
         if "C" in properties or "N" in properties:
-            _correct_only_comment_tree_node(problem)
+            corrections.correct_only_comment_tree_node(problem)
             properties = _get_first_node_properties(problem)
             if "B" not in properties and "W" not in properties:
                 raise PreprocessingException("Found no stone while parsing sgf tree root")
@@ -120,41 +98,15 @@ def _get_comment(properties: Dict[str, str]) -> str:
     return comment + note
 
 
-def __is_valid_position(position: Pos) -> bool:
-    row, col = position
-    return 0 <= row <= 18 and 0 <= col <= 18
-
-
-def _has_fake_root(problem: sgf.GameTree) -> bool:
-    return "AW" not in problem.root.properties and "AB" not in problem.root.properties
-
-
-def _correct_fake_root(problem: sgf.GameTree):
-    # root must have at least 2 nodes
-    if len(problem.nodes) == 1:
-        raise PreprocessingException("Found impossible fake root with only one node")
-
-    problem.nodes.pop(0)
-
-
-def _invalid_size(problem: sgf.GameTree) -> bool:
+def _has_invalid_size(problem: sgf.GameTree) -> bool:
     if "SZ" not in problem.root.properties:
         return False
     return problem.root.properties["SZ"][0] != "19"
 
 
-def _has_first_empty_branch(problem: sgf.GameTree) -> bool:
-    if len(problem.nodes) > 1:
-        return False
-    first_branch: sgf.GameTree = problem.children[0]
-    if len(first_branch.nodes) > 1:
-        return False
-    properties: Dict[str, str] = first_branch.nodes[0].properties
-    return "B" not in properties and "W" not in properties
-
-
-def _correct_first_empty_branch(problem: sgf.GameTree):
-    problem.children.pop(0)  # remove first branch
+def __is_valid_position(position: Pos) -> bool:
+    row, col = position
+    return 0 <= row <= 18 and 0 <= col <= 18
 
 
 class TreeAdapter:
@@ -162,14 +114,14 @@ class TreeAdapter:
     def __init__(self, problem: sgf.GameTree):
         self.__problem = problem
 
-        if _invalid_size(problem):
+        if _has_invalid_size(problem):
             raise PreprocessingException("Invalid size")
 
-        while _has_first_empty_branch(problem):  # can have several empty branches
-            _correct_first_empty_branch(problem)
+        while corrections.has_first_empty_branch(problem):  # can have several empty branches
+            corrections.correct_first_empty_branch(problem)
 
-        while _has_fake_root(problem):  # can be several nodes
-            _correct_fake_root(problem)
+        while corrections.has_fake_root(problem):  # can be several nodes
+            corrections.correct_fake_root(problem)
 
         init_stones: List[Stone] = _get_init_stones(problem)
 
@@ -199,8 +151,8 @@ class TreeAdapter:
     def __add_branches(self, branches: List[sgf.GameTree], game_node: GameNode, color: Color):
         """Recursively adds all branches"""
         for branch in branches:
-            if branch.nodes and _check_only_comment_branch_node(branch):
-                _correct_only_comment_branch_node(branch)
+            if branch.nodes and corrections.check_only_comment_branch_node(branch):
+                corrections.correct_only_comment_branch_node(branch)
 
             if branch.nodes:
                 last_game_node = self.__add_branch_nodes(branch.nodes, game_node, color)
