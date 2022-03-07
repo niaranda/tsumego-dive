@@ -1,3 +1,4 @@
+import gc
 import os
 from datetime import datetime
 
@@ -25,6 +26,7 @@ def main():
 
         truncate_csv_files()
         process_collection(collection_path)
+        gc.collect()
 
 
 if __name__ == "__main__":
