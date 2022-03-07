@@ -12,19 +12,23 @@ from src.preprocessing.sgf_corrections import apply_corrections
 from src.preprocessing.tree_adapter import TreeAdapter
 
 
-def process_problem(problem_name: str) -> Optional[Tuple[np.ndarray, Optional[np.ndarray]]]:
-    """Processes one tsumego problem"""
-    print(problem_name)
-    problem: Optional[sgf.GameTree] = __parse_problem(problem_name)
-    if problem is None:
+def process_problem(problem_path: str) -> Optional[Tuple[np.ndarray, Optional[np.ndarray]]]:
+    """Returns result of processing one tsumego problem in given path"""
+    print(problem_path)
+    problem: Optional[sgf.GameTree] = __parse_problem(problem_path)
+
+    if problem is None:  # The problem has incorrect format
         return None
 
     try:
+        # Perform tree adaptation
         game_tree: GameTree = TreeAdapter(problem).parse_tree()
+
+        # Generate data from tree
         return generate_input_data(game_tree)
 
     except (GamePlayException, PreprocessingException) as e:
-        log_error(e, problem_name)
+        log_error(e, problem_path)
         return None
 
 
@@ -32,8 +36,12 @@ def __parse_problem(problem_path: str) -> Optional[sgf.GameTree]:
     """Parses problem in given path"""
     with open(problem_path, encoding="GB2312", errors="ignore") as file:
         try:
+            # Apply pre sgf parsing corrections
             sgf_str: str = apply_corrections(file.read())
-            return sgf.parse(sgf_str).children[0]  # only one problem per file
+
+            # Parse corrected string
+            return sgf.parse(sgf_str).children[0]  # there is only one problem per file
+
         except (UnicodeDecodeError, sgf.ParseException, PreprocessingException) as e:
             log_error(e, problem_path)
             return None
