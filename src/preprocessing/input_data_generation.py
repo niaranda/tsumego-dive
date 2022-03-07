@@ -7,7 +7,7 @@ import numpy as np
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
-from src.beans.game_tree.game_node import GameNode
+from src.beans.game_tree.game_node import GameNode, PathType
 from src.beans.game_tree.game_tree import GameTree
 from src.preprocessing.preprocessing_exception import PreprocessingException
 
@@ -33,40 +33,38 @@ def generate_input_data(game_tree: GameTree) -> Tuple[np.ndarray, np.ndarray]:
     return black_moves_data, white_moves_data
 
 
-def __generate_data(data: Optional[np.ndarray], game_node: GameNode, color: Color, filter_correct: bool) -> np.ndarray:
+def __generate_data(data: Optional[np.ndarray], game_node: GameNode, color: Color, get_path_type: bool) -> np.ndarray:
     if len(game_node.children) == 0:
         if color == Color.BLACK and data is None:
             raise PreprocessingException("Empty game")
         return data
     if game_node.children[0].stone.color == color:
         if data is None:
-            data = __get_data_from_game_node(game_node, filter_correct)
+            data = __get_data_from_game_node(game_node, get_path_type)
         else:
-            data = np.vstack([data, __get_data_from_game_node(game_node, filter_correct)])
+            data = np.vstack([data, __get_data_from_game_node(game_node, get_path_type)])
 
-    if filter_correct:
-        next_paths = __filter_correct_paths(game_node.children)
-    else:
-        next_paths = __filter_valid_paths(game_node.children)
+    next_paths = __filter_valid_paths(game_node.children)
     for path in next_paths:
-        data = __generate_data(data, path, color, filter_correct)
+        data = __generate_data(data, path, color, get_path_type)
     return data
 
 
-def __get_data_from_game_node(game_node: GameNode, filter_correct: bool) -> np.ndarray:
+def __get_data_from_game_node(game_node: GameNode, get_path_type: bool) -> np.ndarray:
     board_data: np.ndarray = __format_board_as_input(game_node.board)
 
-    if filter_correct:
-        moves: List[Stone] = __get_correct_moves(game_node.children)
-    else:
-        moves: List[Stone] = __get_valid_moves(game_node.children)
-
+    moves: List[Stone] = __get_valid_moves(game_node.children)
     moves_data = np.array([__format_pos_as_input(stone.pos) for stone in moves]).reshape((-1, 1))
 
     num_moves = len(moves_data)
     problem_data = np.repeat(board_data, num_moves).reshape((num_moves, -1))
 
-    return np.hstack([problem_data, moves_data])
+    if not get_path_type:
+        return np.hstack([problem_data, moves_data])
+
+    path_types: List[PathType] = __get_valid_moves_path_types(game_node.children)
+    path_type_data = np.array([path_type == PathType.CORRECT for path_type in path_types]).reshape((-1, 1))
+    return np.hstack([problem_data, moves_data, path_type_data])
 
 
 def __format_board_as_input(board: Board) -> np.ndarray:
@@ -81,18 +79,14 @@ def __format_pos_as_input(position: Pos) -> int:
     return row * 19 + col
 
 
-def __get_correct_moves(children: List[GameNode]) -> List[Stone]:
-    correct_paths = __filter_correct_paths(children)
-    return [path.stone for path in correct_paths]
-
-
 def __get_valid_moves(children: List[GameNode]) -> List[Stone]:
     valid_paths = __filter_valid_paths(children)
     return [path.stone for path in valid_paths]
 
 
-def __filter_correct_paths(children: List[GameNode]) -> List[GameNode]:
-    return list(filter(lambda child: child.is_correct(), children))
+def __get_valid_moves_path_types(children: List[GameNode]) -> List[PathType]:
+    valid_paths = __filter_valid_paths(children)
+    return [path.path_type for path in valid_paths]
 
 
 def __filter_valid_paths(children: List[GameNode]) -> List[GameNode]:
