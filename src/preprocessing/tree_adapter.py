@@ -69,7 +69,7 @@ def _get_first_stone(problem: sgf.GameTree) -> Stone:
         # If no stone found, this could be an only comment node
         if "C" in properties or "N" in properties:
             # Perform correction
-            corrections.correct_only_comment_tree_node(problem)
+            corrections.correct_only_comment_first_node(problem)
 
             # Try retrieving first node properties again
             properties = _get_first_node_properties(problem)
