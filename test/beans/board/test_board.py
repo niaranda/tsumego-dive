@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Tuple, Dict
+from typing import Dict
 
 from src.beans.board.board import Board
 from src.beans.board.color import Color

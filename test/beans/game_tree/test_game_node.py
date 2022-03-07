@@ -9,9 +9,10 @@ from src.beans.game_tree.game_node import GameNode, PathType
 
 
 def _create_game_node(parent: Optional[GameNode], path_type: PathType = PathType.UNKNOWN) -> GameNode:
-    node = GameNode(parent, Board(), None, None)
+    node = GameNode(parent, Board(), None, "")
     node.path_type = path_type
     return node
+
 
 class TestGameNode(unittest.TestCase):
 
@@ -67,13 +68,13 @@ class TestGameNode(unittest.TestCase):
         self.assertFalse(node3.is_correct())
 
     def test_ko_rule(self):
-        black_stones = [Stone((0, 1), Color.BLACK), ((1, 0), Color.BLACK)]
-        white_stones = [Stone((0, 2), Color.WHITE), ((1, 1), Color.WHITE)]
+        black_stones = [Stone((0, 1), Color.BLACK), Stone((1, 0), Color.BLACK)]
+        white_stones = [Stone((0, 2), Color.WHITE), Stone((1, 1), Color.WHITE)]
         board1 = Board(black_stones + white_stones)
         root = GameNode(None, board1, None)
 
         board2 = copy(board1)
-        stone = ((0, 0), Color.WHITE)
+        stone = Stone((0, 0), Color.WHITE)
         board2.place_stone(stone)
         node = GameNode(root, board2, stone)
 

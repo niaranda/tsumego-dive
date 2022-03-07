@@ -1,18 +1,22 @@
 import unittest
-from typing import Optional
 
 from src.beans.board.board import Board
+from src.beans.board.color import Color
+from src.beans.board.stone import Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
 
 
-def _create_game_tree(leaf1_comment: Optional[str], leaf2_comment: Optional[str]) -> GameTree:
-    root = GameNode(None, Board(), None)
-    branch1 = GameNode(root, Board(), None)
-    branch2 = GameNode(root, Board(), None)
+def _create_game_tree(leaf1_comment: str, leaf2_comment: str) -> GameTree:
+    stones = [Stone((0, pos), Color.BLACK) for pos in range(4)]
+    boards = [Board([stone]) for stone in stones]
 
-    GameNode(branch1, Board(), None, [leaf1_comment])
-    GameNode(branch2, Board(), None, [leaf2_comment])
+    root = GameNode(None, Board(), None)
+    branch1 = GameNode(root, boards[0], None)
+    branch2 = GameNode(root, boards[1], None)
+
+    GameNode(branch1, boards[2], None, leaf1_comment)
+    GameNode(branch2, boards[3], None, leaf2_comment)
 
     return GameTree(root)
 
@@ -26,7 +30,7 @@ class TestPathTypeAnalysis(unittest.TestCase):
         with self.assertRaises(Exception):
             _create_game_tree("正解 incorrect", "failure")
 
-        dual_none = _create_game_tree("success 失败", None)
+        dual_none = _create_game_tree("success 失败", "")
         self.assertTrue(dual_none.root.is_correct())
         self.assertTrue(dual_none.root.children[1].is_correct())
         self.assertFalse(dual_none.root.children[0].is_valid())
