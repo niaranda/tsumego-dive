@@ -21,9 +21,8 @@ class GameNode:
 
     def __init__(self, parent: Optional[GameNode], board: Board, stone: Optional[Stone],
                  comment: str = ""):
-        """Creates a new game node with given parent, board and positioned stone.
-        Adds this game node to given parent node's children list.
-        Can optionally specify the original node's comment."""
+        """Creates a new game node with given parent, board, lastly placed stone and optional comment.
+        Adds this game node to given parent node's children list."""
         self.__parent: Optional[GameNode] = parent
         self.__children: List[GameNode] = []  # The node is initialized without children nodes
         self.__stone: Optional[Stone] = stone
@@ -31,7 +30,7 @@ class GameNode:
         self.__path_type: PathType = PathType.UNKNOWN  # The path type is initialized as unknown
         self.__comment: str = comment
 
-        # add this node as the parent's child
+        # Add this node as the parent's child
         if parent:
             parent.add_child(self)
 
@@ -69,7 +68,7 @@ class GameNode:
         self.__path_type = path_type
 
     def add_child(self, game_node: GameNode):
-        """Add child node to this node"""
+        """Adds child node to this node"""
         self.__children.append(game_node)
 
     def is_root(self) -> bool:
@@ -89,11 +88,13 @@ class GameNode:
         return self.__path_type == PathType.CORRECT
 
     def __broken_ko_rule(self) -> bool:
+        """True if the ko rule was broken when placing the last stone"""
         if self.__parent is None:
             return False
 
-        grand_parent = self.__parent.__parent
-        if grand_parent is None:
+        grandparent = self.__parent.__parent
+        if grandparent is None:
             return False
 
-        return grand_parent.board == self.__board
+        # Ko rule was broken if the grandparent node has the same board state
+        return grandparent.board == self.__board
