@@ -5,7 +5,7 @@ import dotenv
 import numpy as np
 import pandas as pd
 
-from problem_processing import process_problem
+from src.preprocessing.processing.problem_processing import process_problem
 
 
 def process_collection(collection_path: str):
