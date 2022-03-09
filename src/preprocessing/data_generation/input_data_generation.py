@@ -68,7 +68,7 @@ def __get_data_from_game_node(game_node: GameNode, get_path_type: bool) -> np.nd
 
     # Repeat board data to create one row per move
     num_moves = len(moves_data)
-    problem_data = np.repeat(board_data, num_moves).reshape((num_moves, -1))
+    problem_data = np.tile(board_data, (num_moves, 1))
 
     if not get_path_type:
         return np.hstack([problem_data, moves_data])
