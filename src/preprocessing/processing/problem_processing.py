@@ -12,7 +12,7 @@ from src.preprocessing.corrections.sgf_corrections import apply_corrections
 from src.preprocessing.adapter.tree_adapter import TreeAdapter
 
 
-def process_problem(problem_path: str) -> Optional[Tuple[np.ndarray, Optional[np.ndarray]]]:
+def process_problem(problem_path: str, problem_id: int) -> Optional[Tuple[np.ndarray, Optional[np.ndarray]]]:
     """Returns result of processing one tsumego problem in given path"""
     print(problem_path)
     problem: Optional[sgf.GameTree] = __parse_problem(problem_path)
@@ -25,7 +25,7 @@ def process_problem(problem_path: str) -> Optional[Tuple[np.ndarray, Optional[np
         game_tree: GameTree = TreeAdapter(problem).parse_tree()
 
         # Generate data from tree
-        return generate_preprocessing_data(game_tree)
+        return generate_preprocessing_data(game_tree, problem_id)
 
     except (GamePlayException, PreprocessingException) as e:
         log_error(e, problem_path)

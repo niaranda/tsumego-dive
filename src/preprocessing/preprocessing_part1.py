@@ -31,7 +31,7 @@ def run():
         truncate_csv_files()
 
         # Perform processing
-        process_collection(collection_path)
+        process_collection(collection_path, collection_number)
 
         # Force garbage collection
         gc.collect()
