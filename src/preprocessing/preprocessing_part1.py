@@ -8,7 +8,7 @@ from src.preprocessing.processing.collection_processing import process_collectio
 from src.preprocessing.data_generation.input_data_generation import truncate_csv_files
 
 
-def main():
+def run():
     # Get collection paths
     collection_paths = os.listdir("../../raw_data")
     if ".keep" in collection_paths:
@@ -39,5 +39,5 @@ def main():
 
 if __name__ == "__main__":
     start = datetime.now()
-    main()
+    run()
     print(datetime.now() - start)
