@@ -8,7 +8,7 @@ from src.beans.board.color import Color
 from src.beans.board.stone import Stone
 from src.beans.game_tree.game_node import GameNode
 from src.beans.game_tree.game_tree import GameTree
-from src.preprocessing.data_generation.input_data_generation import generate_input_data
+from src.preprocessing.data_generation.preprocessing_data_generation import generate_preprocessing_data
 
 BLACK_POSITIONS = [(2, 1), (2, 2), (2, 3), (1, 4), (1, 5), (4, 1)]
 WHITE_POSITIONS = [(0, 3), (1, 0), (1, 1), (1, 2), (1, 3)]
@@ -43,7 +43,7 @@ def _create_game_tree() -> GameTree:
 class TestInputDataGeneration(unittest.TestCase):
 
     def test_data_generation(self):
-        black_data, white_data = generate_input_data(_create_game_tree())
+        black_data, white_data = generate_preprocessing_data(_create_game_tree())
 
         self.assertEqual(black_data.shape, (2, 19 ** 2 + 2))
         self.assertEqual(white_data.shape, (1, 19 ** 2 + 1))

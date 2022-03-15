@@ -6,7 +6,7 @@ import sgf
 from src.beans.game_tree.game_tree import GameTree
 from src.beans.gameplay_exception import GamePlayException
 from src.preprocessing.errors.error_handling import log_error
-from src.preprocessing.data_generation.input_data_generation import generate_input_data
+from src.preprocessing.data_generation.preprocessing_data_generation import generate_preprocessing_data
 from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 from src.preprocessing.corrections.sgf_corrections import apply_corrections
 from src.preprocessing.adapter.tree_adapter import TreeAdapter
@@ -25,7 +25,7 @@ def process_problem(problem_path: str) -> Optional[Tuple[np.ndarray, Optional[np
         game_tree: GameTree = TreeAdapter(problem).parse_tree()
 
         # Generate data from tree
-        return generate_input_data(game_tree)
+        return generate_preprocessing_data(game_tree)
 
     except (GamePlayException, PreprocessingException) as e:
         log_error(e, problem_path)

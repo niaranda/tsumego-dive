@@ -27,7 +27,7 @@ def truncate_csv_files():
             f.write("")
 
 
-def generate_input_data(game_tree: GameTree) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+def generate_preprocessing_data(game_tree: GameTree) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """Returns data collected from given game tree"""
     student_moves_data = __generate_data(None, game_tree.root, Color.BLACK, True)  # Cannot be None
     teacher_moves_data = __generate_data(None, game_tree.root, Color.WHITE, False)  # Can be None
