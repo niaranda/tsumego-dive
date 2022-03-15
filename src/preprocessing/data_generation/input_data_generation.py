@@ -16,9 +16,9 @@ def truncate_csv_files():
     """Truncates csv files"""
     dotenv.load_dotenv(override=True)
 
-    black_file = os.environ["BLACK_FILE"]
-    white_file = os.environ["WHITE_FILE"]
-    for file in [black_file, white_file]:
+    student_file = os.environ["PRE_STUDENT_FILE"]
+    teacher_file = os.environ["PRE_TEACHER_FILE"]
+    for file in [student_file, teacher_file]:
         if os.path.exists(file):
             mode = "w"
         else:
@@ -29,10 +29,10 @@ def truncate_csv_files():
 
 def generate_input_data(game_tree: GameTree) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """Returns data collected from given game tree"""
-    black_moves_data = __generate_data(None, game_tree.root, Color.BLACK, True)  # Cannot be None
-    white_moves_data = __generate_data(None, game_tree.root, Color.WHITE, False)  # Can be None
+    student_moves_data = __generate_data(None, game_tree.root, Color.BLACK, True)  # Cannot be None
+    teacher_moves_data = __generate_data(None, game_tree.root, Color.WHITE, False)  # Can be None
 
-    return black_moves_data, white_moves_data
+    return student_moves_data, teacher_moves_data
 
 
 def __generate_data(data: Optional[np.ndarray], game_node: GameNode, color: Color, get_path_type: bool) -> np.ndarray:

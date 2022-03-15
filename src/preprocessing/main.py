@@ -23,8 +23,8 @@ def main():
         # Define necessary environment variables
         dotenv.load_dotenv()
 
-        dotenv.set_key(dotenv.find_dotenv(), "BLACK_FILE", f"../../input_data/black_{collection_number}.csv")
-        dotenv.set_key(dotenv.find_dotenv(), "WHITE_FILE", f"../../input_data/white_{collection_number}.csv")
+        dotenv.set_key(dotenv.find_dotenv(), "PRE_STUDENT_FILE", f"../../preprocessing_data/student_{collection_number}.csv")
+        dotenv.set_key(dotenv.find_dotenv(), "PRE_TEACHER_FILE", f"../../preprocessing_data/teacher_{collection_number}.csv")
         dotenv.set_key(dotenv.find_dotenv(), "DEFAULT_WRONG", str("wrong" in collection_path))
 
         # Truncate existing csv files
