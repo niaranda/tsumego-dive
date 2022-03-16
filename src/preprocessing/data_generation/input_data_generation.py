@@ -19,10 +19,16 @@ def generate_input_data(student_paths: List[str], teacher_paths: List[str]):
     data = __cut_preprocessing_data_moves(data)
     print(f"Number of unique observations after moves cut: {data.shape[0]}")
 
-    columns = list(data.columns)
+    del data["problem_id"]
     data = pd.get_dummies(data, columns=["move"], prefix="move")
-    expected_columns = columns + ["move_" + str(pos) for pos in list(range(19 * 19))]
-    data = data.reindex(expected_columns, axis=1, fill_value=0)  # TODO change columns
+    pos_columns = [str(pos) for pos in range(19**2)]
+    expected_columns = ["student", "correct", "move"] + pos_columns + ["move_" + pos for pos in pos_columns]
+    data = data.reindex(expected_columns, axis=1, fill_value=0)
+    del data["move"]
+
+    data = data.groupby(["student", "correct"] + pos_columns, as_index=False).sum()
+
+    print(f"Number of observations after one hot encoding: {data.shape[0]}")
 
     num_student = data["student"].sum()
     num_interest = data.shape[0]
