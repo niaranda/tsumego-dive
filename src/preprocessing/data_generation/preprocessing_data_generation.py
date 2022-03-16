@@ -9,6 +9,7 @@ from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
 from src.beans.game_tree.game_node import GameNode, PathType
 from src.beans.game_tree.game_tree import GameTree
+from src.preprocessing.adapter.normalizer import Normalizer
 from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
@@ -71,11 +72,17 @@ def __generate_data(data: Optional[np.ndarray], game_node: GameNode, color: Colo
 
 def __get_data_from_game_node(game_node: GameNode, get_path_type: bool) -> np.ndarray:
     """Returns data from given game node. If get_path_type is True, a path type column is generated"""
+    # Perform board normalization again
+    # This is necessary because shape might change during the problem resolution
+    normalizer = Normalizer(game_node.board)
+    normalizer.normalize_board(game_node.board)
+
     board_data: np.ndarray = __format_board_as_input(game_node.board)
 
     # Get valid moves data
     moves: List[Stone] = __get_valid_moves(game_node.children)
-    moves_data = np.array([__format_pos_as_input(stone.pos) for stone in moves]).reshape((-1, 1))
+    normalized_moves: List[Stone] = [normalizer.normalize_stone(move) for move in moves]
+    moves_data = np.array([__format_pos_as_input(stone.pos) for stone in normalized_moves]).reshape((-1, 1))
 
     # Repeat board data to create one row per move
     num_moves = len(moves_data)
