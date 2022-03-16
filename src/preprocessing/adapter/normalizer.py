@@ -15,18 +15,17 @@ def __get_distance(pos1: Pos, pos2: Pos) -> int:
     return (row1 - row2) ** 2 + (col1 - col2) ** 2
 
 
-def __get_closer_reference(position: Pos, references: List[Pos]) -> Pos:
+def __get_min_distance(positions: List[Pos], reference: Pos) -> int:
     """Returns closer reference to given position among given references"""
-    distances: List[int] = [__get_distance(position, reference) for reference in references]
-    return references[distances.index(min(distances))]
+    distances: List[int] = [__get_distance(pos, reference) for pos in positions]
+    return min(distances)
 
 
 def __get_main_reference(board: Board, references: List[Pos]) -> Pos:
     """Returns main reference for given board among given references"""
     positions: List[Pos] = list(board.placed_stones.keys())
-    closer_corners = [__get_closer_reference(pos, references) for pos in positions]
-    counts = [closer_corners.count(corner) for corner in references]
-    return references[counts.index(max(counts))]
+    min_distances = [__get_min_distance(positions, reference) for reference in references]
+    return references[min_distances.index(min(min_distances))]
 
 
 def _determine_color_inversion(first_stone: Stone) -> bool:
