@@ -28,7 +28,6 @@ def __save_to_csv(student_moves: np.ndarray, teacher_moves: np.ndarray):
         f.write(pd.DataFrame(teacher_moves).to_csv(header=False, index=False, line_terminator="\n"))
 
 
-
 def __process_problems(problem_paths: List[str], collection_number: int) -> Tuple[np.ndarray, np.ndarray]:
     """Returns data obtained by processing problems in given paths"""
     student_moves, teacher_moves = None, None
