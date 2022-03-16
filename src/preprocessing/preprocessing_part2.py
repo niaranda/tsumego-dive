@@ -15,7 +15,7 @@ def run():
 
     input_data = generate_input_data(student_paths, teacher_paths)
 
-    with open("../../input_data/input_data.csv", "x") as file:
+    with open("../../input_data/input_data.csv", "w+") as file:
         file.write(input_data.to_csv())
 
 
