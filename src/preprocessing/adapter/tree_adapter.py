@@ -168,7 +168,7 @@ class TreeAdapter:
 
         # Perform normalization
         first_stone: Stone = _get_first_stone(problem)
-        self.__normalizer = Normalizer(init_board, first_stone)
+        self.__normalizer = Normalizer(init_board, first_stone.color)
         self.__normalizer.normalize_board(init_board)
 
         # Create root and first color property

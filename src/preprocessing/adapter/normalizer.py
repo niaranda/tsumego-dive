@@ -28,9 +28,9 @@ def __get_main_reference(board: Board, references: List[Pos]) -> Pos:
     return references[min_distances.index(min(min_distances))]
 
 
-def _determine_color_inversion(first_stone: Stone) -> bool:
+def _determine_color_inversion(first_stone_color: Color) -> bool:
     """True if color inversion is needed to normalize board with given first stone"""
-    return first_stone.color == Color.WHITE
+    return first_stone_color == Color.WHITE
 
 
 def _determine_board_rotations(init_board: Board) -> int:
@@ -134,10 +134,10 @@ def _perform_board_reflexion(board: Board):
 class Normalizer:
     """Performs board normalization"""
 
-    def __init__(self, init_board: Board, first_stone: Stone):
+    def __init__(self, board: Board, first_stone: Color = Color.BLACK):
         self.__color_inversion: bool = _determine_color_inversion(first_stone)
-        self.__board_rotations: int = _determine_board_rotations(init_board)
-        self.__board_reflection: bool = _determine_board_reflexion(init_board)
+        self.__board_rotations: int = _determine_board_rotations(board)
+        self.__board_reflection: bool = _determine_board_reflexion(board)
 
     def normalize_stone(self, stone: Stone) -> Stone:
         """Returns stone by applying normalization to given stone"""
