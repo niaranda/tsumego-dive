@@ -38,6 +38,7 @@ def draw_board(board: Board):
 
     # Add background and show
     ax.imshow(BACKGROUND_IMAGE, extent=(-1, 19, -19, 1))
+    plt.show()
 
 
 def __draw_stones(ax: Axes, board: Board):
