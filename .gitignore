@@ -4,3 +4,6 @@ raw_data
 *.log
 *.csv
 venv
+tuner
+tb_logs*
+models
