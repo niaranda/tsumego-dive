@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 
 
-def prepare_interesting_moves_data():
+def prepare_student_moves_data():
     data = pd.read_csv("../../input_data/input_data.csv", index_col=0)
+    data = data[data["student"]]
 
     # Remove unnecessary columns
     del data["student"]
@@ -23,9 +24,9 @@ def prepare_interesting_moves_data():
 
     print("Saving file...")
 
-    with open("../../input_data/interesting_moves_data.csv", "w+") as file:
+    with open("../../input_data/student_moves_data.csv", "w+") as file:
         file.write(pd.DataFrame(data).to_csv(header=False, index=False))
 
 
 if __name__ == "__main__":
-    prepare_interesting_moves_data()
+    prepare_student_moves_data()
