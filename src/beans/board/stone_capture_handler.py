@@ -13,7 +13,7 @@ class StoneCaptureHandler(StoneLibertiesHandler, StoneGroupHandler):
         StoneLibertiesHandler.__init__(self, stones)
         StoneGroupHandler.__init__(self, stones)
 
-    def _remove_stones(self, captured_stones):
+    def _remove_stones(self, positions: List[Pos]):
         """Removes stones from the board"""
         pass
 
