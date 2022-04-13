@@ -41,6 +41,9 @@ def check_empty_zones():
     seaborn.heatmap(moves_count > 100, annot=True, fmt="d")
     plt.show()
 
+    total = data.shape[0]
+    seaborn.heatmap(moves_count/total*100, annot=True, fmt=".1f")
+
     load_dotenv(override=True)
     row_cut = int(os.environ["MOVES_ROW_CUT"])
     observations = data[data["move"] > row_cut * 19]
