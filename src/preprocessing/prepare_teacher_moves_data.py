@@ -14,7 +14,7 @@ def prepare_teacher_moves_data():
 
     # Group by board position
     pos_columns = [str(pos) for pos in range(19 ** 2)]
-    data = data.groupby(pos_columns, as_index=False).sum()
+    data = data.groupby(pos_columns, as_index=False, sort=False).sum()
     data = np.array(data)
 
     print(f"Number of rows after grouping: {data.shape[0]}")

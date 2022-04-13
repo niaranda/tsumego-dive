@@ -12,6 +12,7 @@ def generate_input_data(student_paths: List[str], teacher_paths: List[str]):
     data = __join_data(student_data, teacher_data)
     del student_data, teacher_data
     print(f"Number of observations: {data.shape[0]}")
+    print(f"Number of problems: {len(data['problem_id'].unique())}")
 
     data = __remove_duplicates(data)
     print(f"Number of unique observations: {data.shape[0]}")
@@ -26,7 +27,7 @@ def generate_input_data(student_paths: List[str], teacher_paths: List[str]):
     data = data.reindex(expected_columns, axis=1, fill_value=0)
     del data["move"]
 
-    data = data.groupby(["student", "correct"] + pos_columns, as_index=False).sum()
+    data = data.groupby(["student", "correct"] + pos_columns, as_index=False, sort=False).sum()
 
     print(f"Number of observations after one hot encoding: {data.shape[0]}")
 
