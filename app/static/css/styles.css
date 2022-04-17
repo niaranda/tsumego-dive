@@ -1,6 +1,5 @@
 body {
   text-align: center;
-  background-size: cover;
 }
 
 h1 {
@@ -35,8 +34,8 @@ tr {
 }
 
 td {
-  height: 33px;
-  width: 33px;
+  height: 33.3px;
+  width: 33.3px;
   padding: 0;
   text-align: center;
   display: inline-block;
@@ -94,9 +93,9 @@ td {
 }
 
 .board-positions {
-  height: 631px;
-  width: 631px;
-  padding: 14.5px;
+  height: 632.7px;
+  width: 632.7px;
+  padding: 14px;
   text-align: left;
 }
 
