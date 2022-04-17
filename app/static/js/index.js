@@ -3,6 +3,7 @@ let insertColor;
 let firstStoneColor;
 let placedStones = {};
 
+// Insertion color
 $("#insert-black").click(function() {
   if (insertColor === "black") {
     insertColor = undefined;
@@ -33,6 +34,7 @@ $("#insert-white").click(function() {
   $(this).addClass("selected");
 })
 
+// First color
 $("#first-black").click(function() {
   $(".bottom-container > .stone-btn").removeClass("selected");
 
@@ -48,7 +50,44 @@ $("#first-white").click(function() {
 })
 
 $("#start-btn").click(function() {
+  if (Object.keys(placedStones).length === 0) {
+    alert("Insert stones");
+    return;
+  }
+
   if (firstStoneColor === undefined) {
     alert("Choose first stone color");
   }
+})
+
+// Set board positions index
+ $("td").each(function(index) {
+  $(this).data("index", index);
+})
+
+// Insertions
+$("td").click(function() {
+  if (insertColor === undefined) {
+    return;
+  }
+  index = $(this).data("index");
+  color = placedStones[index];
+
+  if (color !== undefined) {
+    $(this).empty();
+    delete placedStones[index];
+
+    if (insertColor === color) {
+      return;
+    }
+  }
+
+  placedStones[index] = insertColor;
+
+  if (insertColor === "black") {
+    $(this).append("<img class='stone' data-color='black' src='/static/images/black.png' alt=''>");
+    return;
+  }
+
+  $(this).append("<img class='stone' data-color='white' src='/static/images/white.png' alt=''>");
 })

@@ -19,17 +19,7 @@
         {% for row_num in range(19) %}
           <tr>
             {% for col_num in range(19) %}
-              <td>
-                {% set position = row_num * 19 + col_num %}
-                {% if position in placed_stones %}
-                  {% set stone = placed_stones[position] %}
-                  {% if stone.color == "black" %}
-                    <img class="stone" src="{{ url_for('static', filename='images/black.png') }}" alt="">
-                  {% else %}
-                    <img class="stone" src="{{ url_for('static', filename='images/white.png') }}" alt="">
-                  {% endif %}
-                {% endif %}
-              </td>
+              <td></td>
             {% endfor %}
         </tr>
         {% endfor %}
