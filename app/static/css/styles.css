@@ -1,0 +1,128 @@
+body {
+  text-align: center;
+  background-size: cover;
+}
+
+h1 {
+  text-align: left;
+  font-family: 'Caveat Brush', cursive;
+  font-size: 2rem;
+  text-decoration: underline;
+  font-weight: lighter;
+  top: 0;
+}
+
+h2 {
+  font-family: 'Merriweather', serif;
+  font-size: 1.3rem;
+}
+
+h3 {
+  font-family: 'Merriweather', serif;
+  font-size: 1.2rem;
+  margin-top: 30px;
+}
+
+table {
+  empty-cells: show;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+tr {
+  line-height: 0px;
+  font-size: 0;
+}
+
+td {
+  height: 33px;
+  width: 33px;
+  padding: 0;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.stone-btn {
+  border-width: 2px;
+  border-color: dimgray;
+  padding: 7.5px;
+  background-color: #F3B24B;
+  border-radius: 5px;
+  margin: 5px;
+  position: relative;
+}
+
+.stone-btn:hover {
+  border-width: 2px;
+  border-color: dimgray;
+  padding: 7.5px;
+  background-color: #d09940;
+  border-radius: 5px;
+  margin: 5px;
+  position: relative;
+}
+
+.stone-btn.selected {
+  border-width: 2px;
+  border-color: dimgray;
+  padding: 7.5px;
+  background-color: #d09940;
+  border-radius: 5px;
+  margin: 5px;
+  position: relative;
+}
+
+.stone-btn-img {
+  width: 30px;
+  height: 30px;
+}
+
+.edit-icon {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 20px;
+  bottom: 2px;
+}
+
+.board {
+  background-image: url("../images/board.png");
+  height: 660px;
+  width: 660px;
+  margin: 10px auto;
+}
+
+.board-positions {
+  height: 631px;
+  width: 631px;
+  padding: 14.5px;
+  text-align: left;
+}
+
+.stone {
+  height: 30px;
+  width: 30px;
+}
+
+#start-btn {
+  margin: 20px;
+  margin-bottom: 100px;
+  font-family: 'Patua One', cursive;
+  font-size: 40px;
+  font-style: italic;
+  width: 30%;
+  padding: 10px;
+  background-color: #FFB890;
+}
+
+#start-btn:hover {
+  margin: 20px;
+  margin-bottom: 100px;
+  font-family: 'Patua One', cursive;
+  font-size: 40px;
+  font-style: italic;
+  width: 30%;
+  padding: 10px;
+  background-color: #e3a480;
+}

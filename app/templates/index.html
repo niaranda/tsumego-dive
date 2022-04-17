@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="top-container">
+    <h2>Insert stones:</h2>
+    <div class="insertion">
+      <button class="stone-btn" id="insert-black" type="button" name="add-black">
+        <img class="stone-btn-img" src="{{ url_for('static', filename='images/black.png') }}" alt="">
+        <img class="edit-icon" src="https://img.icons8.com/stickers/100/000000/edit.png" alt="">
+      </button>
+      <button class="stone-btn" id="insert-white" type="button" name="add-white">
+        <img class="stone-btn-img" src="{{ url_for('static', filename='images/white.png') }}" alt="">
+        <img class="edit-icon" src="https://img.icons8.com/stickers/100/000000/edit.png" alt="">
+      </button>
+    </div>
+  </div>
+  <div class="board">
+    <div class="board-positions">
+      <table cellspacing="0">
+        {% for row_num in range(19) %}
+          <tr>
+            {% for col_num in range(19) %}
+              <td>
+                {% set position = row_num * 19 + col_num %}
+                {% if position in placed_stones %}
+                  {% set stone = placed_stones[position] %}
+                  {% if stone.color == "black" %}
+                    <img class="stone" src="{{ url_for('static', filename='images/black.png') }}" alt="">
+                  {% else %}
+                    <img class="stone" src="{{ url_for('static', filename='images/white.png') }}" alt="">
+                  {% endif %}
+                {% endif %}
+              </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <div class="bottom-container">
+    <h3>Choose first stone color:</h3>
+    <button class="stone-btn" id="first-black" type="button" name="first-black">
+      <img class="stone-btn-img" src="{{ url_for('static', filename='images/black.png') }}" alt="">
+    </button>
+    <button class="stone-btn" id="first-white" type="button" name="first-white">
+      <img class="stone-btn-img" src="{{ url_for('static', filename='images/white.png') }}" alt="">
+    </button>
+  </div>
+  <button id="start-btn" type="button" name="done">Start</button>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/index.js') }}" charset="utf-8"></script>
+{% endblock %}
