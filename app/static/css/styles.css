@@ -8,7 +8,11 @@ h1 {
   font-size: 2rem;
   text-decoration: underline;
   font-weight: lighter;
-  top: 0;
+  position: relative;
+  bottom: 0.7rem;
+  left: -1rem;
+  color: #222222;
+  display: inline;
 }
 
 h2 {
@@ -102,6 +106,16 @@ td {
 .stone {
   height: 30px;
   width: 30px;
+}
+
+#logo-div {
+  text-align: left;
+  padding-left: 10%;
+  padding-top: 2rem;
+}
+
+#logo-icon {
+  height: 2.7rem;
 }
 
 #start-btn {
