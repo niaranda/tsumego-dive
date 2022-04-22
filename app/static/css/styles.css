@@ -30,20 +30,12 @@ table {
   empty-cells: show;
   border-collapse: collapse;
   border-spacing: 0;
+  display: inline-block;
 }
 
 tr {
   line-height: 0px;
   font-size: 0;
-}
-
-td {
-  height: 33.3px;
-  width: 33.3px;
-  padding: 0;
-  text-align: center;
-  display: inline-block;
-  white-space: nowrap;
 }
 
 .stone-btn {
@@ -103,9 +95,57 @@ td {
   text-align: left;
 }
 
+.board-pos {
+  height: 33.3px;
+  width: 33.3px;
+  padding: 0;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .stone {
   height: 30px;
   width: 30px;
+}
+
+.split {
+    display: flex;
+    flex-direction: row;
+}
+
+.gutter {
+    background-color: #555555;
+}
+
+.gutter.gutter-horizontal {
+    cursor: col-resize;
+}
+
+.arrow {
+  width: 3rem;
+  position: absolute;
+  top: 50%;
+}
+
+.arrow-key {
+  height: 3rem;
+}
+
+#right-arrow {
+  left: 0;
+}
+
+#left-arrow {
+  right: 0;
+}
+
+#split-board {
+  position: relative;
+}
+
+#split-tree {
+  position: relative;
 }
 
 #logo-div {

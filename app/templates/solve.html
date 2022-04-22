@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="split">
+  <div id="split-board">
+    <div class="board">
+      <div class="board-positions">
+        <table cellspacing="0">
+          {% for row_num in range(19) %}
+            <tr>
+              {% for col_num in range(19) %}
+                <td class="board-pos"></td>
+              {% endfor %}
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <button id="start-btn" type="button" name="done">Dive</button>
+    <img class="arrow" id="left-arrow" src="static/images/left-arrow.png" alt="">
+  </div>
+
+  <div id="split-tree">
+    <img class="arrow" id="right-arrow" src="static/images/right-arrow.png" alt="">
+    Tree
+
+    <div class="bottom-container">
+      <h3>Navigate the game tree:</h3>
+      <table>
+        <tr>
+          <td class="arrow-key"></td>
+          <td class="arrow-key">
+            <button id="arrow-key-up" type="button" name="button">
+              <img src="{{ url_for('static', filename='images/arrow-key-up.png') }}" alt="">
+            </button>
+          </td>
+          <td class="arrow-key"></td>
+        </tr>
+        <tr>
+          <td class="arrow-key">
+            <button id="arrow-key-left" type="button" name="button">
+              <img src="{{ url_for('static', filename='images/arrow-key-left.png') }}" alt="">
+            </button>
+          </td>
+          <td class="arrow-key"><button id="arrow-key-down" type="button" name="button">
+            <img src="{{ url_for('static', filename='images/arrow-key-down.png') }}" alt="">
+          </button>
+          </td>
+          <td class="arrow-key"><button id="arrow-key-right" type="button" name="button">
+            <img src="{{ url_for('static', filename='images/arrow-key-right.png') }}" alt="">
+          </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
+  <script src="{{ url_for('static', filename='js/solve.js') }}" charset="utf-8"></script>
+{% endblock %}

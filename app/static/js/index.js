@@ -61,12 +61,12 @@ $("#start-btn").click(function() {
 })
 
 // Set board positions index
- $("td").each(function(index) {
+ $(".board-pos").each(function(index) {
   $(this).data("index", index);
 })
 
 // Insertions
-$("td").click(function() {
+$(".board-pos").click(function() {
   if (insertColor === undefined) {
     return;
   }
