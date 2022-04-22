@@ -120,6 +120,22 @@ tr {
   width: 30px;
 }
 
+.start-btn {
+  border-width: 2px;
+  border-color: dimgray;
+  margin: 20px;
+  font-family: 'Patua One', cursive;
+  font-size: 40px;
+  font-style: italic;
+  width: 30%;
+  padding: 10px;
+  background-color: #F3B24B;
+}
+
+.start-btn:hover {
+  background-color: #d09940;
+}
+
 .split {
     display: flex;
     flex-direction: row;
@@ -181,6 +197,20 @@ tr {
   padding: 30px 10px;
 }
 
+#from-sgf-btn {
+  background-color: #f3e8de;
+  font-family: 'Patua One', cursive;
+  font-size: 1rem;
+  font-style: italic;
+  width: 100px;
+  border-width: 2px;
+  border-color: dimgray;
+}
+
+#from-sgf-btn:hover {
+  background-color: #e0d6cc;
+}
+
 #right-arrow {
   left: 0;
 }
@@ -195,20 +225,4 @@ tr {
 
 #split-tree {
   position: relative;
-}
-
-#start-btn {
-  border-width: 2px;
-  border-color: dimgray;
-  margin: 20px;
-  font-family: 'Patua One', cursive;
-  font-size: 40px;
-  font-style: italic;
-  width: 30%;
-  padding: 10px;
-  background-color: #F3B24B;
-}
-
-#start-btn:hover {
-  background-color: #d09940;
 }

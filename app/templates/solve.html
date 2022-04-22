@@ -15,39 +15,32 @@
         </table>
       </div>
     </div>
-    <button id="start-btn" type="button" name="done">Dive</button>
+    <button id="dive-btn" class="start-btn" type="button" name="done">Dive</button>
     <img class="arrow" id="left-arrow" src="static/images/left-arrow.png" alt="">
   </div>
 
   <div id="split-tree">
     <img class="arrow" id="right-arrow" src="static/images/right-arrow.png" alt="">
-    Tree
-
+    <div id="tree-div">
+      Tree
+    </div>
     <div class="bottom-container">
       <h3>Navigate the game tree:</h3>
       <table>
         <tr>
           <td class="arrow-key"></td>
           <td class="arrow-key">
-            <button id="arrow-key-up" type="button" name="button">
-              <img src="{{ url_for('static', filename='images/arrow-key-up.png') }}" alt="">
-            </button>
+            <button id="arrow-key-up" type="button" name="button"></button>
           </td>
           <td class="arrow-key"></td>
         </tr>
         <tr>
           <td class="arrow-key">
-            <button id="arrow-key-left" type="button" name="button">
-              <img src="{{ url_for('static', filename='images/arrow-key-left.png') }}" alt="">
-            </button>
+            <button id="arrow-key-left" type="button" name="button"></button>
           </td>
-          <td class="arrow-key"><button id="arrow-key-down" type="button" name="button">
-            <img src="{{ url_for('static', filename='images/arrow-key-down.png') }}" alt="">
-          </button>
+          <td class="arrow-key"><button id="arrow-key-down" type="button" name="button"></button>
           </td>
-          <td class="arrow-key"><button id="arrow-key-right" type="button" name="button">
-            <img src="{{ url_for('static', filename='images/arrow-key-right.png') }}" alt="">
-          </button>
+          <td class="arrow-key"><button id="arrow-key-right" type="button" name="button"></button>
           </td>
         </tr>
       </table>
