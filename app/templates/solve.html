@@ -2,6 +2,12 @@
 {% block content %}
 <div class="split">
   <div id="split-board">
+    <div id="board-top-div" class="top-div">
+      <button id="back-btn" class="sgf-btn" type="button" name="back-btn">
+        <img src="static/images/left-arrow.png" alt="">
+        Return
+      </button>
+    </div>
     <div class="board">
       <div class="board-positions">
         <table cellspacing="0">
@@ -21,6 +27,9 @@
 
   <div id="split-tree">
     <img class="arrow" id="right-arrow" src="static/images/right-arrow.png" alt="">
+    <div id="tree-top-div" class="top-div">
+      <button id="to-sgf-btn" class="sgf-btn" type="button" name="from-sgf">Save as sgf...</button>
+    </div>
     <div id="tree-div">
       Tree
     </div>

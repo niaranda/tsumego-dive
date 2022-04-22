@@ -12,8 +12,6 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  flex-grow: 1;
 }
 
 nav {
@@ -92,6 +90,19 @@ tr {
   bottom: 2px;
 }
 
+.sgf-btn {
+  background-color: #f3e8de;
+  font-family: 'Patua One', cursive;
+  font-size: 1rem;
+  font-style: italic;
+  border-width: 2px;
+  border-color: dimgray;
+}
+
+.sgf-btn:hover {
+  background-color: #e0d6cc;
+}
+
 .board {
   background-image: url("../images/board.png");
   height: 660px;
@@ -123,13 +134,14 @@ tr {
 .start-btn {
   border-width: 2px;
   border-color: dimgray;
-  margin: 20px;
+  margin: 13px;
   font-family: 'Patua One', cursive;
   font-size: 40px;
   font-style: italic;
   width: 30%;
   padding: 10px;
   background-color: #F3B24B;
+  border-radius: 5px;
 }
 
 .start-btn:hover {
@@ -149,14 +161,21 @@ tr {
     cursor: col-resize;
 }
 
+.top-div {
+    margin: 0 30px 30px;
+}
+
 .arrow {
   width: 3rem;
   position: absolute;
   top: 50%;
 }
 
-.arrow-key {
+.arrow-key > button {
   height: 3rem;
+  width: 3rem;
+  background-size: cover;
+  border-radius: 5px;
 }
 
 #logo-div {
@@ -166,6 +185,10 @@ tr {
   display: inline-block;
   position: relative;
   left: 0;
+}
+
+#logo-div > a {
+  text-decoration: none;
 }
 
 #logo-icon {
@@ -195,20 +218,29 @@ tr {
   min-width: 700px;
   margin: 0 auto;
   padding: 30px 10px;
+  flex-shrink: 0;
+  flex-grow: 1;
 }
 
 #from-sgf-btn {
-  background-color: #f3e8de;
-  font-family: 'Patua One', cursive;
-  font-size: 1rem;
-  font-style: italic;
   width: 100px;
-  border-width: 2px;
-  border-color: dimgray;
 }
 
-#from-sgf-btn:hover {
-  background-color: #e0d6cc;
+#board-top-div {
+  text-align: left;
+}
+
+#tree-top-div {
+  text-align: right;
+}
+
+#back-btn > img {
+  height: 15px;
+}
+
+#to-sgf-btn {
+  position: static;
+  left: 0;
 }
 
 #right-arrow {
@@ -221,8 +253,43 @@ tr {
 
 #split-board {
   position: relative;
+  overflow-x: auto;
 }
 
 #split-tree {
   position: relative;
+  overflow-x: auto;
+}
+
+#dive-btn {
+  background-image: url("../images/spacebar.png");
+  background-color: #e9e9ed;
+  background-size: cover;
+  width: 20rem;
+  height: 5rem;
+}
+
+#dive-btn:hover {
+  background-color: #d0d0d7;
+}
+
+#arrow-key-up {
+  background-image: url("../images/arrow-key-up.png");
+}
+
+#arrow-key-left {
+  background-image: url("../images/arrow-key-left.png");
+}
+
+#arrow-key-down {
+  background-image: url("../images/arrow-key-down.png");
+}
+
+#arrow-key-right {
+  background-image: url("../images/arrow-key-right.png");
+}
+
+#tree-div {
+  height: 600px;
+  overflow-y: auto;
 }

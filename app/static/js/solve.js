@@ -1,6 +1,6 @@
 
 Split(['#split-board', '#split-tree'], {
-  minSize: [800, 300],
+  minSize: [400, 300],
   gutterSize: 4,
   snapOffset: 0,
   dragInterval: 2,
