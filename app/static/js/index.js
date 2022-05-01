@@ -74,7 +74,31 @@ $(".start-btn").click(function() {
 
   if (firstStoneColor === undefined) {
     alert("Choose first stone color");
+    return;
   }
+
+  let form = document.createElement("form");
+  form.method = "post";
+  form.action = "/solve";
+  form.type = "hidden";
+
+  document.body.appendChild(form);
+
+  let placedStonesInput = document.createElement("input");
+  placedStonesInput.name = "placed_stones";
+  placedStonesInput.value = JSON.stringify(placedStones);
+  placedStonesInput.type = "hidden";
+
+  form.appendChild(placedStonesInput);
+
+  let nextColorInput = document.createElement("input");
+  nextColorInput.name = "next_color";
+  nextColorInput.value = firstStoneColor;
+  nextColorInput.type = "hidden";
+
+  form.appendChild(nextColorInput);
+
+  form.submit();
 })
 
 // Insertions

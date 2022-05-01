@@ -44,9 +44,14 @@ def index():
     return render_template("index.html", placed_stones=placed_stones, first_color=first_color)
 
 
-@app.route("/solve")
+@app.route("/solve", methods=["GET", "POST"])
 def solve():
-    return render_template('solve.html')
+    if request.method == "POST":
+        return render_template("solve.html",
+                               placed_stones=request.form["placed_stones"],
+                               first_color=request.form["next_color"],
+                               next_color=request.form["next_color"])
+    return render_template("solve.html")
 
 
 def __valid_file(filename: str) -> bool:
