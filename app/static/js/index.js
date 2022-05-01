@@ -1,7 +1,18 @@
 
 let insertColor;
-let firstStoneColor;
-let placedStones = {};
+
+// Error message
+if (error !== undefined) {
+  alert(error);
+}
+
+// Set board positions index and stones
+ $(".board-pos").each(function(index) {
+  $(this).data("index", index);
+  if (index in placedStones) {
+    placeStone($(this), placedStones[index]);
+  }
+})
 
 // Insertion color
 $("#insert-black").click(function() {
@@ -34,7 +45,7 @@ $("#insert-white").click(function() {
   $(this).addClass("selected");
 })
 
-// First color
+// First color selection
 $("#first-black").click(function() {
   $(".bottom-container > .stone-btn").removeClass("selected");
 
@@ -49,7 +60,13 @@ $("#first-white").click(function() {
   $(this).addClass("selected");
 })
 
-$("#start-btn").click(function() {
+// First color from sgf
+if (firstStoneColor !== undefined) {
+  $("#first-" + firstStoneColor).click();
+}
+
+// Start
+$(".start-btn").click(function() {
   if (Object.keys(placedStones).length === 0) {
     alert("Insert stones");
     return;
@@ -58,11 +75,6 @@ $("#start-btn").click(function() {
   if (firstStoneColor === undefined) {
     alert("Choose first stone color");
   }
-})
-
-// Set board positions index
- $(".board-pos").each(function(index) {
-  $(this).data("index", index);
 })
 
 // Insertions
@@ -84,10 +96,18 @@ $(".board-pos").click(function() {
 
   placedStones[index] = insertColor;
 
-  if (insertColor === "black") {
-    $(this).append("<img class='stone' data-color='black' src='/static/images/black.png' alt=''>");
-    return;
-  }
-
-  $(this).append("<img class='stone' data-color='white' src='/static/images/white.png' alt=''>");
+  placeStone($(this), insertColor);
 })
+
+// Sgf upload
+$("#from-sgf-btn").click(function() {
+  $("#upload-sgf").click();
+})
+
+$("#upload-sgf").change(function() {
+  $("#sgf-file-form").submit()
+})
+
+function placeStone(element, color) {
+  element.append("<img class='stone' data-color='" + color + "' src='/static/images/" + color + ".png' alt=''>");
+}

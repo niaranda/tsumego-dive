@@ -58,7 +58,7 @@ def _get_first_node_properties(problem: sgf.GameTree) -> Dict[str, str]:
     return problem.children[0].root.properties
 
 
-def _get_first_stone(problem: sgf.GameTree) -> Stone:
+def get_first_stone(problem: sgf.GameTree) -> Stone:
     """Returns first stone for given problem"""
     # Get first stone properties
     properties: Dict[str, str] = _get_first_node_properties(problem)
@@ -105,7 +105,7 @@ def _parse_init_stones(properties: dict, color: Color) -> List[Stone]:
     return [Stone(pos, color) for pos in stones_pos]
 
 
-def _get_init_stones(problem: sgf.GameTree) -> List[Stone]:
+def get_init_stones(problem: sgf.GameTree) -> List[Stone]:
     """Returns list of initial stones in given problem"""
     # Initial stones info is in first node properties
     properties: dict = problem.nodes[0].properties
@@ -130,7 +130,7 @@ def _get_comment(properties: Dict[str, str]) -> str:
     return comment + note  # Join both types
 
 
-def _has_invalid_size(problem: sgf.GameTree) -> bool:
+def has_invalid_size(problem: sgf.GameTree) -> bool:
     """True if the problem size is not 19x19.
     No size specified is considered 19x19 by default"""
     if "SZ" not in problem.root.properties:  # No size specified
@@ -152,7 +152,7 @@ class TreeAdapter:
         self.__problem = problem
 
         # Check invalid size
-        if _has_invalid_size(problem):
+        if has_invalid_size(problem):
             raise PreprocessingException("Invalid size")
 
         # Perform corrections
@@ -163,11 +163,11 @@ class TreeAdapter:
             corrections.correct_fake_root(problem)
 
         # Place initial stones
-        init_stones: List[Stone] = _get_init_stones(problem)
+        init_stones: List[Stone] = get_init_stones(problem)
         init_board: Board = Board(init_stones)
 
         # Perform normalization
-        first_stone: Stone = _get_first_stone(problem)
+        first_stone: Stone = get_first_stone(problem)
         self.__normalizer = Normalizer(init_board, first_stone.color)
         self.__normalizer.normalize_board(init_board)
 

@@ -226,6 +226,10 @@ tr {
   width: 100px;
 }
 
+#upload-sgf {
+  display: none;
+}
+
 #board-top-div {
   text-align: left;
 }

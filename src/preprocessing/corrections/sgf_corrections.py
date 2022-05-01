@@ -5,7 +5,7 @@ from src.beans.board.color import Color
 from src.preprocessing.errors.preprocessing_exception import PreprocessingException
 
 
-def apply_corrections(sgf: str) -> str:
+def apply_corrections(sgf: str, check_only_initial_board: bool = False) -> str:
     """Returns sgf string after applying corrections"""
     # Remove line breaks to allow analysis
     result = sgf.replace("\n", "")
@@ -15,7 +15,7 @@ def apply_corrections(sgf: str) -> str:
         result = __replace_node_delimiters(result)
 
     # Check fatal error: node with multiple stone placing
-    if __has_node_with_multiple_stone_placing(result):
+    if not check_only_initial_board and __has_node_with_multiple_stone_placing(result):
         raise PreprocessingException("Unallowed multiple stone placing in one node")
 
     # Check multiple init properties

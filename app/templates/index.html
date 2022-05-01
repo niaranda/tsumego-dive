@@ -13,6 +13,9 @@
       </button>
       <br />
       <button id="from-sgf-btn" class="sgf-btn" type="button" name="from-sgf">From sgf...</button>
+      <form id="sgf-file-form" action="/" method="post" enctype="multipart/form-data">
+        <input type="file" id="upload-sgf" name="sgf-file">
+      </form>
     </div>
   </div>
   <div class="board">
@@ -42,5 +45,35 @@
 
 {% block scripts %}
   {{ super() }}
+  {% if placed_stones %}
+    <script type="text/javascript">
+      let placedStones = {{ placed_stones|safe }};
+    </script>
+  {% else %}
+    <script type="text/javascript">
+      let placedStones = {};
+    </script>
+  {% endif %}
+
+  {% if error %}
+    <script type="text/javascript">
+      let error = "{{ error|safe }}";
+    </script>
+  {% else %}
+    <script type="text/javascript">
+      let error;
+    </script>
+  {% endif %}
+
+  {% if first_color %}
+    <script type="text/javascript">
+      let firstStoneColor = "{{ first_color|safe }}";
+    </script>
+  {% else %}
+    <script type="text/javascript">
+      let firstStoneColor;
+    </script>
+  {% endif %}
+  
   <script src="{{ url_for('static', filename='js/index.js') }}" charset="utf-8"></script>
 {% endblock %}
