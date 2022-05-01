@@ -21,6 +21,11 @@ def index():
     if request.method == "GET":
         return render_template("index.html")
 
+    if len(request.form) != 0:
+        print(request.form["first_color"])
+        return render_template("index.html", placed_stones=request.form["placed_stones"],
+                               first_color=request.form["first_color"])
+
     if "sgf-file" not in request.files:
         return render_template("index.html", error="Please upload a file")
 

@@ -27,3 +27,29 @@ $("#content-div").css("min-width", "1000px");
 function placeStone(element, color) {
   element.append("<img class='stone' data-color='" + color + "' src='/static/images/" + color + ".png' alt=''>");
 }
+
+// Return button
+$("#return-btn").click(function() {
+  let form = document.createElement("form");
+  form.method = "post";
+  form.action = "/";
+  form.type = "hidden";
+
+  document.body.appendChild(form);
+
+  let placedStonesInput = document.createElement("input");
+  placedStonesInput.name = "placed_stones";
+  placedStonesInput.value = JSON.stringify(placedStones);
+  placedStonesInput.type = "hidden";
+
+  form.appendChild(placedStonesInput);
+
+  let firstColorInput = document.createElement("input");
+  firstColorInput.name = "first_color";
+  firstColorInput.value = firstColor;
+  firstColorInput.type = "hidden";
+
+  form.appendChild(firstColorInput);
+
+  form.submit();
+})
