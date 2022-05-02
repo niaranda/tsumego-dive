@@ -7,13 +7,10 @@ $("#content-div").css("min-width", "1000px");
 
 let placedStones;
 let nextColor;
-let gameTree;
-let selectedNodeId;
 
 let chart;
-let treeConfig;
-let treeNodes;
-let nodeIdCounter;
+let gameTree;
+let selectedNodeId;
 
 initialConfig();
 
@@ -38,7 +35,7 @@ function initialConfig() {
   })
 
   // Set board positions index and stones
-  placedStones = initialStones;
+  placedStones = {...initialStones};
 
   $(".board-pos").each(function(index) {
     $(this).data("index", index);
@@ -51,29 +48,28 @@ function initialConfig() {
   nextColor = firstColor;
 
   // Initial tree
-  treeConfig = [{
-    container: "#tree-div",
-    connectors: {
-      type: "step"
-    }
-  }];
-
-  root = {
-    image: "static/images/circle.png",
-    HTMLclass: "selected-node",
-    text: {
-      data: {
-        placedStones: initialStones,
-        nextColor: firstColor,
-        forbiddenMoves: forbiddenMoves
+  let treeConfig = {
+    chart: {
+      container: "#tree-div",
+      connectors: {
+        type: "step"
+      },
+      node: {
+        collapsable: false
+      }
+    },
+    nodeStructure: {
+      image: "static/images/circle.png",
+      HTMLclass: "selected-node",
+      text: {
+        data: {
+          placedStones: initialStones,
+          nextColor: firstColor,
+          forbiddenMoves: forbiddenMoves
+        }
       }
     }
-  };
-  nodeIdCounter = 0;
-
-  treeConfig.push(root);
-  treeNodes = {};
-  treeNodes[0] = root;
+  }
 
   chart = new Treant(treeConfig, null, $);
   gameTree = chart.tree;
@@ -96,12 +92,11 @@ function removeStone(element) {
 
 function replaceStones() {
   $(".board-pos").each(function(index) {
-   if (index in placedStones) {
-     placeStone($(this), placedStones[index]);
-   } else {
-     removeStone($(this));
-   }
- })
+    removeStone($(this));
+    if (index in placedStones) {
+      placeStone($(this), placedStones[index]);
+    }
+  })
 }
 
 // Preview move
@@ -140,7 +135,7 @@ $(".board-pos").click(function(event) {
   forbiddenMoves.push($(this).data("index"));
 
   // Get current stones
-  let parentStones = placedStones;
+  let parentStones = {...placedStones};
 
   // Place stone
   removeStone($(this)); // Remove move preview
@@ -155,34 +150,27 @@ $(".board-pos").click(function(event) {
   checkForbiddenMoves(parentStones);
 
   // Add node to tree
-  parent_node = treeNodes[selectedNodeId];
-  parent_node.nodeHTMLclass = "";
+  parentNode = gameTree.getNodeDb().get(selectedNodeId);
+  parentNode.nodeDOM.classList.remove("selected-node");
 
-  new_node = {
-    parent: parent_node,
+  newNodeData = {
     image: "static/images/" + currentColor + ".png",
     HTMLclass: "selected-node",
     text: {
       data: {
-        placedStones: placedStones,
+        placedStones: {...placedStones},
         nextColor: nextColor,
-        forbiddenMoves: forbiddenMoves
+        forbiddenMoves: {...forbiddenMoves}
       }
     }
   }
 
-  nodeIdCounter += 1;
-  treeNodes[nodeIdCounter] = new_node;
-  treeConfig.push(new_node);
-
-  let chart = new Treant(treeConfig, null, $);
-  gameTree = chart.tree;
-  reDrawTree();
+  newNode = gameTree.addNode(parentNode, newNodeData);
+  selectedNodeId = newNode.id;
 })
 
 function checkForbiddenMoves(parentStones) {
-  $.post("/move",
-    {
+  $.post("/move", {
       placed_stones: JSON.stringify(placedStones),
       next_color: nextColor,
       parent_stones: JSON.stringify(parentStones)
