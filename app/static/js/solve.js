@@ -143,13 +143,38 @@ $(".board-pos").click(function(event) {
 
   // Update board
   updateBoardData($(this).data("index"));
+})
+
+function updateBoardData(stoneIndex) {
+  let newStone = {}
+  newStone[stoneIndex] = nextColor;
+
+  $.post("/move", {
+      placed_stones: JSON.stringify(placedStones),
+      new_stone: JSON.stringify(newStone)
+    },
+    function(data) {
+      let boardData = JSON.parse(data);
+      placedStones = JSON.parse(boardData["placed_stones"]);
+      forbiddenMoves = JSON.parse(boardData["forbidden_moves"]);
+
+      nodeColor = nextColor;
+      nextColor = nodeColor === "white" ? "black" : "white";
+
+      replaceStones();
+      addTreeNode(nodeColor);
+    }
+  )
+
+}
 
   // Add node to tree
+function addTreeNode(nodeColor) {
   let parentNode = gameTree.getNodeDb().get(selectedNodeId);
   parentNode.nodeDOM.classList.remove("selected-node");
 
   let newNodeData = {
-    image: "static/images/" + currentColor + ".png",
+    image: "static/images/" + nodeColor + ".png",
     HTMLclass: "selected-node",
     text: {
       data: {
@@ -166,27 +191,6 @@ $(".board-pos").click(function(event) {
 
   let newNode = gameTree.addNode(parentNode, newNodeData);
   selectedNodeId = newNode.id;
-})
-
-function updateBoardData(stoneIndex) {
-  let newStone = {}
-  newStone[stoneIndex] = nextColor;
-
-  $.post("/move", {
-      placed_stones: JSON.stringify(placedStones),
-      new_stone: JSON.stringify(newStone)
-    },
-    function(data) {
-      let boardData = JSON.parse(data);
-      placedStones = JSON.parse(boardData["placed_stones"]);
-      forbiddenMoves = JSON.parse(boardData["forbidden_moves"]);
-
-      nextColor = nextColor === "white" ? "black" : "white";
-
-      replaceStones();
-    }
-  )
-
 }
 
 // Tree navigation
