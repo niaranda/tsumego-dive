@@ -35,7 +35,9 @@ function initialConfig() {
   })
 
   // Set board positions index and stones
-  placedStones = {...initialStones};
+  placedStones = {
+    ...initialStones
+  };
 
   $(".board-pos").each(function(index) {
     $(this).data("index", index);
@@ -63,9 +65,13 @@ function initialConfig() {
       HTMLclass: "selected-node",
       text: {
         data: {
-          placedStones: {...initialStones},
+          placedStones: {
+            ...initialStones
+          },
           nextColor: firstColor,
-          forbiddenMoves: {...forbiddenMoves}
+          forbiddenMoves: {
+            ...forbiddenMoves
+          }
         }
       }
     }
@@ -132,53 +138,55 @@ $(".board-pos").click(function(event) {
     return;
   }
 
-  forbiddenMoves.push($(this).data("index"));
-
-  // Get current stones
-  let parentStones = {...placedStones};
-
-  // Place stone
-  removeStone($(this)); // Remove move preview
-  placeStone($(this), nextColor);
-  placedStones[$(this).data("index")] = nextColor;
-
-  // Set next color
+  // Get current color
   let currentColor = nextColor;
-  nextColor = currentColor === "white" ? "black" : "white";
 
-  // Set new forbidden moves
-  checkForbiddenMoves(parentStones);
+  // Update board
+  updateBoardData($(this).data("index"));
 
   // Add node to tree
-  parentNode = gameTree.getNodeDb().get(selectedNodeId);
+  let parentNode = gameTree.getNodeDb().get(selectedNodeId);
   parentNode.nodeDOM.classList.remove("selected-node");
 
-  newNodeData = {
+  let newNodeData = {
     image: "static/images/" + currentColor + ".png",
     HTMLclass: "selected-node",
     text: {
       data: {
-        placedStones: {...placedStones},
+        placedStones: {
+          ...placedStones
+        },
         nextColor: nextColor,
-        forbiddenMoves: {...forbiddenMoves}
+        forbiddenMoves: {
+          ...forbiddenMoves
+        }
       }
     }
   }
 
-  newNode = gameTree.addNode(parentNode, newNodeData);
+  let newNode = gameTree.addNode(parentNode, newNodeData);
   selectedNodeId = newNode.id;
 })
 
-function checkForbiddenMoves(parentStones) {
-  $.post("/forbidden_move", {
+function updateBoardData(stoneIndex) {
+  let newStone = {}
+  newStone[stoneIndex] = nextColor;
+
+  $.post("/move", {
       placed_stones: JSON.stringify(placedStones),
-      next_color: nextColor,
-      parent_stones: JSON.stringify(parentStones)
+      new_stone: JSON.stringify(newStone)
     },
     function(data) {
-      forbiddenMoves = JSON.parse(data);
+      let boardData = JSON.parse(data);
+      placedStones = JSON.parse(boardData["placed_stones"]);
+      forbiddenMoves = JSON.parse(boardData["forbidden_moves"]);
+
+      nextColor = nextColor === "white" ? "black" : "white";
+
+      replaceStones();
     }
   )
+
 }
 
 // Tree navigation
@@ -208,7 +216,9 @@ function navigateTree(direction) {
   selectedNodeId = next.id;
 
   // Retrieve state
-  placedStones = {...next.text.data["placedStones"]};
+  placedStones = {
+    ...next.text.data["placedStones"]
+  };
   nextColor = next.text.data["nextColor"];
   forbiddenMoves = Object.values(next.text.data["forbiddenMoves"]);
 

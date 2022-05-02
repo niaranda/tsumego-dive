@@ -1,5 +1,6 @@
 import json
 import os
+from copy import deepcopy
 from re import match
 from typing import List, Optional, Tuple, Dict
 
@@ -65,16 +66,30 @@ def solve():
                            forbidden_moves=__get_forbidden_moves(stones_str, first_color))
 
 
-@app.route("/forbidden_move", methods=["POST"])
+@app.route("/move", methods=["POST"])
 def move():
     if request.method != "POST":
         return
 
-    stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
-    next_color: str = request.form["next_color"]
-    parent_stones_str: Dict[str, str] = json.loads(request.form["parent_stones"])
+    print(request.form)
+    parent_stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
+    new_stone_str: Dict[str, str] = json.loads(request.form["new_stone"])
 
-    return json.dumps(__get_forbidden_moves(stones_str, next_color, parent_stones_str))
+    placed_stones: List[Stone] = __dict_str_to_stones(parent_stones_str)
+    new_stone: Stone = __dict_str_to_stones(new_stone_str)[0]
+    next_color = new_stone.color.get_other()
+
+    parent_board = Board(placed_stones)
+    board: Board = deepcopy(parent_board)
+    board.place_stone(new_stone)
+    new_placed_stones: List[Stone] = [Stone(pos, color) for pos, color in board.placed_stones.items()]
+
+    forbidden_moves: List[Pos] = board.get_forbidden_moves(next_color, parent_board)
+
+    return json.dumps({
+        "placed_stones": json.dumps(__stones_to_dict(new_placed_stones)),
+        "forbidden_moves": json.dumps([row * 19 + col for row, col in forbidden_moves])
+    })
 
 
 def __valid_file(filename: str) -> bool:
@@ -110,7 +125,7 @@ def __get_placed_stones_from_sgf(path: str) -> Tuple[Dict[int, str], Optional[st
 def __stones_to_dict(stones: List[Stone]) -> Dict[int, str]:
     stone_dict: Dict[int, str] = {}
     for stone in stones:
-        pos_index: int = stone.pos[0] + stone.pos[1] * 19
+        pos_index: int = stone.pos[0] * 19 + stone.pos[1]
         stone_dict[pos_index] = stone.color.name.lower()
     return stone_dict
 
@@ -129,15 +144,10 @@ def __dict_str_to_stones(stone_dict_str: Dict[str, str]) -> List[Stone]:
     return __dict_to_stones(stone_dict)
 
 
-def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color: str, parent_stones_str: Dict[str, str] = None) \
+def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color: str) \
         -> List[int]:
     stones: List[Stone] = __dict_str_to_stones(stone_dict_str)
     color: Color = Color.BLACK if next_color == "black" else Color.WHITE
-    parent_board = None
 
-    if parent_stones_str is not None:
-        parent_stones: List[Stone] = __dict_str_to_stones(parent_stones_str)
-        parent_board = Board(parent_stones)
-
-    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(color, parent_board)
+    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(color)
     return [row * 19 + col for row, col in forbidden_moves]
