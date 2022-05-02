@@ -9,7 +9,6 @@ let placedStones;
 let nextColor;
 let gameTree;
 let selectedNodeId;
-let forbiddenMoves;
 
 initialConfig();
 

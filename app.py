@@ -1,3 +1,4 @@
+import json
 import os
 from re import match
 from typing import List, Optional, Tuple, Dict
@@ -7,7 +8,9 @@ from flask import Flask, render_template, request
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
-from src.beans.board.stone import Stone
+from src.beans.board.board import Board
+from src.beans.board.color import Color
+from src.beans.board.stone import Stone, Pos
 from src.preprocessing.adapter.tree_adapter import has_invalid_size, get_init_stones, get_first_stone
 from src.preprocessing.corrections.sgf_corrections import apply_corrections
 from src.preprocessing.errors.preprocessing_exception import PreprocessingException
@@ -51,11 +54,15 @@ def index():
 
 @app.route("/solve", methods=["GET", "POST"])
 def solve():
-    if request.method == "POST":
-        return render_template("solve.html",
-                               placed_stones=request.form["placed_stones"],
-                               first_color=request.form["next_color"])
-    return render_template("solve.html")
+    if request.method != "POST":
+        return
+
+    stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
+    first_color: str = request.form["first_color"]
+    return render_template("solve.html",
+                           initial_stones=request.form["placed_stones"],
+                           first_color=first_color,
+                           forbidden_moves=__get_forbidden_moves(stones_str, first_color))
 
 
 def __valid_file(filename: str) -> bool:
@@ -94,3 +101,19 @@ def __stones_to_dict(stones: List[Stone]) -> Dict[int, str]:
         pos_index: int = stone.pos[0] + stone.pos[1] * 19
         stone_dict[pos_index] = stone.color.name.lower()
     return stone_dict
+
+
+def __dict_to_stones(stone_dict: Dict[int, str]) -> List[Stone]:
+    stones: List[Stone] = []
+    for index, color in stone_dict.items():
+        pos: Pos = (int(index / 19), index % 19)
+        color = Color.BLACK if color == "black" else Color.WHITE
+        stones.append(Stone(pos, color))
+    return stones
+
+
+def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color) -> List[int]:
+    stone_dict = dict([(int(index), color) for index, color in stone_dict_str.items()])
+    stones: List[Stone] = __dict_to_stones(stone_dict)
+    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(next_color)
+    return [row * 19 + col for row, col in forbidden_moves]
