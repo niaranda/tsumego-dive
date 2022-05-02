@@ -30,9 +30,7 @@
     <div id="tree-top-div" class="top-div">
       <button id="to-sgf-btn" class="sgf-btn" type="button" name="from-sgf">Save as sgf...</button>
     </div>
-    <div id="tree-div">
-      Tree
-    </div>
+    <div id="tree-div"></div>
     <div class="bottom-container">
       <h3>Navigate the game tree:</h3>
       <table>
@@ -75,5 +73,7 @@
   </script>
 
   <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.0/raphael-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js"></script>
   <script src="{{ url_for('static', filename='js/solve.js') }}" charset="utf-8"></script>
 {% endblock %}

@@ -53,3 +53,47 @@ $("#return-btn").click(function() {
 
   form.submit();
 })
+
+// Tree
+let treeConfig = {
+  chart: {
+    container: "#tree-div",
+    connectors: {
+      type: "step"
+    }
+  },
+  nodeStructure: {
+    image: "static/images/" + firstColor + ".png",
+    HTMLclass: "selected-node",
+    text: {
+      data: placedStones
+    },
+    children: [
+      {
+        image: "static/images/white.png",
+        text: {
+          data: placedStones
+        }
+      },
+      {
+        image: "static/images/white.png",
+        text: {
+          data: placedStones
+        }
+      }
+    ]
+  }
+}
+
+let gameTree = (new Treant(treeConfig, null, $)).tree;
+let selected = gameTree.root();
+
+function moveDown() {
+  if (selected.children.length == 0) {
+    return;
+  }
+  selected.nodeDOM.classList.remove("selected-node");
+  let firstChildId = selected.children[0];
+  let firstChild = gameTree.getNodeDb().get(firstChildId);
+  firstChild.nodeDOM.classList.add("selected-node");
+}

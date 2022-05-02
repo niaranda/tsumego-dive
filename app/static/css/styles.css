@@ -178,6 +178,16 @@ tr {
   border-radius: 5px;
 }
 
+.node > img {
+  height: 30px;
+  width: 30px;
+}
+
+.selected-node > img {
+  height: 40px;
+  width: 40px;
+}
+
 #logo-div {
   text-align: left;
   padding-left: 5%;
