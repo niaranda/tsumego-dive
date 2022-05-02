@@ -6,6 +6,7 @@ $("#content-div").css("width", "90%");
 $("#content-div").css("min-width", "1000px");
 
 let placedStones;
+let nextColor;
 let gameTree;
 let selectedNodeId;
 let forbiddenMoves;
@@ -42,8 +43,8 @@ function initialConfig() {
     }
   })
 
-  // Forbidden moves TODO pass
-  forbiddenMoves = Object.keys(placedStones).map(Number);
+  // Next color
+  nextColor = firstColor;
 
   // Initial tree
   let treeConfig = {
@@ -61,21 +62,7 @@ function initialConfig() {
           placedStones: initialStones,
           nextColor: firstColor
         }
-      },
-      children: [
-        {
-          image: "static/images/white.png",
-          text: {
-            data: placedStones
-          }
-        },
-        {
-          image: "static/images/white.png",
-          text: {
-            data: placedStones
-          }
-        }
-      ]
+      }
     }
   }
 
@@ -162,7 +149,7 @@ $("#return-btn").click(function() {
 
   let placedStonesInput = document.createElement("input");
   placedStonesInput.name = "placed_stones";
-  placedStonesInput.value = JSON.stringify(placedStones);
+  placedStonesInput.value = JSON.stringify(initialStones);
   placedStonesInput.type = "hidden";
 
   form.appendChild(placedStonesInput);

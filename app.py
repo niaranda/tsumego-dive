@@ -54,8 +54,7 @@ def solve():
     if request.method == "POST":
         return render_template("solve.html",
                                placed_stones=request.form["placed_stones"],
-                               first_color=request.form["next_color"],
-                               next_color=request.form["next_color"])
+                               first_color=request.form["next_color"])
     return render_template("solve.html")
 
 

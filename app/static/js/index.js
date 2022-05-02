@@ -91,12 +91,12 @@ $(".start-btn").click(function() {
 
   form.appendChild(placedStonesInput);
 
-  let nextColorInput = document.createElement("input");
-  nextColorInput.name = "next_color";
-  nextColorInput.value = firstStoneColor;
-  nextColorInput.type = "hidden";
+  let firstColorInput = document.createElement("input");
+  firstColorInput.name = "first_color";
+  firstColorInput.value = firstStoneColor;
+  firstColorInput.type = "hidden";
 
-  form.appendChild(nextColorInput);
+  form.appendChild(firstColorInput);
 
   form.submit();
 })
