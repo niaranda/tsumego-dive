@@ -18,6 +18,14 @@ function reDrawTree() {
   gameTree = gameTree.redraw();
 }
 
+// Redraw tree on window resize
+let resizeTimeout;
+$(window).resize(function() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(reDrawTree, 50);
+})
+
+let dragTimeout;
 function initialConfig() {
   // Create split
   Split(['#split-board', '#split-tree'], {
@@ -29,8 +37,9 @@ function initialConfig() {
     onDragStart: function(sizes) {
       $(".arrow").remove();
     },
-    onDragEnd: function(sizes) {
-      reDrawTree();
+    onDrag: function(sizes) {
+      clearTimeout(dragTimeout);
+      dragTimeout = setTimeout(reDrawTree, 50);
     }
   })
 
