@@ -142,6 +142,13 @@ function navigateTree(direction) {
   selected.nodeDOM.classList.remove("selected-node");
   next.nodeDOM.classList.add("selected-node");
   selectedNodeId = next.id;
+
+  // Retrieve state
+  placedStones = next.text.data["placedStones"];
+  nextColor = next.text.data["nextColor"];
+  forbiddenMoves = next.text.data["forbiddenMoves"];
+
+  replaceStones();
 }
 
 // Return button
