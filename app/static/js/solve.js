@@ -5,28 +5,84 @@ $("nav").css("min-width", "1000px");
 $("#content-div").css("width", "90%");
 $("#content-div").css("min-width", "1000px");
 
-// Create split
-function reDrawTree() {
-  gameTree = gameTree.reload();
+let placedStones;
+let gameTree;
+let selectedNodeId;
+let forbiddenMoves = [];
+
+initialConfig();
+
+function initialConfig() {
+  // Create split
+  function reDrawTree() {
+    gameTree = gameTree.reload();
+  }
+
+  Split(['#split-board', '#split-tree'], {
+    minSize: [400, 300],
+    gutterSize: 4,
+    snapOffset: 0,
+    dragInterval: 2,
+    sizes: [70, 30],
+    onDragStart: function(sizes) {
+      $(".arrow").remove();
+    },
+    onDragEnd: function(sizes) {
+      reDrawTree();
+    }
+  })
+
+  // Set board positions index and stones
+  placedStones = initialStones;
+  $(".board-pos").each(function(index) {
+    $(this).data("index", index);
+    if (index in placedStones) {
+      placeStone($(this), placedStones[index]);
+    }
+  })
+
+  // Initial tree
+  let treeConfig = {
+    chart: {
+      container: "#tree-div",
+      connectors: {
+        type: "step"
+      }
+    },
+    nodeStructure: {
+      image: "static/images/circle.png",
+      HTMLclass: "selected-node",
+      text: {
+        data: {
+          placedStones: initialStones,
+          nextColor: firstColor
+        }
+      },
+      children: [
+        {
+          image: "static/images/white.png",
+          text: {
+            data: placedStones
+          }
+        },
+        {
+          image: "static/images/white.png",
+          text: {
+            data: placedStones
+          }
+        }
+      ]
+    }
+  }
+
+  let chart = new Treant(treeConfig, null, $);
+  gameTree = chart.tree;
+
+  // Selected node
+  selectedNodeId = gameTree.root().id;
 }
 
-Split(['#split-board', '#split-tree'], {
-  minSize: [400, 300],
-  gutterSize: 4,
-  snapOffset: 0,
-  dragInterval: 2,
-  sizes: [70, 30],
-  onDragStart: function(sizes) {
-    $(".arrow").remove();
-  },
-  onDragEnd: function(sizes) {
-    reDrawTree();
-  }
-})
-
-// Set board positions index and stones
-let placedStones = initialStones;
-
+// Board changes
 function placeStone(element, color) {
   element.append("<img class='stone' data-color='" + color + "' src='/static/images/" + color + ".png' alt=''>");
 }
@@ -34,13 +90,6 @@ function placeStone(element, color) {
 function removeStone(element) {
   element.empty();
 }
-
- $(".board-pos").each(function(index) {
-  $(this).data("index", index);
-  if (index in placedStones) {
-    placeStone($(this), placedStones[index]);
-  }
-})
 
 function replaceStones() {
   $(".board-pos").each(function(index) {
@@ -52,48 +101,8 @@ function replaceStones() {
  })
 }
 
-// Initial tree
-let treeConfig = {
-  chart: {
-    container: "#tree-div",
-    connectors: {
-      type: "step"
-    }
-  },
-  nodeStructure: {
-    image: "static/images/circle.png",
-    HTMLclass: "selected-node",
-    text: {
-      data: {
-        placedStones: initialStones,
-        nextColor: firstColor
-      }
-    },
-    children: [
-      {
-        image: "static/images/white.png",
-        text: {
-          data: placedStones
-        }
-      },
-      {
-        image: "static/images/white.png",
-        text: {
-          data: placedStones
-        }
-      }
-    ]
-  }
-}
-
-let chart = new Treant(treeConfig, null, $);
-let gameTree = chart.tree;
-
-// Selected node
-let selectedNodeId = gameTree.root().id;
-
 // Tree navigation
-function move(direction) {
+function navigateTree(direction) {
   let selected = gameTree.getNodeDb().get(selectedNodeId);
   let next;
   switch (direction) {
