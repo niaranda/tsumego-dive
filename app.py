@@ -70,9 +70,10 @@ def move():
     if request.method != "POST":
         return
 
+    print("REQUEST: " + str(request.form))
     stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
     next_color: str = request.form["next_color"]
-    parent_stones_str: Dict[str, str] = json.loads(request.form["parent_stones_str"])
+    parent_stones_str: Dict[str, str] = json.loads(request.form["parent_stones"])
 
     return json.dumps(__get_forbidden_moves(stones_str, next_color, parent_stones_str))
 

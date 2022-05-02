@@ -10,17 +10,19 @@ let nextColor;
 let gameTree;
 let selectedNodeId;
 
+let chart;
 let treeConfig;
 let treeNodes;
+let nodeIdCounter;
 
 initialConfig();
 
+function reDrawTree() {
+  gameTree = gameTree.reload();
+}
+
 function initialConfig() {
   // Create split
-  function reDrawTree() {
-    gameTree = gameTree.reload();
-  }
-
   Split(['#split-board', '#split-tree'], {
     minSize: [400, 300],
     gutterSize: 4,
@@ -67,16 +69,20 @@ function initialConfig() {
       }
     }
   };
+  nodeIdCounter = 0;
 
   treeConfig.push(root);
   treeNodes = {};
   treeNodes[0] = root;
 
-  let chart = new Treant(treeConfig, null, $);
+  chart = new Treant(treeConfig, null, $);
   gameTree = chart.tree;
 
   // Selected node
   selectedNodeId = gameTree.root().id;
+
+  // Move preview
+  setMovePreview();
 }
 
 // Board changes
@@ -103,19 +109,89 @@ function isForbidden(posElement) {
   return forbiddenMoves.includes(posElement.data("index"));
 }
 
-$(".board-pos").mouseenter(function(event) {
+function setMovePreview() {
+  $(".board-pos").mouseenter(function(event) {
+    if (isForbidden($(this))) {
+      return;
+    }
+    $(this).append("<img class='stone selected-pos' src='/static/images/" + nextColor + ".png' alt=''>");
+  })
+
+  $(".board-pos").mouseleave(function(event) {
+    if (isForbidden($(this))) {
+      return;
+    }
+    removeStone($(this));
+  })
+}
+
+function removeMovePreview() {
+  $(".board-pos").off("mouseenter");
+  $(".board-pos").off("mouseleave");
+}
+
+
+// Make move
+$(".board-pos").click(function(event) {
   if (isForbidden($(this))) {
     return;
   }
-  $(this).append("<img class='stone selected-pos' src='/static/images/" + nextColor + ".png' alt=''>");
+
+  forbiddenMoves.push($(this).data("index"));
+
+  // Get current stones
+  let parentStones = placedStones;
+
+  // Place stone
+  removeStone($(this)); // Remove move preview
+  placeStone($(this), nextColor);
+  placedStones[$(this).data("index")] = nextColor;
+
+  // Set next color
+  let currentColor = nextColor;
+  nextColor = currentColor === "white" ? "black" : "white";
+
+  // Set new forbidden moves
+  checkForbiddenMoves(parentStones);
+
+  // Add node to tree
+  parent_node = treeNodes[selectedNodeId];
+  parent_node.nodeHTMLclass = "";
+
+  new_node = {
+    parent: parent_node,
+    image: "static/images/" + currentColor + ".png",
+    HTMLclass: "selected-node",
+    text: {
+      data: {
+        placedStones: placedStones,
+        nextColor: nextColor,
+        forbiddenMoves: forbiddenMoves
+      }
+    }
+  }
+
+  nodeIdCounter += 1;
+  treeNodes[nodeIdCounter] = new_node;
+  treeConfig.push(new_node);
+
+  let chart = new Treant(treeConfig, null, $);
+  gameTree = chart.tree;
+  reDrawTree();
 })
 
-$(".board-pos").mouseleave(function(event) {
-  if (isForbidden($(this))) {
-    return;
-  }
-  removeStone($(this));
-})
+function checkForbiddenMoves(parentStones) {
+  $.post("/move",
+    {
+      placed_stones: JSON.stringify(placedStones),
+      next_color: nextColor,
+      parent_stones: JSON.stringify(parentStones)
+    },
+    function(data) {
+      forbiddenMoves = JSON.parse(data);
+    }
+  )
+}
 
 // Tree navigation
 function navigateTree(direction) {
