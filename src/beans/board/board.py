@@ -105,10 +105,6 @@ class Board(StoneCaptureHandler):
         if move.pos in self.placed_stones:
             return True
 
-        # Has liberties
-        if self._compute_liberties(move.pos) != 0:
-            return False
-
         # Check suicide rule
         dummy_board = deepcopy(self)
         try:
@@ -117,4 +113,6 @@ class Board(StoneCaptureHandler):
             return True
 
         # Check ko rule
-        return parent_board == self
+        if parent_board is not None:
+            return parent_board == self
+        return False

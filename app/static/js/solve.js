@@ -170,7 +170,7 @@ $(".board-pos").click(function(event) {
 })
 
 function checkForbiddenMoves(parentStones) {
-  $.post("/move", {
+  $.post("/forbidden_move", {
       placed_stones: JSON.stringify(placedStones),
       next_color: nextColor,
       parent_stones: JSON.stringify(parentStones)

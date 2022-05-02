@@ -65,12 +65,11 @@ def solve():
                            forbidden_moves=__get_forbidden_moves(stones_str, first_color))
 
 
-@app.route("/move", methods=["POST"])
+@app.route("/forbidden_move", methods=["POST"])
 def move():
     if request.method != "POST":
         return
 
-    print("REQUEST: " + str(request.form))
     stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
     next_color: str = request.form["next_color"]
     parent_stones_str: Dict[str, str] = json.loads(request.form["parent_stones"])
@@ -130,14 +129,15 @@ def __dict_str_to_stones(stone_dict_str: Dict[str, str]) -> List[Stone]:
     return __dict_to_stones(stone_dict)
 
 
-def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color, parent_stones_str: Dict[str, str] = None) \
+def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color: str, parent_stones_str: Dict[str, str] = None) \
         -> List[int]:
     stones: List[Stone] = __dict_str_to_stones(stone_dict_str)
+    color: Color = Color.BLACK if next_color == "black" else Color.WHITE
     parent_board = None
 
     if parent_stones_str is not None:
         parent_stones: List[Stone] = __dict_str_to_stones(parent_stones_str)
         parent_board = Board(parent_stones)
 
-    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(next_color, parent_board)
+    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(color, parent_board)
     return [row * 19 + col for row, col in forbidden_moves]
