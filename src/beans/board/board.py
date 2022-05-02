@@ -70,9 +70,9 @@ class Board(StoneCaptureHandler):
         if self.__stone_suicided(pos):
             raise GamePlayException(f"Broke suicide rule when placing stone in {pos}")
 
-    def get_forbidden_moves(self, color: Color) -> List[Pos]:
+    def get_forbidden_moves(self, color: Color, parent_board: Optional[Board]) -> List[Pos]:
         all_moves: List[Stone] = [Stone((row, col), color) for row in range(19) for col in range(19)]
-        forbidden_moves: List[Stone] = list(filter(lambda move: self.__is_forbidden_move(move), all_moves))
+        forbidden_moves: List[Stone] = list(filter(lambda move: self.__is_forbidden_move(move, parent_board), all_moves))
         return [move.pos for move in forbidden_moves]
 
     def _remove_stones(self, positions: List[Pos]):
@@ -100,7 +100,7 @@ class Board(StoneCaptureHandler):
         """Returns list of occupied positions. Overrides StoneLibertiesHandler method"""
         return list(self.__placed_stones.keys())
 
-    def __is_forbidden_move(self, move: Stone) -> bool:
+    def __is_forbidden_move(self, move: Stone, parent_board: Optional[Board]) -> bool:
         # Not empty
         if move.pos in self.placed_stones:
             return True
@@ -113,6 +113,8 @@ class Board(StoneCaptureHandler):
         dummy_board = deepcopy(self)
         try:
             dummy_board.place_stone(move)
-            return False
         except Exception:
             return True
+
+        # Check ko rule
+        return parent_board == self

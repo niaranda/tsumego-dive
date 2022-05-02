@@ -65,6 +65,18 @@ def solve():
                            forbidden_moves=__get_forbidden_moves(stones_str, first_color))
 
 
+@app.route("/move", methods=["POST"])
+def move():
+    if request.method != "POST":
+        return
+
+    stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
+    next_color: str = request.form["next_color"]
+    parent_stones_str: Dict[str, str] = json.loads(request.form["parent_stones_str"])
+
+    return json.dumps(__get_forbidden_moves(stones_str, next_color, parent_stones_str))
+
+
 def __valid_file(filename: str) -> bool:
     return match("^.+\.sgf$", filename.lower()) is not None
 
@@ -112,8 +124,19 @@ def __dict_to_stones(stone_dict: Dict[int, str]) -> List[Stone]:
     return stones
 
 
-def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color) -> List[int]:
+def __dict_str_to_stones(stone_dict_str: Dict[str, str]) -> List[Stone]:
     stone_dict = dict([(int(index), color) for index, color in stone_dict_str.items()])
-    stones: List[Stone] = __dict_to_stones(stone_dict)
-    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(next_color)
+    return __dict_to_stones(stone_dict)
+
+
+def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color, parent_stones_str: Dict[str, str] = None) \
+        -> List[int]:
+    stones: List[Stone] = __dict_str_to_stones(stone_dict_str)
+    parent_board = None
+
+    if parent_stones_str is not None:
+        parent_stones: List[Stone] = __dict_str_to_stones(parent_stones_str)
+        parent_board = Board(parent_stones)
+
+    forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(next_color, parent_board)
     return [row * 19 + col for row, col in forbidden_moves]
