@@ -190,6 +190,10 @@ tr {
   border-color: #222222;
 }
 
+.selected-pos {
+  opacity: 25%;
+}
+
 #logo-div {
   text-align: left;
   padding-left: 5%;

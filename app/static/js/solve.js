@@ -8,7 +8,7 @@ $("#content-div").css("min-width", "1000px");
 let placedStones;
 let gameTree;
 let selectedNodeId;
-let forbiddenMoves = [];
+let forbiddenMoves;
 
 initialConfig();
 
@@ -34,12 +34,16 @@ function initialConfig() {
 
   // Set board positions index and stones
   placedStones = initialStones;
+
   $(".board-pos").each(function(index) {
     $(this).data("index", index);
     if (index in placedStones) {
       placeStone($(this), placedStones[index]);
     }
   })
+
+  // Forbidden moves TODO pass
+  forbiddenMoves = Object.keys(placedStones).map(Number);
 
   // Initial tree
   let treeConfig = {
@@ -100,6 +104,25 @@ function replaceStones() {
    }
  })
 }
+
+// Preview move
+function isForbidden(posElement) {
+  return forbiddenMoves.includes(posElement.data("index"));
+}
+
+$(".board-pos").mouseenter(function(event) {
+  if (isForbidden($(this))) {
+    return;
+  }
+  $(this).append("<img class='stone selected-pos' src='/static/images/" + nextColor + ".png' alt=''>");
+})
+
+$(".board-pos").mouseleave(function(event) {
+  if (isForbidden($(this))) {
+    return;
+  }
+  removeStone($(this));
+})
 
 // Tree navigation
 function navigateTree(direction) {
