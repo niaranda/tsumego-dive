@@ -1,3 +1,14 @@
+// Resize content
+$("nav").css("width", "90%");
+$("nav").css("min-width", "1000px");
+
+$("#content-div").css("width", "90%");
+$("#content-div").css("min-width", "1000px");
+
+// Create split
+function reDrawTree() {
+  gameTree = gameTree.reload();
+}
 
 Split(['#split-board', '#split-tree'], {
   minSize: [400, 300],
@@ -7,16 +18,23 @@ Split(['#split-board', '#split-tree'], {
   sizes: [70, 30],
   onDragStart: function(sizes) {
     $(".arrow").remove();
+  },
+  onDragEnd: function(sizes) {
+    reDrawTree();
   }
 })
 
-$("nav").css("width", "90%");
-$("nav").css("min-width", "1000px");
-
-$("#content-div").css("width", "90%");
-$("#content-div").css("min-width", "1000px");
-
 // Set board positions index and stones
+let placedStones = initialStones;
+
+function placeStone(element, color) {
+  element.append("<img class='stone' data-color='" + color + "' src='/static/images/" + color + ".png' alt=''>");
+}
+
+function removeStone(element) {
+  element.empty();
+}
+
  $(".board-pos").each(function(index) {
   $(this).data("index", index);
   if (index in placedStones) {
@@ -24,8 +42,81 @@ $("#content-div").css("min-width", "1000px");
   }
 })
 
-function placeStone(element, color) {
-  element.append("<img class='stone' data-color='" + color + "' src='/static/images/" + color + ".png' alt=''>");
+function replaceStones() {
+  $(".board-pos").each(function(index) {
+   if (index in placedStones) {
+     placeStone($(this), placedStones[index]);
+   } else {
+     removeStone($(this));
+   }
+ })
+}
+
+// Initial tree
+let treeConfig = {
+  chart: {
+    container: "#tree-div",
+    connectors: {
+      type: "step"
+    }
+  },
+  nodeStructure: {
+    image: "static/images/circle.png",
+    HTMLclass: "selected-node",
+    text: {
+      data: {
+        placedStones: initialStones,
+        nextColor: firstColor
+      }
+    },
+    children: [
+      {
+        image: "static/images/white.png",
+        text: {
+          data: placedStones
+        }
+      },
+      {
+        image: "static/images/white.png",
+        text: {
+          data: placedStones
+        }
+      }
+    ]
+  }
+}
+
+let chart = new Treant(treeConfig, null, $);
+let gameTree = chart.tree;
+
+// Selected node
+let selectedNodeId = gameTree.root().id;
+
+// Tree navigation
+function move(direction) {
+  let selected = gameTree.getNodeDb().get(selectedNodeId);
+  let next;
+  switch (direction) {
+    case "up":
+      next = selected.parent();
+      break;
+    case "down":
+      next = selected.firstChild();
+      break;
+    case "left":
+      next = selected.leftSibling();
+      break;
+    case "right":
+      next = selected.rightSibling();
+  }
+
+  if (next === undefined) {
+    return;
+  }
+
+  selected.nodeDOM.classList.remove("selected-node");
+  next.nodeDOM.classList.add("selected-node");
+  selectedNodeId = next.id;
 }
 
 // Return button
@@ -53,47 +144,3 @@ $("#return-btn").click(function() {
 
   form.submit();
 })
-
-// Tree
-let treeConfig = {
-  chart: {
-    container: "#tree-div",
-    connectors: {
-      type: "step"
-    }
-  },
-  nodeStructure: {
-    image: "static/images/" + firstColor + ".png",
-    HTMLclass: "selected-node",
-    text: {
-      data: placedStones
-    },
-    children: [
-      {
-        image: "static/images/white.png",
-        text: {
-          data: placedStones
-        }
-      },
-      {
-        image: "static/images/white.png",
-        text: {
-          data: placedStones
-        }
-      }
-    ]
-  }
-}
-
-let gameTree = (new Treant(treeConfig, null, $)).tree;
-let selected = gameTree.root();
-
-function moveDown() {
-  if (selected.children.length == 0) {
-    return;
-  }
-  selected.nodeDOM.classList.remove("selected-node");
-  let firstChildId = selected.children[0];
-  let firstChild = gameTree.getNodeDb().get(firstChildId);
-  firstChild.nodeDOM.classList.add("selected-node");
-}

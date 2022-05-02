@@ -183,9 +183,11 @@ tr {
   width: 30px;
 }
 
-.selected-node > img {
-  height: 40px;
-  width: 40px;
+.selected-node {
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #222222;
 }
 
 #logo-div {
