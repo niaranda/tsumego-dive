@@ -194,6 +194,11 @@ tr {
   opacity: 25%;
 }
 
+.pressed {
+  box-shadow: 0 3px 4px 0 #d0d0d7;
+  opacity: 0.5;
+}
+
 #logo-div {
   text-align: left;
   padding-left: 5%;

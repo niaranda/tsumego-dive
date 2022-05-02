@@ -15,7 +15,7 @@ let selectedNodeId;
 initialConfig();
 
 function reDrawTree() {
-  gameTree = gameTree.reload();
+  gameTree = gameTree.redraw();
 }
 
 function initialConfig() {
@@ -63,9 +63,9 @@ function initialConfig() {
       HTMLclass: "selected-node",
       text: {
         data: {
-          placedStones: initialStones,
+          placedStones: {...initialStones},
           nextColor: firstColor,
-          forbiddenMoves: forbiddenMoves
+          forbiddenMoves: {...forbiddenMoves}
         }
       }
     }
@@ -208,12 +208,56 @@ function navigateTree(direction) {
   selectedNodeId = next.id;
 
   // Retrieve state
-  placedStones = next.text.data["placedStones"];
+  placedStones = {...next.text.data["placedStones"]};
   nextColor = next.text.data["nextColor"];
-  forbiddenMoves = next.text.data["forbiddenMoves"];
+  forbiddenMoves = Object.values(next.text.data["forbiddenMoves"]);
 
   replaceStones();
 }
+
+// Key events
+$("body").keydown(function(event) {
+  switch (event.key) {
+    case "ArrowUp":
+      $("#arrow-key-up").click();
+      break;
+    case "ArrowLeft":
+      $("#arrow-key-left").click();
+      break;
+    case "ArrowRight":
+      $("#arrow-key-right").click();
+      break;
+    case "ArrowDown":
+      $("#arrow-key-down").click();
+      break;
+    case " ":
+      $("#dive-btn").click();
+  }
+})
+
+// Button clicks
+$(".arrow-key, #dive-btn").click(function(event) {
+  $(this).addClass("pressed");
+  setTimeout(function() {
+    $(".pressed").removeClass("pressed");
+  }, 100);
+})
+
+$("#arrow-key-up").click(function(event) {
+  navigateTree("up");
+})
+
+$("#arrow-key-down").click(function(event) {
+  navigateTree("down");
+})
+
+$("#arrow-key-left").click(function(event) {
+  navigateTree("left");
+})
+
+$("#arrow-key-right").click(function(event) {
+  navigateTree("right");
+})
 
 // Return button
 $("#return-btn").click(function() {
