@@ -10,6 +10,9 @@ let nextColor;
 let gameTree;
 let selectedNodeId;
 
+let treeConfig;
+let treeNodes;
+
 initialConfig();
 
 function initialConfig() {
@@ -46,24 +49,28 @@ function initialConfig() {
   nextColor = firstColor;
 
   // Initial tree
-  let treeConfig = {
-    chart: {
-      container: "#tree-div",
-      connectors: {
-        type: "step"
-      }
-    },
-    nodeStructure: {
-      image: "static/images/circle.png",
-      HTMLclass: "selected-node",
-      text: {
-        data: {
-          placedStones: initialStones,
-          nextColor: firstColor
-        }
+  treeConfig = [{
+    container: "#tree-div",
+    connectors: {
+      type: "step"
+    }
+  }];
+
+  root = {
+    image: "static/images/circle.png",
+    HTMLclass: "selected-node",
+    text: {
+      data: {
+        placedStones: initialStones,
+        nextColor: firstColor,
+        forbiddenMoves: forbiddenMoves
       }
     }
-  }
+  };
+
+  treeConfig.push(root);
+  treeNodes = {};
+  treeNodes[0] = root;
 
   let chart = new Treant(treeConfig, null, $);
   gameTree = chart.tree;
