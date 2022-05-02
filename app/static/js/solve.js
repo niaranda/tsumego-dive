@@ -227,6 +227,7 @@ function navigateTree(direction) {
 
 // Key events
 $("body").keydown(function(event) {
+  event.preventDefault();
   switch (event.key) {
     case "ArrowUp":
       $("#arrow-key-up").click();
