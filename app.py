@@ -89,6 +89,9 @@ def move():
         "forbidden_moves": json.dumps([row * 19 + col for row, col in forbidden_moves])
     })
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 def __valid_file(filename: str) -> bool:
     return match("^.+\.sgf$", filename.lower()) is not None

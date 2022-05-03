@@ -322,3 +322,14 @@ tr {
   height: 600px;
   overflow-y: auto;
 }
+
+#about-div {
+  margin: 0 10%;
+  text-align: justify;
+}
+
+#about-div > p {
+  text-align: justify;
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+}
