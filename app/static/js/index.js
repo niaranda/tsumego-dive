@@ -33,6 +33,21 @@ function chooseInsertColor(chosenColor) {
   $("#insert-" + chosenColor).addClass("selected");
 }
 
+// Preview insertion
+$(".board-pos").mouseenter(function(event) {
+  if (insertColor === undefined || $(this).data("index") in placedStones) {
+    return;
+  }
+  $(this).append("<img class='stone selected-pos' src='/static/images/" + insertColor + ".png' alt=''>");
+})
+
+$(".board-pos").mouseleave(function(event) {
+  if (insertColor === undefined || $(this).data("index") in placedStones) {
+    return;
+  }
+  removeStone($(this));
+})
+
 // First color selection
 $("#first-black").click(function() {
   chooseFirstStoneColor("black");

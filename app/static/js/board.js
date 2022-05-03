@@ -12,8 +12,8 @@ function initialiseInsertBoard() {
     index = $(this).data("index");
     color = placedStones[index];
 
+    $(this).empty();
     if (color !== undefined) {
-      $(this).empty();
       delete placedStones[index];
 
       if (insertColor === color) {
