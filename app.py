@@ -26,7 +26,6 @@ def index():
         return render_template("index.html")
 
     if len(request.form) != 0:
-        print(request.form["first_color"])
         return render_template("index.html", placed_stones=request.form["placed_stones"],
                                first_color=request.form["first_color"])
 
@@ -71,7 +70,6 @@ def move():
     if request.method != "POST":
         return
 
-    print(request.form)
     parent_stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
     new_stone_str: Dict[str, str] = json.loads(request.form["new_stone"])
 

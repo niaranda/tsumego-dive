@@ -5,6 +5,9 @@ $("nav").css("min-width", "1000px");
 $("#content-div").css("width", "90%");
 $("#content-div").css("min-width", "1000px");
 
+let placedStones;
+let nextColor;
+
 let dragTimeout;
 
 initialConfig();
@@ -26,7 +29,7 @@ function initialConfig() {
     }
   })
 
-  initialiseBoard();
+  initialiseSolveBoard();
   initialiseTree();
 
   // Move preview
@@ -97,24 +100,10 @@ $("#arrow-key-right").click(function(event) {
 
 // Return button
 $("#return-btn").click(function() {
-  let form = document.createElement("form");
-  form.method = "post";
-  form.action = "/";
-  form.type = "hidden";
-
-  document.body.appendChild(form);
+  let form = createHiddenForm("/");
 
   addFormInput(form, "placed_stones", JSON.stringify(initialStones));
   addFormInput(form, "first_color", firstColor);
 
   form.submit();
 })
-
-function addFormInput(form, name, value) {
-  let input = document.createElement("input");
-  input.name = name;
-  input.value = value;
-  input.type = "hidden";
-
-  form.appendChild(input);
-}

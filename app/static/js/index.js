@@ -1,39 +1,27 @@
-
 let insertColor;
+
+
+// Set board positions index and place stones
+initialiseInsertBoard();
 
 // Error message
 if (error !== undefined) {
   alert(error);
 }
 
-// Set board positions index and stones
- $(".board-pos").each(function(index) {
-  $(this).data("index", index);
-  if (index in placedStones) {
-    placeStone($(this), placedStones[index]);
-  }
-})
-
 // Insertion color
 $("#insert-black").click(function() {
-  if (insertColor === "black") {
-    insertColor = undefined;
-    $(this).removeClass("selected");
-    return;
-  }
-
-  if (insertColor !== undefined) {
-    $(".insertion > .stone-btn").removeClass("selected");
-  }
-
-  insertColor = "black";
-  $(this).addClass("selected");
+  chooseInsertColor("black");
 })
 
 $("#insert-white").click(function() {
-  if (insertColor === "white") {
+  chooseInsertColor("white");
+})
+
+function chooseInsertColor(chosenColor) {
+  if (insertColor === chosenColor) {
     insertColor = undefined;
-    $(this).removeClass("selected");
+    $("#insert-" + chosenColor).removeClass("selected");
     return;
   }
 
@@ -41,24 +29,25 @@ $("#insert-white").click(function() {
     $(".insertion > .stone-btn").removeClass("selected");
   }
 
-  insertColor = "white";
-  $(this).addClass("selected");
-})
+  insertColor = chosenColor;
+  $("#insert-" + chosenColor).addClass("selected");
+}
 
 // First color selection
 $("#first-black").click(function() {
-  $(".bottom-container > .stone-btn").removeClass("selected");
-
-  firstStoneColor = "black";
-  $(this).addClass("selected");
+  chooseFirstStoneColor("black");
 })
 
 $("#first-white").click(function() {
+  chooseFirstStoneColor("white");
+})
+
+function chooseFirstStoneColor(chosenColor) {
   $(".bottom-container > .stone-btn").removeClass("selected");
 
-  firstStoneColor = "white";
-  $(this).addClass("selected");
-})
+  firstStoneColor = chosenColor;
+  $("#first-" + chosenColor).addClass("selected");
+}
 
 // First color from sgf
 if (firstStoneColor !== undefined) {
@@ -77,50 +66,10 @@ $(".start-btn").click(function() {
     return;
   }
 
-  let form = document.createElement("form");
-  form.method = "post";
-  form.action = "/solve";
-  form.type = "hidden";
-
-  document.body.appendChild(form);
-
-  let placedStonesInput = document.createElement("input");
-  placedStonesInput.name = "placed_stones";
-  placedStonesInput.value = JSON.stringify(placedStones);
-  placedStonesInput.type = "hidden";
-
-  form.appendChild(placedStonesInput);
-
-  let firstColorInput = document.createElement("input");
-  firstColorInput.name = "first_color";
-  firstColorInput.value = firstStoneColor;
-  firstColorInput.type = "hidden";
-
-  form.appendChild(firstColorInput);
-
+  let form = createHiddenForm("/solve");
+  addFormInput(form, "placed_stones", JSON.stringify(placedStones));
+  addFormInput(form, "first_color", firstStoneColor);
   form.submit();
-})
-
-// Insertions
-$(".board-pos").click(function() {
-  if (insertColor === undefined) {
-    return;
-  }
-  index = $(this).data("index");
-  color = placedStones[index];
-
-  if (color !== undefined) {
-    $(this).empty();
-    delete placedStones[index];
-
-    if (insertColor === color) {
-      return;
-    }
-  }
-
-  placedStones[index] = insertColor;
-
-  placeStone($(this), insertColor);
 })
 
 // Sgf upload
@@ -131,7 +80,3 @@ $("#from-sgf-btn").click(function() {
 $("#upload-sgf").change(function() {
   $("#sgf-file-form").submit()
 })
-
-function placeStone(element, color) {
-  element.append("<img class='stone' data-color='" + color + "' src='/static/images/" + color + ".png' alt=''>");
-}

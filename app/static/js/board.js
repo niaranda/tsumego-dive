@@ -1,21 +1,50 @@
-let placedStones;
-let nextColor;
 
-function initialiseBoard() {
+function initialiseInsertBoard() {
+  // Set indexes and place stones
+  setBoardPosIndexes();
+  replaceStones();
+
+  // Insertions
+  $(".board-pos").click(function() {
+    if (insertColor === undefined) {
+      return;
+    }
+    index = $(this).data("index");
+    color = placedStones[index];
+
+    if (color !== undefined) {
+      $(this).empty();
+      delete placedStones[index];
+
+      if (insertColor === color) {
+        return;
+      }
+    }
+
+    placedStones[index] = insertColor;
+
+    placeStone($(this), insertColor);
+  })
+}
+
+function initialiseSolveBoard() {
   // Set board positions index and stones
   placedStones = {
     ...initialStones
   };
 
-  $(".board-pos").each(function(index) {
-    $(this).data("index", index);
-    if (index in placedStones) {
-      placeStone($(this), placedStones[index]);
-    }
-  })
+  setBoardPosIndexes();
+  replaceStones();
+  setMakeMoveEvents();
 
   // Next color
   nextColor = firstColor;
+}
+
+function setBoardPosIndexes() {
+  $(".board-pos").each(function(index) {
+    $(this).data("index", index);
+  })
 }
 
 // Board changes
@@ -41,17 +70,19 @@ function isForbidden(posElement) {
 }
 
 // Make move
-$(".board-pos").click(function(event) {
-  if (isForbidden($(this))) {
-    return;
-  }
+function setMakeMoveEvents() {
+  $(".board-pos").click(function(event) {
+    if (isForbidden($(this))) {
+      return;
+    }
 
-  // Get current color
-  let currentColor = nextColor;
+    // Get current color
+    let currentColor = nextColor;
 
-  // Update board
-  updateBoardData($(this).data("index"));
-})
+    // Update board
+    updateBoardData($(this).data("index"));
+  })
+}
 
 function updateBoardData(stoneIndex) {
   let newStone = {}
