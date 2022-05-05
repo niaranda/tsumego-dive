@@ -169,3 +169,18 @@ class Normalizer:
         # Perform board reflection
         if self.__board_reflection:
             _perform_board_reflexion(board)
+
+    def denormalize_positions(self, positions: List[Pos]) -> List[Pos]:
+        return [self.denormalize_position(pos) for pos in positions]
+
+    def denormalize_position(self, pos: Pos) -> Pos:
+        stone = Stone(pos, Color.BLACK)
+
+        rotations = (4 - self.__board_rotations) % 4
+        for _ in range(rotations):
+            stone = _perform_stone_rotation(stone)
+
+        if self.__board_reflection:
+            stone = _perform_stone_reflection(stone)
+
+        return stone.pos
