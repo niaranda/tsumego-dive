@@ -57,6 +57,10 @@ function addTreeNode(nodeColor) {
   parentNode.nodeDOM.classList.remove("selected-node");
 
   let parentPathType = parentNode.text.data["pathType"];
+  let nodePathType = parentPathType;
+  if (getChildren(parentNode).length != 0) {
+    nodePathType = "unknown";
+  }
 
   let newNodeData = {
     image: "static/images/" + nodeColor + ".png",
@@ -70,17 +74,17 @@ function addTreeNode(nodeColor) {
         forbiddenMoves: {
           ...forbiddenMoves
         },
-        pathType: parentPathType
+        pathType: nodePathType
       }
     }
   }
 
   let newNode = gameTree.addNode(parentNode, newNodeData);
-  addNodePathMark(newNode, parentPathType);
 
   scrollIntoView(newNode);
 
   selectedNodeId = newNode.id;
+  updatePathType(nodePathType);
 
   resetDive();
 }
