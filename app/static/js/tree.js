@@ -124,7 +124,7 @@ function getNextNode(selected, direction) {
     case "up":
       return selected.parent();
     case "down":
-      return selected.firstChild();
+      return getCentralChild(selected);
     case "left":
       return selected.leftSibling();
     case "right":
@@ -132,6 +132,12 @@ function getNextNode(selected, direction) {
     default:
       return null;
   }
+}
+
+function getCentralChild(parent) {
+  let children = getChildren(parent);
+  let centralNumber = Math.round(children.length / 2);
+  return children[centralNumber - 1];
 }
 
 function getChildren(node) {
