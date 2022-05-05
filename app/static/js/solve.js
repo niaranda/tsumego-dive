@@ -8,6 +8,9 @@ $("#content-div").css("min-width", "1000px");
 let placedStones;
 let nextColor;
 
+let diveCounter = 0;
+let diveProbabilities = {};
+
 let dragTimeout;
 
 initialConfig();
@@ -107,3 +110,22 @@ $("#return-btn").click(function() {
 
   form.submit();
 })
+
+// Dive button
+$("#dive-btn").click(function() {
+  $.post("/dive", {
+      placed_stones: JSON.stringify(placedStones),
+      next_color: nextColor,
+      dive_counter: JSON.stringify(diveCounter)
+    },
+    function(data) {
+      diveProbabilities = JSON.parse(data);
+      diveCounter += 1;
+    }
+  )
+})
+
+function resetDive() {
+  diveCounter = 0;
+  diveProbabilities = {};
+}

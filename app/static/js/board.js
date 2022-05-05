@@ -79,6 +79,8 @@ function setMakeMoveEvents() {
     // Get current color
     let currentColor = nextColor;
 
+    resetDive();
+
     // Update board
     updateBoardData($(this).data("index"));
   })

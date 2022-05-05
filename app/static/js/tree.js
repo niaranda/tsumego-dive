@@ -73,6 +73,8 @@ function addTreeNode(nodeColor) {
 
   let newNode = gameTree.addNode(parentNode, newNodeData);
   selectedNodeId = newNode.id;
+
+  resetDive();
 }
 
 // Tree navigation
@@ -96,6 +98,8 @@ function navigateTree(direction) {
   forbiddenMoves = Object.values(next.text.data["forbiddenMoves"]);
 
   replaceStones();
+
+  resetDive();
 }
 
 function getNextNode(selected, direction) {

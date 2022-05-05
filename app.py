@@ -9,7 +9,7 @@ from flask import Flask, render_template, request
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
-from app.model.model import predict
+from model.model import predict
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
@@ -104,14 +104,9 @@ def dive():
     stones: List[Stone] = __dict_str_to_stones(stones_str)
     next_color = Color.BLACK if next_color_str == "black" else Color.WHITE
 
-    top_indexes: List[int]
-    top_probabilities: List[float]
-    top_indexes, top_probabilities = predict(stones, next_color, dive_counter)
+    probabilities: Dict[int, str] = predict(stones, next_color, dive_counter)
 
-    return json.dumps({
-        "indexes": json.dumps(top_indexes),
-        "probabilities": json.dumps(top_probabilities)
-    })
+    return json.dumps(probabilities)
 
 
 @app.route("/about")
