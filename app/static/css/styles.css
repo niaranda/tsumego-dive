@@ -47,6 +47,11 @@ h3 {
   margin-top: 30px;
 }
 
+h4 {
+  font-family: 'Merriweather', serif;
+  font-size: 1rem;
+}
+
 table {
   empty-cells: show;
   border-collapse: collapse;
@@ -219,6 +224,15 @@ tr {
   background-color: rgba(102, 255, 153, 0.2);
 }
 
+.path-btn {
+  font-family: 'Merriweather', serif;
+  margin: 0 10px;
+  height: 50px;
+  width: 50px;
+  font-size: 1.2rem;
+  border-radius: 100%
+}
+
 #logo-div {
   text-align: left;
   padding-left: 5%;
@@ -335,7 +349,7 @@ tr {
 }
 
 #tree-div {
-  height: 600px;
+  height: 550px;
   overflow-y: auto;
 }
 
@@ -348,4 +362,9 @@ tr {
   text-align: justify;
   font-size: 1rem;
   font-family: "Montserrat", sans-serif;
+}
+
+#bottom-tree-div {
+  text-align: center;
+  display: flex;
 }

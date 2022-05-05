@@ -171,3 +171,16 @@ function resetDive() {
   $("#dive-btn").text("Dive");
   $("#dive-btn").removeClass("unavailable");
 }
+
+// Path type buttons
+$("#correct-btn").click(function() {
+  updatePathType("correct");
+})
+
+$("#unknown-btn").click(function() {
+  updatePathType("unknown");
+})
+
+$("#wrong-btn").click(function() {
+  updatePathType("wrong");
+})

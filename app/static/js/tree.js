@@ -37,7 +37,8 @@ function initialiseTree() {
           nextColor: firstColor,
           forbiddenMoves: {
             ...forbiddenMoves
-          }
+          },
+          pathType: "unknown"
         }
       }
     }
@@ -55,6 +56,8 @@ function addTreeNode(nodeColor) {
   let parentNode = gameTree.getNodeDb().get(selectedNodeId);
   parentNode.nodeDOM.classList.remove("selected-node");
 
+  let parentPathType = parentNode.text.data["pathType"];
+
   let newNodeData = {
     image: "static/images/" + nodeColor + ".png",
     HTMLclass: "selected-node",
@@ -66,12 +69,15 @@ function addTreeNode(nodeColor) {
         nextColor: nextColor,
         forbiddenMoves: {
           ...forbiddenMoves
-        }
+        },
+        pathType: parentPathType
       }
     }
   }
 
   let newNode = gameTree.addNode(parentNode, newNodeData);
+  addNodePathMark(newNode, parentPathType);
+
   selectedNodeId = newNode.id;
 
   resetDive();
@@ -115,4 +121,144 @@ function getNextNode(selected, direction) {
     default:
       return null;
   }
+}
+
+function getChildren(node) {
+  let children = [];
+
+  let childrenId = node.children;
+  if (childrenId === undefined) {
+    return [];
+  }
+
+  childrenId.forEach(function(id) {
+    children.push(gameTree.getNodeDb().get(id));
+  });
+
+  return children;
+}
+
+function getTreeLeaves() {
+  return getLeaves(gameTree.root());
+}
+
+function getLeaves(node) {
+  let children = getChildren(node);
+  if (children.length === 0) {
+    return [node];
+  }
+
+  if (children.length === 1) {
+    return getLeaves(children[0]);
+  }
+
+  let leaves = [];
+  children.forEach(function (child) {
+    leaves = leaves.concat(getLeaves(child));
+  })
+  return leaves;
+}
+
+function updatePathType(type) {
+  let selectedNode = gameTree.getNodeDb().get(selectedNodeId);
+
+  // Downwards update
+  updateDescendantsPathType(selectedNode, type);
+
+  let leaves = getTreeLeaves();
+  updateAncestorsPathType(leaves);
+}
+
+function updateDescendantsPathType(node, type) {
+  updateNodePathType(node, type);
+
+  getChildren(node).forEach(function (child) {
+    updateDescendantsPathType(child, type);
+  })
+}
+
+function updateAncestorsPathType(leaves) {
+  let correctLeaves = [];
+  let unknownLeaves = [];
+  let wrongLeaves = [];
+
+  leaves.forEach(function (leaf) {
+    let pathType = leaf.text.data["pathType"];
+    switch (pathType) {
+      case "correct":
+        correctLeaves.push(leaf);
+        break;
+      case "unknown":
+        unknownLeaves.push(leaf);
+        break;
+      case "wrong":
+        wrongLeaves.push(leaf);
+    }
+  })
+
+  wrongLeaves.forEach(function (leaf) {
+    updateNodeAncestorsPathType(leaf, "wrong");
+  })
+  unknownLeaves.forEach(function (leaf) {
+    updateNodeAncestorsPathType(leaf, "unknown");
+  })
+  correctLeaves.forEach(function (leaf) {
+    updateNodeAncestorsPathType(leaf, "correct");
+  })
+}
+
+function updateNodeAncestorsPathType(node, type) {
+  updateNodePathType(node, type);
+  let parent = node.parent();
+
+  if (parent === undefined) {
+    return;
+  }
+  updateNodeAncestorsPathType(parent, type);
+}
+
+
+function updateNodePathType(node, type) {
+  if (node.id === gameTree.root().id) {
+    return;
+  }
+
+  let currentPathType = node.text.data["pathType"];
+
+  if (currentPathType === type) {
+    return;
+  }
+
+  node.text.data["pathType"] = type;
+
+  if (currentPathType === "unknown") {
+    addNodePathMark(node, type);
+    return;
+  }
+
+  if (type === "unknown") {
+    removeNodePathMark(node);
+    return;
+  }
+
+  removeNodePathMark(node);
+  addNodePathMark(node, type);
+}
+
+function addNodePathMark(node, type) {
+  if (type === "unknown") {
+    return;
+  }
+
+  if (type === "correct") {
+    node.nodeDOM.append("✔️");
+  }
+  if (type === "wrong") {
+    node.nodeDOM.append("❌");
+  }
+}
+
+function removeNodePathMark(node) {
+  let mark = node.nodeDOM.lastChild;
+  node.nodeDOM.removeChild(mark);
 }
