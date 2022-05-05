@@ -203,6 +203,18 @@ tr {
   opacity: 0.5;
 }
 
+.dive-selection1 {
+  background-color: rgba(102, 255, 153, 0.7);
+}
+
+.dive-selection2 {
+  background-color: rgba(102, 255, 153, 0.5);
+}
+
+.dive-selection3 {
+  background-color: rgba(102, 255, 153, 0.4);
+}
+
 #logo-div {
   text-align: left;
   padding-left: 5%;

@@ -9,7 +9,6 @@ let placedStones;
 let nextColor;
 
 let diveCounter = 0;
-let diveProbabilities = {};
 
 let dragTimeout;
 
@@ -119,13 +118,30 @@ $("#dive-btn").click(function() {
       dive_counter: JSON.stringify(diveCounter)
     },
     function(data) {
-      diveProbabilities = JSON.parse(data);
+      let diveProbabilities = JSON.parse(data);
       diveCounter += 1;
+
+      $(".board-pos").each(function(index) {
+        if (index in diveProbabilities) {
+          let probability = diveProbabilities[index];
+          let probabilityLevel = getProbabilityLevel(probability);
+          $(this).addClass("dive-selection" + probabilityLevel);
+        }
+      })
     }
   )
 })
 
+function getProbabilityLevel(probability) {
+  if (probability > 0.6) {
+    return 1;
+  }
+  if (probability > 0.3) {
+    return 2;
+  }
+  return 3;
+}
+
 function resetDive() {
   diveCounter = 0;
-  diveProbabilities = {};
 }
