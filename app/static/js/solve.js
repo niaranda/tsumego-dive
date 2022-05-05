@@ -112,36 +112,62 @@ $("#return-btn").click(function() {
 
 // Dive button
 $("#dive-btn").click(function() {
+  if (diveCounter == 4) {
+    resetDive();
+    return;
+  }
+
   $.post("/dive", {
       placed_stones: JSON.stringify(placedStones),
       next_color: nextColor,
       dive_counter: JSON.stringify(diveCounter)
     },
     function(data) {
-      let diveProbabilities = JSON.parse(data);
+      let diveIndexes = JSON.parse(data);
       diveCounter += 1;
 
-      $(".board-pos").each(function(index) {
-        if (index in diveProbabilities) {
-          let probability = diveProbabilities[index];
-          let probabilityLevel = getProbabilityLevel(probability);
-          $(this).addClass("dive-selection" + probabilityLevel);
-        }
-      })
+      addDiveSelections(diveIndexes);
+
+      $("#dive-btn").text("Dive further");
+      if (diveCounter == 4) {
+        $("#dive-btn").text("Remove");
+      }
+
     }
   )
 })
 
-function getProbabilityLevel(probability) {
-  if (probability > 0.6) {
-    return 1;
+function addDiveSelections(diveIndexes) {
+  let recommendationLevels = getRecommendationLevels();
+
+  $(".board-pos").each(function(index) {
+    if (diveIndexes.includes(index)) {
+      let num = diveIndexes.indexOf(index);
+      $(this).addClass("dive-selection" + recommendationLevels[num]);
+    }
+  })
+}
+
+function getRecommendationLevels() {
+  if (diveCounter == 1) {
+    return [1];
   }
-  if (probability > 0.3) {
-    return 2;
+  if (diveCounter == 2) {
+    return [1, 2, 2];
   }
-  return 3;
+  if (diveCounter == 3) {
+    return [1, 2, 2, 3, 3];
+  }
+  return [1, 2, 2, 3, 3, 4, 4, 4, 4, 4];
 }
 
 function resetDive() {
   diveCounter = 0;
+
+  $(".dive-selection1").removeClass("dive-selection1");
+  $(".dive-selection2").removeClass("dive-selection2");
+  $(".dive-selection3").removeClass("dive-selection3");
+  $(".dive-selection4").removeClass("dive-selection4");
+  $("#dive-btn").text("Dive");
+  $("#dive-btn").removeClass("unavailable");
 }

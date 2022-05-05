@@ -215,6 +215,10 @@ tr {
   background-color: rgba(102, 255, 153, 0.4);
 }
 
+.dive-selection4 {
+  background-color: rgba(102, 255, 153, 0.2);
+}
+
 #logo-div {
   text-align: left;
   padding-left: 5%;

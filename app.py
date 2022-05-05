@@ -104,9 +104,9 @@ def dive():
     stones: List[Stone] = __dict_str_to_stones(stones_str)
     next_color = Color.BLACK if next_color_str == "black" else Color.WHITE
 
-    probabilities: Dict[int, str] = predict(stones, next_color, dive_counter)
+    predicted_indexes: List[int] = predict(stones, next_color, dive_counter)
 
-    return json.dumps(probabilities)
+    return json.dumps(predicted_indexes)
 
 
 @app.route("/about")
