@@ -77,7 +77,7 @@ def __get_data_from_game_node(game_node: GameNode, get_path_type: bool) -> np.nd
     normalizer = Normalizer(game_node.board)
     normalizer.normalize_board(game_node.board)
 
-    board_data: np.ndarray = __format_board_as_input(game_node.board)
+    board_data: np.ndarray = format_board_as_input(game_node.board)
 
     # Get valid moves data
     moves: List[Stone] = __get_valid_moves(game_node.children)
@@ -97,7 +97,7 @@ def __get_data_from_game_node(game_node: GameNode, get_path_type: bool) -> np.nd
     return np.hstack([problem_data, moves_data, path_type_data])
 
 
-def __format_board_as_input(board: Board) -> np.ndarray:
+def format_board_as_input(board: Board) -> np.ndarray:
     """Generates data from given board"""
     board_input = np.zeros(shape=(19, 19), dtype=int)  # empty board data
     for pos, color in board.placed_stones.items():

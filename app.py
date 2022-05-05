@@ -9,6 +9,7 @@ from flask import Flask, render_template, request
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
+from app.model.model import predict
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
@@ -91,6 +92,25 @@ def move():
     return json.dumps({
         "placed_stones": json.dumps(__stones_to_dict(new_placed_stones)),
         "forbidden_moves": json.dumps([row * 19 + col for row, col in forbidden_moves])
+    })
+
+
+@app.route("/dive", methods=["POST"])
+def dive():
+    stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
+    next_color_str: str = request.form["next_color"]
+    dive_counter: int = json.loads(request.form["dive_counter"])
+
+    stones: List[Stone] = __dict_str_to_stones(stones_str)
+    next_color = Color.BLACK if next_color_str == "black" else Color.WHITE
+
+    top_indexes: List[int]
+    top_probabilities: List[float]
+    top_indexes, top_probabilities = predict(stones, next_color, dive_counter)
+
+    return json.dumps({
+        "indexes": json.dumps(top_indexes),
+        "probabilities": json.dumps(top_probabilities)
     })
 
 
