@@ -78,9 +78,18 @@ function addTreeNode(nodeColor) {
   let newNode = gameTree.addNode(parentNode, newNodeData);
   addNodePathMark(newNode, parentPathType);
 
+  scrollIntoView(newNode);
+
   selectedNodeId = newNode.id;
 
   resetDive();
+}
+
+function scrollIntoView(node) {
+  node.nodeDOM.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
 }
 
 // Tree navigation
@@ -95,6 +104,8 @@ function navigateTree(direction) {
   selected.nodeDOM.classList.remove("selected-node");
   next.nodeDOM.classList.add("selected-node");
   selectedNodeId = next.id;
+
+  scrollIntoView(next);
 
   // Retrieve state
   placedStones = {
