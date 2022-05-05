@@ -4,11 +4,6 @@ let insertColor;
 // Set board positions index and place stones
 initialiseInsertBoard();
 
-// Error message
-if (error !== undefined) {
-  alert(error);
-}
-
 // Insertion color
 $("#insert-black").click(function() {
   chooseInsertColor("black");
@@ -81,10 +76,25 @@ $(".start-btn").click(function() {
     return;
   }
 
-  let form = createHiddenForm("/solve");
-  addFormInput(form, "placed_stones", JSON.stringify(placedStones));
-  addFormInput(form, "first_color", firstStoneColor);
-  form.submit();
+  // Validate
+  let valid;
+  $.post("/validate", {
+      placed_stones: JSON.stringify(placedStones)
+    },
+    function(data) {
+      valid = JSON.parse(data);
+    }
+  ).done(function() {
+    if (!valid) {
+      alert("Initial stones are not valid");
+      return;
+    }
+    let form = createHiddenForm("/solve");
+    addFormInput(form, "placed_stones", JSON.stringify(placedStones));
+    addFormInput(form, "first_color", firstStoneColor);
+    form.submit();
+  })
+
 })
 
 // Sgf upload
@@ -95,3 +105,8 @@ $("#from-sgf-btn").click(function() {
 $("#upload-sgf").change(function() {
   $("#sgf-file-form").submit()
 })
+
+// Error message
+if (error !== undefined) {
+  alert(error);
+}

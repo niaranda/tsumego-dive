@@ -52,17 +52,21 @@ def index():
     return render_template("index.html", placed_stones=placed_stones, first_color=first_color)
 
 
-@app.route("/solve", methods=["GET", "POST"])
+@app.route("/solve", methods=["POST"])
 def solve():
-    if request.method != "POST":
-        return
-
     stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
     first_color: str = request.form["first_color"]
+
     return render_template("solve.html",
                            initial_stones=request.form["placed_stones"],
                            first_color=first_color,
                            forbidden_moves=__get_forbidden_moves(stones_str, first_color))
+
+
+@app.route("/validate", methods=["POST"])
+def validate_board():
+    stones_str: Dict[str, str] = json.loads(request.form["placed_stones"])
+    return json.dumps(__valid_init_stones(stones_str))
 
 
 @app.route("/move", methods=["POST"])
@@ -89,9 +93,11 @@ def move():
         "forbidden_moves": json.dumps([row * 19 + col for row, col in forbidden_moves])
     })
 
+
 @app.route("/about")
 def about():
     return render_template("about.html")
+
 
 def __valid_file(filename: str) -> bool:
     return match("^.+\.sgf$", filename.lower()) is not None
@@ -152,3 +158,12 @@ def __get_forbidden_moves(stone_dict_str: Dict[str, str], next_color: str) \
 
     forbidden_moves: List[Pos] = Board(stones).get_forbidden_moves(color)
     return [row * 19 + col for row, col in forbidden_moves]
+
+
+def __valid_init_stones(stone_dict_str: Dict[str, str]) -> bool:
+    stones: List[Stone] = __dict_str_to_stones(stone_dict_str)
+    board = Board()
+    board.place_stones(stones)
+
+    # If stones get captured, the initial stones are not valid
+    return len(board.placed_stones) == len(stones)
