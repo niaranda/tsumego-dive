@@ -170,7 +170,7 @@ function getLeaves(node) {
   }
 
   let leaves = [];
-  children.forEach(function (child) {
+  children.forEach(function(child) {
     leaves = leaves.concat(getLeaves(child));
   })
   return leaves;
@@ -184,12 +184,14 @@ function updatePathType(type) {
 
   let leaves = getTreeLeaves();
   updateAncestorsPathType(leaves);
+
+  updatePathMarks();
 }
 
 function updateDescendantsPathType(node, type) {
-  updateNodePathType(node, type);
+  node.text.data["pathType"] = type;
 
-  getChildren(node).forEach(function (child) {
+  getChildren(node).forEach(function(child) {
     updateDescendantsPathType(child, type);
   })
 }
@@ -199,7 +201,7 @@ function updateAncestorsPathType(leaves) {
   let unknownLeaves = [];
   let wrongLeaves = [];
 
-  leaves.forEach(function (leaf) {
+  leaves.forEach(function(leaf) {
     let pathType = leaf.text.data["pathType"];
     switch (pathType) {
       case "correct":
@@ -213,19 +215,19 @@ function updateAncestorsPathType(leaves) {
     }
   })
 
-  wrongLeaves.forEach(function (leaf) {
+  wrongLeaves.forEach(function(leaf) {
     updateNodeAncestorsPathType(leaf, "wrong");
   })
-  unknownLeaves.forEach(function (leaf) {
+  unknownLeaves.forEach(function(leaf) {
     updateNodeAncestorsPathType(leaf, "unknown");
   })
-  correctLeaves.forEach(function (leaf) {
+  correctLeaves.forEach(function(leaf) {
     updateNodeAncestorsPathType(leaf, "correct");
   })
 }
 
 function updateNodeAncestorsPathType(node, type) {
-  updateNodePathType(node, type);
+  node.text.data["pathType"] = type;
   let parent = node.parent();
 
   if (parent === undefined) {
@@ -234,35 +236,25 @@ function updateNodeAncestorsPathType(node, type) {
   updateNodeAncestorsPathType(parent, type);
 }
 
+function updatePathMarks() {
+  updateDescendantsPathMarks(gameTree.root());
+}
 
-function updateNodePathType(node, type) {
+function updateDescendantsPathMarks(node) {
+  let type = node.text.data["pathType"];
+  removeNodePathMark(node);
+  addNodePathMark(node, type);
+
+  getChildren(node).forEach(function(child) {
+    updateDescendantsPathMarks(child);
+  })
+}
+
+function addNodePathMark(node, type) {
   if (node.id === gameTree.root().id) {
     return;
   }
 
-  let currentPathType = node.text.data["pathType"];
-
-  if (currentPathType === type) {
-    return;
-  }
-
-  node.text.data["pathType"] = type;
-
-  if (currentPathType === "unknown") {
-    addNodePathMark(node, type);
-    return;
-  }
-
-  if (type === "unknown") {
-    removeNodePathMark(node);
-    return;
-  }
-
-  removeNodePathMark(node);
-  addNodePathMark(node, type);
-}
-
-function addNodePathMark(node, type) {
   if (type === "unknown") {
     return;
   }
@@ -276,6 +268,7 @@ function addNodePathMark(node, type) {
 }
 
 function removeNodePathMark(node) {
-  let mark = node.nodeDOM.lastChild;
-  node.nodeDOM.removeChild(mark);
+  while (node.nodeDOM.childNodes.length !== 1) {
+    node.nodeDOM.removeChild(node.nodeDOM.lastChild);
+  }
 }
