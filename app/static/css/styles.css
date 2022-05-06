@@ -349,7 +349,7 @@ tr {
 }
 
 #tree-div {
-  height: 550px;
+  height: 483px;
   overflow-y: auto;
 }
 
@@ -362,9 +362,4 @@ tr {
   text-align: justify;
   font-size: 1rem;
   font-family: "Montserrat", sans-serif;
-}
-
-#bottom-tree-div {
-  text-align: center;
-  display: flex;
 }
