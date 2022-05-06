@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from enum import Enum
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from src.beans.board.board import Board
+from src.beans.board.color import Color
 from src.beans.board.stone import Stone
 from src.beans.gameplay_exception import GamePlayException
 
@@ -14,6 +16,14 @@ class PathType(Enum):
     WRONG = 2
     UNKNOWN = 3  # Unknown means the analysis has yet to be performed
     DUAL = 4  # Dual means analysis could not determine the path type
+
+
+def _get_stone_from_data(stone_data: Dict[str, str]) -> Stone:
+    stone_index = int(list(stone_data.keys())[0])
+    row, col = int(stone_index / 19), stone_index % 19
+    color = Color.BLACK if list(stone_data.values())[0] == "black" else Color.WHITE
+
+    return Stone((row, col), color)
 
 
 class GameNode:
@@ -86,6 +96,22 @@ class GameNode:
     def is_correct(self) -> bool:
         """True if the path is correct"""
         return self.__path_type == PathType.CORRECT
+
+    def add_children_from_data(self, children_data: List[Dict[str, str]]):
+        for child_data in children_data:
+            new_stone = _get_stone_from_data(child_data["new_stone"])
+
+            new_board: Board = deepcopy(self.board)
+            new_board.place_stone(new_stone)
+
+            comment = ""
+            if "path_type" in child_data.keys():
+                comment = child_data["path_type"]
+
+            new_game_node = GameNode(self, new_board, new_stone, comment)
+
+            if "children" in child_data.keys():
+                new_game_node.add_children_from_data(child_data["children"])
 
     def __broken_ko_rule(self) -> bool:
         """True if the ko rule was broken when placing the last stone"""

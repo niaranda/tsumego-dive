@@ -108,6 +108,7 @@ $("#return-btn").click(function() {
   addFormInput(form, "first_color", firstColor);
 
   form.submit();
+  document.body.removeChild(form);
 })
 
 // Dive button
@@ -184,3 +185,36 @@ $("#unknown-btn").click(function() {
 $("#wrong-btn").click(function() {
   updatePathType("wrong");
 })
+
+// To sgf button
+$("#to-sgf-btn").click(function() {
+  let treeData = generateTreeData();
+
+  $.post("/download_sgf",
+  {
+    tree_data: JSON.stringify(treeData)
+  },
+  function(data) {
+    download(data);
+  })
+})
+
+function download(data) {
+  let blob = new Blob([data]);
+  let url = window.URL.createObjectURL(blob);
+
+  let link = document.createElement("a");
+  link.href = url;
+  link.download = "tsumego.sgf";
+  link.type = "hidden";
+
+  console.log(link.href);
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  setTimeout(function() {
+    window.URL.revokeObjectURL(url);
+  }, 500);
+}

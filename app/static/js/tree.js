@@ -279,3 +279,34 @@ function removeNodePathMark(node) {
     node.nodeDOM.removeChild(node.nodeDOM.lastChild);
   }
 }
+
+function generateTreeData() {
+  return generateNodeData(gameTree.root());
+}
+
+function generateNodeData(node) {
+  let data = {};
+
+  let raw_data = node.text.data;
+
+  if (node.id === gameTree.root().id) {
+    data["initial_stones"] = raw_data["placedStones"];
+  } else {
+    data["new_stone"] = raw_data["newStone"];
+  }
+
+  let children = getChildren(node);
+  if (children.length === 0) {
+    data["path_type"] = raw_data["pathType"];
+    return data;
+  }
+
+  let childrenData = [];
+  children.forEach(function(child) {
+    childrenData.push(generateNodeData(child));
+  })
+
+  data["children"] = childrenData;
+
+  return data;
+}

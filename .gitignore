@@ -7,3 +7,4 @@ venv
 tuner
 tb_logs*
 models
+*.sgf

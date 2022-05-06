@@ -5,7 +5,7 @@ from re import match
 from typing import List, Optional, Tuple, Dict
 
 import sgf
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
@@ -13,6 +13,8 @@ from model.model import predict
 from src.beans.board.board import Board
 from src.beans.board.color import Color
 from src.beans.board.stone import Stone, Pos
+from src.beans.game_tree.game_node import GameNode
+from src.beans.game_tree.game_tree import GameTree
 from src.preprocessing.adapter.tree_adapter import has_invalid_size, get_init_stones, get_first_stone
 from src.preprocessing.corrections.sgf_corrections import apply_corrections
 from src.preprocessing.errors.preprocessing_exception import PreprocessingException
@@ -107,6 +109,36 @@ def dive():
     predicted_indexes: List[int] = predict(stones, next_color, dive_counter)
 
     return json.dumps(predicted_indexes)
+
+
+@app.route("/download_sgf", methods=["POST"])
+def download_sgf():
+    file_name = "tsumego.sgf"
+    file_path = app.config["UPLOAD_FOLDER"] + "/" + file_name
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    tree_data: Dict[str, str] = json.loads(request.form["tree_data"])
+
+    init_stones: List[Stone] = __dict_str_to_stones(tree_data["initial_stones"])
+    root_comment = ""
+    if "path_type" in tree_data.keys():
+        root_comment = tree_data["path_type"]
+
+    root = GameNode(None, Board(init_stones), None, root_comment)
+
+    if "children" in tree_data.keys():
+        root.add_children_from_data(tree_data["children"])
+
+    game_tree = GameTree(root)
+
+    sgf: str = game_tree.generate_sgf()
+
+    with open(file_path, "x") as file:
+        file.write(sgf)
+
+    return send_file(file_path, as_attachment=True)
 
 
 @app.route("/about")
