@@ -341,26 +341,18 @@ function placePathMark(index, pathType) {
   let row = Math.floor(index / 19);
   let col = index % 19;
 
-  let topPixels = 19.5 + 33.3 * row;
+  let topPixels = 21 + 33.3 * row;
   let leftPixels = 23 + 33.3 * col;
 
-  let element = document.createElement("div");
+  let element = document.createElement("img");
 
-  if (pathType === "correct") {
-    element.textContent = "🟢";
-  }
-  if (pathType === "wrong") {
-    element.textContent = "🔴";
-  }
   if (pathType === "unknown") {
-    if (nextColor === "black") {
-      element.textContent = "⚫";
-    } else {
-      element.textContent = "⚪";
-    }
+    element.src = "static/images/" + nextColor + "-mark.png";
+  } else {
+    element.src = "static/images/" + pathType + "-mark.png";
   }
 
   element.classList.add("board-path-mark");
-  element.style = "position: absolute; top: " + topPixels + "px; left: " + leftPixels + "px;"
+  element.style = "top: " + topPixels + "px; left: " + leftPixels + "px;"
   $(".board-positions").append(element);
 }

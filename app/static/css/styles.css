@@ -235,7 +235,8 @@ tr {
 }
 
 .board-path-mark {
-  font-size: 11px;
+  position: absolute;
+  width: 15px;
   pointer-events: none;
 }
 
