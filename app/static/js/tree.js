@@ -2,6 +2,8 @@ let chart;
 let gameTree;
 let selectedNodeId;
 
+let exploredPaths = {};
+
 let resizeTimeout;
 
 function reDrawTree() {
@@ -89,6 +91,9 @@ function addTreeNode(newStone) {
   selectedNodeId = newNode.id;
   updatePathType(nodePathType);
 
+  updateExploredPaths();
+  replaceStones();
+
   resetDive();
 }
 
@@ -121,9 +126,26 @@ function navigateTree(direction) {
   nextColor = next.text.data["nextColor"];
   forbiddenMoves = Object.values(next.text.data["forbiddenMoves"]);
 
+  updateExploredPaths();
   replaceStones();
 
   resetDive();
+}
+
+function updateExploredPaths() {
+  let selected = gameTree.getNodeDb().get(selectedNodeId);
+  exploredPaths = {};
+
+  let children = getChildren(selected);
+  if (children.length === 0) {
+    return;
+  }
+
+  children.forEach(function(child) {
+    let index = Object.keys(child.text.data["newStone"])[0];
+    let pathType = child.text.data["pathType"];
+    exploredPaths[index] = pathType;
+  })
 }
 
 function getNextNode(selected, direction) {
@@ -193,6 +215,7 @@ function updatePathType(type) {
   updateAncestorsPathType(leaves);
 
   updatePathMarks();
+  updateExploredPaths();
 }
 
 function updateDescendantsPathType(node, type) {
@@ -309,4 +332,32 @@ function generateNodeData(node) {
   data["children"] = childrenData;
 
   return data;
+}
+
+function placePathMark(index, pathType) {
+  let row = Math.floor(index / 19);
+  let col = index % 19;
+
+  let topPixels = 19.5 + 33.3 * row;
+  let leftPixels = 23 + 33.3 * col;
+
+  let element = document.createElement("div");
+
+  if (pathType === "correct") {
+    element.textContent = "🟢";
+  }
+  if (pathType === "wrong") {
+    element.textContent = "🔴";
+  }
+  if (pathType === "unknown") {
+    if (nextColor === "black") {
+      element.textContent = "⚫";
+    } else {
+      element.textContent = "⚪";
+    }
+  }
+
+  element.classList.add("board-path-mark");
+  element.style = "position: absolute; top: " + topPixels + "px; left: " + leftPixels + "px;"
+  $(".board-positions").append(element);
 }

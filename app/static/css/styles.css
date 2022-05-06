@@ -120,6 +120,7 @@ tr {
   width: 632.7px;
   padding: 14px;
   text-align: left;
+  position: relative;
 }
 
 .board-pos {
@@ -231,6 +232,11 @@ tr {
   width: 50px;
   font-size: 1.2rem;
   border-radius: 100%
+}
+
+.board-path-mark {
+  font-size: 11px;
+  pointer-events: none;
 }
 
 #logo-div {
@@ -351,6 +357,11 @@ tr {
 #tree-div {
   height: 483px;
   overflow-y: auto;
+}
+
+#unknown-btn {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 #about-div {
