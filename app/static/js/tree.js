@@ -133,9 +133,9 @@ function getNextNode(selected, direction) {
     case "down":
       return getCentralChild(selected);
     case "left":
-      return selected.leftSibling();
+      return selected.leftNeighbor();
     case "right":
-      return selected.rightSibling();
+      return selected.rightNeighbor();
     default:
       return null;
   }
