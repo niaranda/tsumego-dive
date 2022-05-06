@@ -2,8 +2,6 @@ let chart;
 let gameTree;
 let selectedNodeId;
 
-let exploredPaths = {};
-
 let resizeTimeout;
 
 function reDrawTree() {

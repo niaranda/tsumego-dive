@@ -1,3 +1,5 @@
+let exploredPaths = {};
+
 function initialiseInsertBoard() {
   // Set indexes and place stones
   setBoardPosIndexes();
