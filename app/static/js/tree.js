@@ -205,6 +205,10 @@ function getLeaves(node) {
 }
 
 function updatePathType(type) {
+  if (selectedNodeId === gameTree.root().id) {
+    return;
+  }
+
   let selectedNode = gameTree.getNodeDb().get(selectedNodeId);
 
   // Downwards update
