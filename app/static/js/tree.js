@@ -105,15 +105,14 @@ function scrollIntoView(node) {
 }
 
 // Tree navigation
-function navigateTree(direction) {
-  let selected = gameTree.getNodeDb().get(selectedNodeId);
-  let next = getNextNode(selected, direction);
-
+function navigateTree(next) {
   if (next === undefined || next === null) {
     return;
   }
 
+  let selected = gameTree.getNodeDb().get(selectedNodeId);
   selected.nodeDOM.classList.remove("selected-node");
+
   next.nodeDOM.classList.add("selected-node");
   selectedNodeId = next.id;
 
@@ -148,7 +147,9 @@ function updateExploredPaths() {
   })
 }
 
-function getNextNode(selected, direction) {
+function getNextNode(direction) {
+  let selected = gameTree.getNodeDb().get(selectedNodeId);
+
   switch (direction) {
     case "up":
       return selected.parent();

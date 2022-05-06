@@ -1,4 +1,3 @@
-
 function initialiseInsertBoard() {
   // Set indexes and place stones
   setBoardPosIndexes();
@@ -86,7 +85,22 @@ function setMakeMoveEvents() {
     resetDive();
 
     // Update board
-    updateBoardData($(this).data("index"));
+    let selectedNode = gameTree.getNodeDb().get(selectedNodeId);
+    let children = getChildren(selectedNode);
+
+    let index = $(this).data("index");
+
+    if (index in exploredPaths) {
+      let nextNode = children.filter(function(child) {
+        let childStone = child.text.data["newStone"];
+        return Object.keys(childStone)[0] == index;
+      })[0]
+
+      navigateTree(nextNode);
+      return;
+    }
+
+    updateBoardData(index);
   })
 }
 

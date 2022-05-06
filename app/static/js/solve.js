@@ -85,19 +85,19 @@ $(".arrow-key, #dive-btn").click(function(event) {
 })
 
 $("#arrow-key-up").click(function(event) {
-  navigateTree("up");
+  navigateTree(getNextNode("up"));
 })
 
 $("#arrow-key-down").click(function(event) {
-  navigateTree("down");
+  navigateTree(getNextNode("down"));
 })
 
 $("#arrow-key-left").click(function(event) {
-  navigateTree("left");
+  navigateTree(getNextNode("left"));
 })
 
 $("#arrow-key-right").click(function(event) {
-  navigateTree("right");
+  navigateTree(getNextNode("right"));
 })
 
 // Return button
@@ -190,13 +190,12 @@ $("#wrong-btn").click(function() {
 $("#to-sgf-btn").click(function() {
   let treeData = generateTreeData();
 
-  $.post("/download_sgf",
-  {
-    tree_data: JSON.stringify(treeData)
-  },
-  function(data) {
-    download(data);
-  })
+  $.post("/download_sgf", {
+      tree_data: JSON.stringify(treeData)
+    },
+    function(data) {
+      download(data);
+    })
 })
 
 function download(data) {
