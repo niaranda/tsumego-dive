@@ -52,7 +52,7 @@ function initialiseTree() {
 }
 
 // Add node to tree
-function addTreeNode(nodeColor) {
+function addTreeNode(newStone) {
   let parentNode = gameTree.getNodeDb().get(selectedNodeId);
   parentNode.nodeDOM.classList.remove("selected-node");
 
@@ -61,6 +61,8 @@ function addTreeNode(nodeColor) {
   if (getChildren(parentNode).length != 0) {
     nodePathType = "unknown";
   }
+
+  let nodeColor = Object.values(newStone)[0];
 
   let newNodeData = {
     image: "static/images/" + nodeColor + ".png",
@@ -74,7 +76,8 @@ function addTreeNode(nodeColor) {
         forbiddenMoves: {
           ...forbiddenMoves
         },
-        pathType: nodePathType
+        pathType: nodePathType,
+        newStone: newStone
       }
     }
   }

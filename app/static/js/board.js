@@ -103,7 +103,7 @@ function updateBoardData(stoneIndex) {
       nextColor = nodeColor === "white" ? "black" : "white";
 
       replaceStones();
-      addTreeNode(nodeColor);
+      addTreeNode(newStone);
     }
   )
 
