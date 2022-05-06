@@ -219,6 +219,7 @@ function updatePathType(type) {
 
   updatePathMarks();
   updateExploredPaths();
+  replaceStones();
 }
 
 function updateDescendantsPathType(node, type) {
