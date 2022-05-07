@@ -1,13 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="about-div">
-  <h3>About...</h3>
+  <h3>The project</h3>
   <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor vel orci ut blandit. Nam elementum, est nec sagittis blandit, nulla nunc rhoncus diam, faucibus vestibulum mauris ligula at lectus. Vivamus vel felis aliquam, scelerisque justo vel, vehicula velit. Donec ac vestibulum lorem. Sed ullamcorper eu velit vel dapibus. Proin venenatis nisl sed nisl tempus fermentum. Donec at varius purus. Donec at dui vulputate, eleifend lorem vitae, luctus erat. Suspendisse sit amet faucibus augue. Nullam euismod mauris eget nibh ullamcorper, id pulvinar sapien elementum. Cras at libero lectus. Integer vel dignissim libero.
+    TsumegoDive is the product of a bachelor's degree final year project by UPM
+    (Universidad Politécnica de Madrid) student Nina Aranda. All code developed
+    for the project is available at
+    <a href="https://github.com/niaranda/tsumego-dive" target="_blank">GitHub</a>
+    under a GNU General Public License, along with more information about the
+    authors.
+  </p>
+  <p>
+    This project aims to offer a new kind of perspective on tsumego solving, by
+    helping the user explore the tsumego at their own pace in a fully
+    interactive way. TsumegoDive gives recommendations based on a neural network
+    which has been trained by analyzing over 16000 tsumegos.
   </p>
 
+  <br>
+  <br>
+
+  <h3>How to use it</h3>
   <p>
-    Nulla eget augue sit amet est dignissim blandit et at tortor. In facilisis elit nec bibendum posuere. Phasellus viverra egestas metus in tempus. Nullam cursus neque vel arcu tempor, at viverra orci auctor. Sed consequat, magna et efficitur porttitor, sem nunc elementum purus, eget lobortis metus mauris a lorem. Pellentesque elit lectus, tristique in malesuada ac, eleifend et lorem. Phasellus volutpat, risus convallis consectetur scelerisque, felis leo bibendum mauris, sed auctor ligula urna et ipsum. In arcu diam, consectetur dignissim cursus quis, rhoncus quis nisi. Maecenas pulvinar felis non tortor vestibulum, sed pretium sem sodales.
+    You can insert your tsumego by using the edit buttons or uploading an SGF
+    file. Clicking on a placed stone again while in edit mode will remove it
+    from the board. Once you are done, you will be required to choose the color
+    of the first move.
+  </p>
+  <p>
+    Clicking <em>Start</em> will allow you to start looking for the solution.
+    A game tree will appear on the screen which is automatically filled as you explore
+    and can be used to navigate through your search by using your keyboard's
+    arrow keys or the corresponding buttons. You can also mark paths as
+    correct or wrong to guide your search. To remove correct or wrong markings you may also
+    mark a path as unknown.
+  </p>
+  <p>
+    When in doubt, use the <em>Dive</em> button or your keyboard's space bar to
+    receive a recommendation. You can receive more recommendations by using this
+    function repetitively.
+  </p>
+  <p>
+    If you want to save your search at any moment, use the <em>Save as sgf</em>
+    button to download the game tree in SGF format.
   </p>
 </div>
 {% endblock %}
