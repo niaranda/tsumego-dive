@@ -78,10 +78,10 @@ class GameTree(PathTypeAnalyser):
         init_stones: List[Stone] = [Stone(pos, color) for pos, color in stones_dict.items()]
 
         white_pos_str: List[str] = _generate_stone_pos_sgf_with_color(init_stones, Color.WHITE)
-        white_sgf = "AW" + "".join(white_pos_str)
+        white_sgf = "AW" + "".join(white_pos_str) if len(white_pos_str) != 0 else ""
 
         black_pos_str: List[str] = _generate_stone_pos_sgf_with_color(init_stones, Color.BLACK)
-        black_sgf = "AB" + "".join(black_pos_str)
+        black_sgf = "AB" + "".join(black_pos_str) if len(black_pos_str) != 0 else ""
 
         return white_sgf + black_sgf
 
