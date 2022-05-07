@@ -234,6 +234,15 @@ tr {
   border-radius: 100%
 }
 
+.path-btn:hover {
+  background-color: #d0d0d7;
+}
+
+.path-btn:active {
+  box-shadow: 0 3px 4px 0 #d0d0d7;
+  opacity: 0.5;
+}
+
 .board-path-mark {
   position: absolute;
   width: 15px;
