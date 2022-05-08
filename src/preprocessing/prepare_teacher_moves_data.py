@@ -19,7 +19,7 @@ def prepare_teacher_moves_data():
 
     print(f"Number of rows after grouping: {data.shape[0]}")
 
-    board_data = data[:, :(19 ** 2 - 1)]
+    board_data = data[:, :(19 ** 2)]
     movement_data = data[:, (19 ** 2):]
 
     # Inverse colors
