@@ -101,3 +101,11 @@ del incorrect_moves_data
 
 model.evaluate(np.vstack([X_test, X_incorrect]), np.vstack([y_test, y_incorrect]))
 # accuracy: 0.2556 - topk3: 0.5215 - topk5: 0.6636 - topk10: 0.8100
+
+teacher_moves_data = pd.read_csv("input_data/teacher_moves_data.csv", header=None)
+teacher_moves_data = np.array(teacher_moves_data)
+X_teacher = teacher_moves_data[:, :(19 ** 2)]
+y_teacher = teacher_moves_data[:, (19 ** 2):]
+del teacher_moves_data
+
+model.evaluate(X_teacher, y_teacher)
