@@ -13,7 +13,7 @@ from src.preprocessing.data_generation.preprocessing_data_generation import form
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 DIVE_COUNTER_TOP_N = {0: 1, 1: 3, 2: 5, 3: 10}
 
-model: Model = load_model("model/dense_model.h5")
+model: Model = load_model("model/cnn_model.h5")
 
 
 def predict(placed_stones: List[Stone], next_color: Color, dive_counter: int) -> List[int]:
