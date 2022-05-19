@@ -5,3 +5,4 @@ raw_data
 src/modeling
 src/utils
 test
+dense_model.h5
