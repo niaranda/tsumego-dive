@@ -75,3 +75,27 @@ model.save_weights("models/correct_cnn02")
 # accuracy: 0.3362 - topk3: 0.6098 - topk5: 0.7310 - topk10: 0.8406
 # val_accuracy: 0.3244 - val_topk3: 0.6045 - val_topk5: 0.7287 - val_topk10: 0.8444
 model.evaluate(X_test, y_test)  # accuracy: 0.3209 - topk3: 0.5990 - topk5: 0.7282 - topk10: 0.8427
+
+incorrect_moves_data = pd.read_csv("input_data/incorrect_moves_data.csv", header=None)
+
+incorrect_moves_data = np.array(incorrect_moves_data)
+X_incorrect = incorrect_moves_data[:, :(19 ** 2)].reshape(-1, 19, 19, 1).astype("float")
+y_incorrect = incorrect_moves_data[:, (19 ** 2):]
+del incorrect_moves_data
+
+model.evaluate(np.vstack([X_test, X_incorrect]), np.vstack([y_test, y_incorrect]))
+# accuracy: 0.2903 - topk3: 0.5826 - topk5: 0.7213 - topk10: 0.8428
+
+model.evaluate(X_incorrect, y_incorrect)
+# accuracy: 0.2835 - topk3: 0.5790 - topk5: 0.7198 - topk10: 0.8429
+
+teacher_moves_data = pd.read_csv("input_data/teacher_moves_data.csv", header=None)
+teacher_moves_data = np.array(teacher_moves_data)
+X_teacher = teacher_moves_data[:, :(19 ** 2)].reshape(-1, 19, 19, 1).astype("float")
+y_teacher = teacher_moves_data[:, (19 ** 2):]
+del teacher_moves_data
+
+model.evaluate(X_teacher, y_teacher)
+# accuracy: 0.3222 - topk3: 0.6055 - topk5: 0.7240 - topk10: 0.8248
+
+model.save("model/cnn_model.h5")
