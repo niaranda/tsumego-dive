@@ -379,11 +379,11 @@ function generateNodeData(node) {
     data["initial_stones"] = raw_data["placedStones"];
   } else {
     data["new_stone"] = raw_data["newStone"];
+    data["path_type"] = raw_data["pathType"];
   }
 
   let children = getChildren(node);
   if (children.length === 0) {
-    data["path_type"] = raw_data["pathType"];
     return data;
   }
 
