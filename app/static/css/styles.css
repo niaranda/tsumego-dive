@@ -187,6 +187,7 @@ p > a {
   width: 3rem;
   background-size: cover;
   border-radius: 5px;
+  border-width: 0;
 }
 
 .arrow-key > button:hover {
@@ -232,11 +233,19 @@ p > a {
 
 .path-btn {
   font-family: 'Merriweather', serif;
-  margin: 0 10px;
   height: 50px;
   width: 50px;
-  font-size: 1.2rem;
-  border-radius: 100%
+  border-radius: 100%;
+  border: solid #161616 3px;
+  position: relative;
+}
+
+.path-btn > img {
+  height: 35px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .path-btn:hover {
@@ -347,6 +356,7 @@ p > a {
   background-size: cover;
   width: 20rem;
   height: 5rem;
+  border-width: 0;
 }
 
 #dive-btn:hover {
