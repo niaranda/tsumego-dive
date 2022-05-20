@@ -22,7 +22,7 @@ def predict(placed_stones: List[Stone], next_color: Color, dive_counter: int) ->
     normalizer = Normalizer(board, next_color)
     normalizer.normalize_board(board)
 
-    board_data: np.ndarray = format_board_as_input(board).reshape(1, -1)
+    board_data: np.ndarray = format_board_as_input(board).reshape(1, 19, 19, 1).astype("float")
 
     probabilities: np.ndarray = model.predict(board_data)[0]
 
