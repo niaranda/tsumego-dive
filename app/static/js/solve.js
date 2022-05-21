@@ -173,17 +173,17 @@ function resetDive() {
   $("#dive-btn").removeClass("unavailable");
 }
 
-// Path type buttons
+// Mark buttons
 $("#correct-btn").click(function() {
-  updatePathType("correct");
+  updateMark("correct");
 })
 
 $("#unknown-btn").click(function() {
-  updatePathType("unknown");
+  updateMark("unknown");
 })
 
 $("#wrong-btn").click(function() {
-  updatePathType("wrong");
+  updateMark("wrong");
 })
 
 // To sgf button

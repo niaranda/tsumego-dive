@@ -38,7 +38,7 @@ function initialiseTree() {
           forbiddenMoves: {
             ...forbiddenMoves
           },
-          pathType: "unknown"
+          markType: "unknown"
         }
       }
     }
@@ -57,22 +57,6 @@ function addTreeNode(newStone) {
   parentNode.nodeDOM.classList.remove("selected-node");
 
   let nodeColor = Object.values(newStone)[0];
-  let nodePathType = "unknown";
-
-  // For student moves take path type from grandparent,
-  // if it exists and there are no other paths (no siblings or uncles)
-  let isNewStudentMove = nodeColor === firstColor;
-  let hasGrandParent = parentNode.id !== gameTree.root().id;
-
-  if (isNewStudentMove && hasGrandParent) {
-    let grandParentNode = parentNode.parent();
-    let hasUncles = getChildren(grandParentNode).length !== 1;
-    let hasSiblings = getChildren(parentNode).length !== 0; // Not yet counted
-
-    if (!hasUncles && !hasSiblings) {
-      nodePathType = grandParentNode.text.data["pathType"];
-    }
-  }
 
   let newNodeData = {
     image: "static/images/" + nodeColor + ".png",
@@ -86,7 +70,7 @@ function addTreeNode(newStone) {
         forbiddenMoves: {
           ...forbiddenMoves
         },
-        pathType: nodePathType,
+        markType: "unknown",
         newStone: newStone
       }
     }
@@ -97,10 +81,6 @@ function addTreeNode(newStone) {
   scrollIntoView(newNode);
 
   selectedNodeId = newNode.id;
-
-  if (isNewStudentMove) {
-    updatePathType(nodePathType);
-  }
 
   updateExploredPaths();
   replaceStones();
@@ -153,8 +133,8 @@ function updateExploredPaths() {
 
   children.forEach(function(child) {
     let index = Object.keys(child.text.data["newStone"])[0];
-    let pathType = child.text.data["pathType"];
-    exploredPaths[index] = pathType;
+    let markType = child.text.data["markType"];
+    exploredPaths[index] = markType;
   })
 }
 
@@ -245,106 +225,26 @@ function getStudentLeaves(node) {
   return leaves;
 }
 
-function updatePathType(type) {
+function updateMark(type) {
   if (selectedNodeId === gameTree.root().id) {
     return;
   }
 
   let selectedNode = gameTree.getNodeDb().get(selectedNodeId);
 
-  // If selected is not student move and does not have children, apply to parent
-  let children = getChildren(selectedNode);
-  if (!isStudentMove(selectedNode) && children.length === 0) {
-    selectedNode = selectedNode.parent();
-  }
-
-  // Downwards update
-  updateDescendantsPathType(selectedNode, type);
-
-  let leaves = getTreeStudentLeaves();
-  updateAncestorsPathType(leaves);
-
-  updatePathMarks();
+  updateNodeMark(selectedNode, type);
+  selectedNode.text.data["markType"] = type;
   updateExploredPaths();
   replaceStones();
 }
 
-function updateDescendantsPathType(node, type) {
-  if (isStudentMove(node)) {
-    node.text.data["pathType"] = type;
-  }
-
-  getChildren(node).forEach(function(child) {
-    updateDescendantsPathType(child, type);
-  })
+function updateNodeMark(node, type) {
+  removeNodeMark(node);
+  addNodeMark(node, type);
 }
 
-function updateAncestorsPathType(leaves) {
-  let correctLeaves = [];
-  let unknownLeaves = [];
-  let wrongLeaves = [];
-
-  leaves.forEach(function(leaf) {
-    if (!isStudentMove(leaf)) {
-      return;
-    }
-    let pathType = leaf.text.data["pathType"];
-    switch (pathType) {
-      case "correct":
-        correctLeaves.push(leaf);
-        break;
-      case "unknown":
-        unknownLeaves.push(leaf);
-        break;
-      case "wrong":
-        wrongLeaves.push(leaf);
-    }
-  })
-
-  wrongLeaves.forEach(function(leaf) {
-    updateNodeAncestorsPathType(leaf, "wrong");
-  })
-  unknownLeaves.forEach(function(leaf) {
-    updateNodeAncestorsPathType(leaf, "unknown");
-  })
-  correctLeaves.forEach(function(leaf) {
-    updateNodeAncestorsPathType(leaf, "correct");
-  })
-}
-
-function updateNodeAncestorsPathType(node, type) {
-  if (isStudentMove(node)) {
-    node.text.data["pathType"] = type;
-  }
-
-  let parent = node.parent();
-
-  if (parent === undefined) {
-    return;
-  }
-  updateNodeAncestorsPathType(parent, type);
-}
-
-function updatePathMarks() {
-  updateDescendantsPathMarks(gameTree.root());
-}
-
-function updateDescendantsPathMarks(node) {
-  let type = node.text.data["pathType"];
-  removeNodePathMark(node);
-  addNodePathMark(node, type);
-
-  getChildren(node).forEach(function(child) {
-    updateDescendantsPathMarks(child);
-  })
-}
-
-function addNodePathMark(node, type) {
+function addNodeMark(node, type) {
   if (node.id === gameTree.root().id) {
-    return;
-  }
-
-  if (node.text.data["nextColor"] == firstColor) {
     return;
   }
 
@@ -362,7 +262,7 @@ function addNodePathMark(node, type) {
   node.nodeDOM.appendChild(image);
 }
 
-function removeNodePathMark(node) {
+function removeNodeMark(node) {
   while (node.nodeDOM.childNodes.length !== 1) {
     node.nodeDOM.removeChild(node.nodeDOM.lastChild);
   }
@@ -381,7 +281,7 @@ function generateNodeData(node) {
     data["initial_stones"] = raw_data["placedStones"];
   } else {
     data["new_stone"] = raw_data["newStone"];
-    data["path_type"] = raw_data["pathType"];
+    data["mark_type"] = raw_data["markType"];
   }
 
   let children = getChildren(node);
@@ -399,7 +299,7 @@ function generateNodeData(node) {
   return data;
 }
 
-function placePathMark(index, pathType) {
+function placeBoardMark(index, type) {
   let row = Math.floor(index / 19);
   let col = index % 19;
 
@@ -408,13 +308,13 @@ function placePathMark(index, pathType) {
 
   let element = document.createElement("img");
 
-  if (pathType === "unknown" || nextColor != firstColor) {
+  if (type === "unknown") {
     element.src = "static/images/" + nextColor + "-mark.png";
   } else {
-    element.src = "static/images/" + pathType + "-mark.png";
+    element.src = "static/images/" + type + "-mark.png";
   }
 
-  element.classList.add("board-path-mark");
+  element.classList.add("board-mark");
   element.style = "top: " + topPixels + "px; left: " + leftPixels + "px;"
   $(".board-positions").append(element);
 }

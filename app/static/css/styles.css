@@ -231,7 +231,7 @@ p > a {
   background-color: rgba(102, 255, 153, 0.2);
 }
 
-.path-btn {
+.mark-btn {
   font-family: 'Merriweather', serif;
   height: 50px;
   width: 50px;
@@ -240,7 +240,7 @@ p > a {
   position: relative;
 }
 
-.path-btn > img {
+.mark-btn > img {
   height: 35px;
   position: absolute;
   left: 5px;
@@ -248,16 +248,16 @@ p > a {
   image-rendering: -webkit-optimize-contrast;
 }
 
-.path-btn:hover {
+.mark-btn:hover {
   background-color: #d0d0d7;
 }
 
-.path-btn:active {
+.mark-btn:active {
   box-shadow: 0 3px 4px 0 #d0d0d7;
   opacity: 0.5;
 }
 
-.board-path-mark {
+.board-mark {
   position: absolute;
   width: 15px;
   pointer-events: none;

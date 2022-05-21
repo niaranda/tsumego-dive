@@ -105,8 +105,8 @@ class GameNode:
             new_board.place_stone(new_stone)
 
             comment = ""
-            if "path_type" in child_data.keys():
-                comment = child_data["path_type"]
+            if "mark_type" in child_data.keys():
+                comment = child_data["mark_type"]
 
             new_game_node = GameNode(self, new_board, new_stone, comment)
 

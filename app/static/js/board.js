@@ -58,14 +58,14 @@ function removeStone(element) {
 }
 
 function replaceStones() {
-  $(".board-path-mark").remove();
+  $(".board-mark").remove();
   $(".board-pos").each(function(index) {
     removeStone($(this));
     if (index in placedStones) {
       placeStone($(this), placedStones[index]);
     }
     if (index in exploredPaths) {
-      placePathMark(index, exploredPaths[index]);
+      placeBoardMark(index, exploredPaths[index]);
     }
   })
 }

@@ -123,8 +123,8 @@ def download_sgf():
 
     init_stones: List[Stone] = __dict_str_to_stones(tree_data["initial_stones"])
     root_comment = ""
-    if "path_type" in tree_data.keys():
-        root_comment = tree_data["path_type"]
+    if "mark_type" in tree_data.keys():
+        root_comment = tree_data["mark_type"]
 
     root = GameNode(None, Board(init_stones), None, root_comment)
 
