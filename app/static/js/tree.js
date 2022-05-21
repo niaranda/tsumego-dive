@@ -352,12 +352,14 @@ function addNodePathMark(node, type) {
     return;
   }
 
+  let image = document.createElement("img");
   if (type === "correct") {
-    node.nodeDOM.append("✔️");
+    image.src = "static/images/check-mark.png";
   }
   if (type === "wrong") {
-    node.nodeDOM.append("❌");
+    image.src = "static/images/cross-mark.png";
   }
+  node.nodeDOM.appendChild(image);
 }
 
 function removeNodePathMark(node) {
