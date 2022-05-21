@@ -399,6 +399,7 @@ p > a {
   margin-top: 30px;
   font-family: 'Caveat Brush', cursive;
   letter-spacing: 0.05rem;
+  font-weight: lighter;
 }
 
 #about-div > p {
