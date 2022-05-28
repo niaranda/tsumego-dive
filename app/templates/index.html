@@ -5,11 +5,11 @@
     <div class="insertion">
       <button class="stone-btn" id="insert-black" type="button" name="add-black">
         <img class="stone-btn-img" src="{{ url_for('static', filename='images/black.png') }}" alt="">
-        <img class="edit-icon" src="https://img.icons8.com/stickers/100/000000/edit.png" alt="">
+        <img class="edit-icon" src="{{ url_for('static', filename='images/edit-icon.png') }}" alt="">
       </button>
       <button class="stone-btn" id="insert-white" type="button" name="add-white">
         <img class="stone-btn-img" src="{{ url_for('static', filename='images/white.png') }}" alt="">
-        <img class="edit-icon" src="https://img.icons8.com/stickers/100/000000/edit.png" alt="">
+        <img class="edit-icon" src="{{ url_for('static', filename='images/edit-icon.png') }}" alt="">
       </button>
       <br />
       <button id="from-sgf-btn" class="sgf-btn" type="button" name="from-sgf">From sgf...</button>
