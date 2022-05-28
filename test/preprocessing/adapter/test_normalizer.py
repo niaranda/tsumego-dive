@@ -13,13 +13,13 @@ class TestNormalizer(unittest.TestCase):
     def test_normalize_color_change(self):
         stones = [Stone((0, 3), Color.BLACK), Stone((1, 2), Color.WHITE), Stone((1, 3), Color.BLACK)]
         board = Board(stones)
-        stone = Stone((4, 1), Color.WHITE)
 
-        normalizer = Normalizer(board, stone)
+        normalizer = Normalizer(board, Color.WHITE)
 
         normalizer.normalize_board(board)
         self.assertEqual(board.placed_stones[(0, 3)], Color.WHITE)
 
+        stone = Stone((4, 1), Color.WHITE)
         self.assertEqual(normalizer.normalize_stone(stone), Stone((4, 1), Color.BLACK))
 
         white_groups: List[StoneGroup] = list(filter(lambda group: group.color == Color.WHITE, board.stone_groups))
