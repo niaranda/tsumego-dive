@@ -78,6 +78,9 @@ function addTreeNode(newStone) {
 
   let newNode = gameTree.addNode(parentNode, newNodeData);
 
+  // Remove parent expansion button
+  removeExpansionButton(newNode.parent());
+
   scrollIntoView(newNode);
 
   selectedNodeId = newNode.id;
@@ -241,6 +244,11 @@ function updateMark(type) {
 function updateNodeMark(node, type) {
   removeNodeMark(node);
   addNodeMark(node, type);
+}
+
+function removeExpansionButton(node) {
+  let pathType = node.text.data["markType"];
+  updateNodeMark(node, pathType);
 }
 
 function addNodeMark(node, type) {
