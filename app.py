@@ -46,7 +46,11 @@ def index():
     placed_stones: Dict[int, str]
     first_color: Optional[str]
     error: str
-    placed_stones, first_color, error = __get_placed_stones_from_sgf(path)
+    try:
+        placed_stones, first_color, error = __get_placed_stones_from_sgf(path)
+    except Exception:
+        placed_stones, first_color = None, None
+        error = "There was an error parsing the sgf file"
     os.remove(path)
 
     if error is not None:
