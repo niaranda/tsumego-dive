@@ -158,12 +158,12 @@ def __get_placed_stones_from_sgf(path: str) -> Tuple[Dict[int, str], Optional[st
         problem: sgf.GameTree = sgf.parse(sgf_str).children[0]
 
     except PreprocessingException:
-        return {}, "", "The sgf contained no initial stones"
+        return {}, "", "No initial stones found in the sgf file"
     except (UnicodeDecodeError, sgf.ParseException):
-        return {}, "", "There was an error parsing the sgf"
+        return {}, "", "There was an error parsing the sgf file"
 
     if has_invalid_size(problem):
-        return {}, "", "Invalid size: only 19x19 allowed"
+        return {}, "", "Invalid board size: only 19x19 allowed"
 
     init_stones: List[Stone] = get_init_stones(problem)
 

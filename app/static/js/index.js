@@ -67,12 +67,12 @@ if (firstStoneColor !== undefined) {
 // Start
 $(".start-btn").click(function() {
   if (Object.keys(placedStones).length === 0) {
-    alert("Insert stones");
+    alert("Please insert stones");
     return;
   }
 
   if (firstStoneColor === undefined) {
-    alert("Choose first stone color");
+    alert("Please choose first stone color");
     return;
   }
 
@@ -86,7 +86,7 @@ $(".start-btn").click(function() {
     }
   ).done(function() {
     if (!valid) {
-      alert("Initial stones are not valid");
+      alert("Initial board state is not valid: please check all stones have at least one liberty");
       return;
     }
     let form = createHiddenForm("/solve");
