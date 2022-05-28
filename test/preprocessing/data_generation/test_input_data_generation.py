@@ -43,10 +43,10 @@ def _create_game_tree() -> GameTree:
 class TestInputDataGeneration(unittest.TestCase):
 
     def test_data_generation(self):
-        black_data, white_data = generate_preprocessing_data(_create_game_tree())
+        black_data, white_data = generate_preprocessing_data(_create_game_tree(), 0)
 
-        self.assertEqual(black_data.shape, (2, 19 ** 2 + 2))
-        self.assertEqual(white_data.shape, (1, 19 ** 2 + 1))
+        self.assertEqual(black_data.shape, (2, 19 ** 2 + 3))  # board + move + pathtype + problem id
+        self.assertEqual(white_data.shape, (1, 19 ** 2 + 2))  # board + move + problem id
 
         black_board1 = black_data[0][:(19 ** 2)].reshape(19, 19)
         self.assertEqual(len(black_board1[black_board1 == 1]), 6)
@@ -56,19 +56,19 @@ class TestInputDataGeneration(unittest.TestCase):
         for pos in WHITE_POSITIONS:
             self.assertEqual(black_board1[pos], -1)
 
-        black_move1 = black_data[0][-2]
+        black_move1 = black_data[0][-3]
         self.assertEqual(black_move1, 1)
 
-        black_path_type1 = black_data[0][-1]
+        black_path_type1 = black_data[0][-2]
         self.assertEqual(black_path_type1, 1)
 
         black_board2 = black_data[1][:(19 ** 2)].reshape(19, 19)
         self.assertTrue(np.all(np.equal(black_board1, black_board2)))
 
-        black_move2 = black_data[1][-2]
+        black_move2 = black_data[1][-3]
         self.assertEqual(black_move2, 59)
 
-        black_path_type2 = black_data[1][-1]
+        black_path_type2 = black_data[1][-2]
         self.assertEqual(black_path_type2, 0)
 
         white_board = white_data[0][:(19 ** 2)].reshape(19, 19)
@@ -80,5 +80,5 @@ class TestInputDataGeneration(unittest.TestCase):
         for pos in WHITE_POSITIONS:
             self.assertEqual(white_board[pos], -1)
 
-        white_move = white_data[0][-1]
+        white_move = white_data[0][-2]
         self.assertEqual(white_move, 1)
