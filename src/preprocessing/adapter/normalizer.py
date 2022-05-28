@@ -134,8 +134,8 @@ def _perform_board_reflexion(board: Board):
 class Normalizer:
     """Performs board normalization"""
 
-    def __init__(self, board: Board, first_stone: Color = Color.BLACK):
-        self.__color_inversion: bool = _determine_color_inversion(first_stone)
+    def __init__(self, board: Board, first_stone_color: Color = Color.BLACK):
+        self.__color_inversion: bool = _determine_color_inversion(first_stone_color)
         self.__board_rotations: int = _determine_board_rotations(board)
         self.__board_reflection: bool = _determine_board_reflexion(board)
 
